@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ROBOTS: The Overly Helpful Apocalypse</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #000;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+    #game-container {
+      width: 100%;
+      height: 100%;
+    }
+    canvas { display: block; }
+
+    /* Dialogue overlay sits above the Phaser canvas */
+    #dialogue-overlay {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 760px;
+      max-width: 96vw;
+      background: rgba(10, 10, 30, 0.92);
+      border: 3px solid #7af;
+      border-radius: 8px;
+      padding: 18px 24px;
+      color: #e8f4ff;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      line-height: 1.6;
+      display: none;
+      z-index: 100;
+    }
+    #dialogue-overlay .speaker {
+      color: #7af;
+      font-weight: bold;
+      margin-bottom: 6px;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    #dialogue-overlay .prompt {
+      float: right;
+      color: #7af;
+      animation: blink 0.8s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+  </style>
+</head>
+<body>
+  <div id="game-container"></div>
+  <div id="dialogue-overlay">
+    <div class="speaker" id="dialogue-speaker"></div>
+    <div id="dialogue-text"></div>
+    <span class="prompt">▼</span>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
