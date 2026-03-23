@@ -5,14 +5,19 @@ import { BattleState } from '../BattleState.js';
  * Set manager.animationCallback and manager.animationNextState before transitioning.
  */
 export class AnimatingState extends BattleState {
-  enter() {
+  private _done: boolean = false;
+
+  enter(): void {
     this._done = false;
     const cb = this.manager.animationCallback;
-    if (cb) cb(() => { this._done = true; });
-    else    this._done = true;
+    if (cb) {
+      cb(() => { this._done = true; });
+    } else {
+      this._done = true;
+    }
   }
 
-  update() {
+  update(_time: number, _delta: number): void {
     if (this._done && this.manager.animationNextState) {
       this.manager.goTo(this.manager.animationNextState);
     }

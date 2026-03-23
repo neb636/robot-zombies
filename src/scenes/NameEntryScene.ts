@@ -5,29 +5,29 @@ import Phaser from 'phaser';
  * Stores the result in game.registry under 'playerName'.
  */
 export class NameEntryScene extends Phaser.Scene {
+  private _name:       string  = '';
+  private _locked:     boolean = false;
+  private _nameText!:  Phaser.GameObjects.Text;
+  private _cursorText!: Phaser.GameObjects.Text;
+
   constructor() {
     super({ key: 'NameEntryScene' });
-    this._name   = '';
-    this._locked = false;
   }
 
-  create() {
+  create(): void {
     const { width, height } = this.scale;
     const cx = width / 2;
 
-    // Background
     const bg = this.add.graphics();
     bg.fillGradientStyle(0x000008, 0x000008, 0x0a0a1e, 0x0a0a1e, 1);
     bg.fillRect(0, 0, width, height);
 
-    // Scanlines
     const sl = this.add.graphics().setAlpha(0.04);
     for (let y = 0; y < height; y += 4) {
       sl.fillStyle(0x000000);
       sl.fillRect(0, y, width, 2);
     }
 
-    // Date / location
     this.add.text(cx, height * 0.24, 'JUNE 12, 2028  —  AUSTIN, TEXAS', {
       fontFamily: 'monospace', fontSize: '13px', color: '#334455', letterSpacing: 3,
     }).setOrigin(0.5);
@@ -40,7 +40,6 @@ export class NameEntryScene extends Phaser.Scene {
       fontFamily: 'monospace', fontSize: '11px', color: '#446688', letterSpacing: 4,
     }).setOrigin(0.5);
 
-    // Name display box
     const boxW = 320, boxH = 52;
     const boxBg = this.add.graphics();
     boxBg.fillStyle(0x0a0a20);
@@ -52,7 +51,6 @@ export class NameEntryScene extends Phaser.Scene {
       fontFamily: 'monospace', fontSize: '32px', color: '#ffffff',
     }).setOrigin(0.5);
 
-    // Blinking cursor
     this._cursorText = this.add.text(0, 0, '|', {
       fontFamily: 'monospace', fontSize: '32px', color: '#7af',
     }).setOrigin(0, 0.5).setDepth(5);
@@ -76,24 +74,22 @@ export class NameEntryScene extends Phaser.Scene {
     this._updateDisplay();
     this._setupInput();
 
-    // Fade in
     this.cameras.main.fadeIn(600, 0, 0, 0);
   }
 
-  _updateDisplay() {
+  private _updateDisplay(): void {
     const { width, height } = this.scale;
     const cx = width / 2;
     const cy = height * 0.51 + 26;
 
     this._nameText.setText(this._name);
 
-    // Position cursor just right of the text
     const half = this._nameText.width / 2;
     this._cursorText.setPosition(cx + half + 3, cy);
   }
 
-  _setupInput() {
-    this.input.keyboard.on('keydown', (event) => {
+  private _setupInput(): void {
+    this.input.keyboard!.on('keydown', (event: KeyboardEvent) => {
       if (this._locked) return;
 
       if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
@@ -107,7 +103,6 @@ export class NameEntryScene extends Phaser.Scene {
         return;
       }
 
-      // Letters, digits, space only — max 12 chars
       if (this._name.length < 12 && /^[a-zA-Z0-9 ]$/.test(event.key)) {
         this._name += event.key.toUpperCase();
         this._updateDisplay();
@@ -115,12 +110,12 @@ export class NameEntryScene extends Phaser.Scene {
     });
   }
 
-  _confirm() {
+  private _confirm(): void {
     this._locked = true;
     const name = this._name.trim() || 'KAI';
     this.registry.set('playerName', name);
 
-    this.cameras.main.fade(500, 0, 0, 0, false, (_cam, progress) => {
+    this.cameras.main.fade(500, 0, 0, 0, false, (_cam: Phaser.Cameras.Scene2D.Camera, progress: number) => {
       if (progress === 1) this.scene.start('PrologueScene');
     });
   }

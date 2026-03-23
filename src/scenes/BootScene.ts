@@ -8,9 +8,7 @@ export class BootScene extends Phaser.Scene {
     super({ key: 'BootScene' });
   }
 
-  create() {
-    this.scale.pageAlignHorizontally = true;
-    this.scale.pageAlignVertically   = true;
+  create(): void {
     this.scene.start('PreloadScene');
   }
 }

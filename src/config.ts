@@ -8,7 +8,7 @@ import { WorldMapScene }   from './scenes/WorldMapScene.js';
 import { BattleScene }     from './scenes/BattleScene.js';
 import { DialogueScene }   from './scenes/DialogueScene.js';
 
-export const gameConfig = {
+export const gameConfig: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   width: window.innerWidth,
   height: window.innerHeight,

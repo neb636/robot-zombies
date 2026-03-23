@@ -1,22 +1,34 @@
+import Phaser from 'phaser';
 import { AnimatedSprite } from './Sprite.js';
 import { BASE_PLAYER_HP, BASE_PLAYER_ATK } from '../utils/constants.js';
+import type { WasdKeys } from '../types.js';
+
+interface SceneWithInput {
+  cursors: Phaser.Types.Input.Keyboard.CursorKeys;
+  wasd: WasdKeys;
+}
 
 export class Player extends AnimatedSprite {
-  constructor(scene, x, y) {
+  readonly maxHp: number;
+  hp: number;
+  readonly attack: number;
+  readonly level: number;
+  name: string;
+  readonly speed: number;
+  isMoving: boolean;
+  constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, 'hero');
 
     this.maxHp  = BASE_PLAYER_HP;
     this.hp     = this.maxHp;
     this.attack = BASE_PLAYER_ATK;
     this.level  = 1;
-    this.name   = scene.registry.get('playerName') || 'KAI';
-
+    this.name   = (scene.registry.get('playerName') as string | undefined) ?? 'KAI';
     this.speed    = 160;
     this.isMoving = false;
 
     this.sprite.setCollideWorldBounds(true);
 
-    // Gracefully handle missing spritesheet
     if (this.scene.textures.exists('hero')) {
       this.playAnim('hero-idle');
     } else {
@@ -24,14 +36,14 @@ export class Player extends AnimatedSprite {
     }
   }
 
-  update() {
-    const { cursors, wasd } = this.scene;
-    const body = this.sprite.body;
+  update(): void {
+    const { cursors, wasd } = this.scene as unknown as SceneWithInput;
+    const body = this.sprite.body as Phaser.Physics.Arcade.Body;
 
     body.setVelocity(0);
     this.isMoving = false;
 
-    if (cursors.left.isDown  || wasd.A.isDown) {
+    if (cursors.left.isDown || wasd.A.isDown) {
       body.setVelocityX(-this.speed);
       this.playAnim('hero-walk-left');
       this.isMoving = true;
@@ -56,23 +68,21 @@ export class Player extends AnimatedSprite {
     body.velocity.normalize().scale(this.speed);
   }
 
-  takeDamage(amount) {
+  takeDamage(amount: number): boolean {
     this.hp = Math.max(0, this.hp - amount);
     return this.hp <= 0;
   }
 
-  heal(amount) {
+  heal(amount: number): void {
     this.hp = Math.min(this.maxHp, this.hp + amount);
   }
 
-  isAlive() {
+  isAlive(): boolean {
     return this.hp > 0;
   }
 
-  _buildPlaceholderGraphic(x, y) {
-    // Simple colored rectangle as stand-in for missing art
-    const gfx = this.scene.add.rectangle(x, y, 24, 32, 0x4488ff);
+  private _buildPlaceholderGraphic(x: number, y: number): void {
+    this.scene.add.rectangle(x, y, 24, 32, 0x4488ff);
     this.sprite.setVisible(false);
-    this._placeholder = gfx;
   }
 }
