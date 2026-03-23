@@ -1,7 +1,7 @@
 import { BattleState } from '../BattleState.js';
 
 export class VictoryState extends BattleState {
-  enter() {
+  enter(): void {
     const { dialogueManager, audioManager, enemy } = this.manager;
     audioManager.stopMusic();
     dialogueManager.show('SYSTEM', [

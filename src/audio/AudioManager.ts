@@ -1,4 +1,5 @@
 import { Howl, Howler } from 'howler';
+import Phaser from 'phaser';
 
 /**
  * AudioManager — unified interface for:
@@ -7,18 +8,21 @@ import { Howl, Howler } from 'howler';
  *   3. Robot voice lines (Web SpeechSynthesis API)
  */
 export class AudioManager {
-  constructor(_scene) {
-    this._music      = null;
-    this._sfxCache   = new Map();
-    this._synth      = window.speechSynthesis || null;
-    this._robotVoice = null;
+  private _music:      Howl | null = null;
+  private _sfxCache:   Map<string, Howl> = new Map();
+  private _synth:      SpeechSynthesis | null;
+  private _robotVoice: SpeechSynthesisVoice | null = null;
+
+  constructor(_scene: Phaser.Scene) {
+    this._synth = 'speechSynthesis' in window ? window.speechSynthesis : null;
 
     if (this._synth) {
-      const pick = () => {
-        const voices = this._synth.getVoices();
+      const pick = (): void => {
+        const voices = this._synth!.getVoices();
         this._robotVoice =
-          voices.find(v => /daniel|karen|google|microsoft/i.test(v.name)) ||
-          voices[0] || null;
+          voices.find(v => /daniel|karen|google|microsoft/i.test(v.name)) ??
+          voices[0] ??
+          null;
       };
       pick();
       this._synth.onvoiceschanged = pick;
@@ -27,18 +31,18 @@ export class AudioManager {
 
   // ─── Music ──────────────────────────────────────────────────────────────────
 
-  playMusic(key, volume = 0.45) {
+  playMusic(key: string, volume = 0.45): void {
     this.stopMusic(0);
     this._music = new Howl({
-      src:        [`assets/audio/music/${this._stem(key)}.ogg`],
-      loop:       true,
+      src:         [`assets/audio/music/${this._stem(key)}.ogg`],
+      loop:        true,
       volume,
-      autoplay:   true,
+      autoplay:    true,
       onloaderror: () => { this._music = null; },
     });
   }
 
-  stopMusic(fadeMs = 600) {
+  stopMusic(fadeMs = 600): void {
     if (!this._music) return;
     if (fadeMs > 0) {
       this._music.fade(this._music.volume(), 0, fadeMs);
@@ -51,13 +55,13 @@ export class AudioManager {
 
   // ─── SFX ────────────────────────────────────────────────────────────────────
 
-  playSfx(key, volume = 0.75) {
+  playSfx(key: string, volume = 0.75): void {
     let howl = this._sfxCache.get(key);
     if (!howl) {
       howl = new Howl({
         src:         [`assets/audio/sfx/${this._stem(key)}.ogg`],
         volume,
-        onloaderror: () => this._sfxCache.delete(key),
+        onloaderror: () => { this._sfxCache.delete(key); },
       });
       this._sfxCache.set(key, howl);
     }
@@ -66,21 +70,21 @@ export class AudioManager {
 
   // ─── Robot voice (SpeechSynthesis) ──────────────────────────────────────────
 
-  speakRobotLine(text) {
+  speakRobotLine(text: string): void {
     if (!this._synth) return;
     this._synth.cancel();
-    const utt  = new SpeechSynthesisUtterance(text);
-    utt.voice  = this._robotVoice;
-    utt.rate   = 1.2;
-    utt.pitch  = 0.35;
-    utt.volume = 0.6;
+    const utt   = new SpeechSynthesisUtterance(text);
+    utt.voice   = this._robotVoice;
+    utt.rate    = 1.2;
+    utt.pitch   = 0.35;
+    utt.volume  = 0.6;
     this._synth.speak(utt);
   }
 
   // ─── Global ─────────────────────────────────────────────────────────────────
 
-  setMasterVolume(v) { Howler.volume(v); }
+  setMasterVolume(v: number): void { Howler.volume(v); }
 
   /** 'music-overworld' → 'overworld', 'sfx-attack' → 'attack' */
-  _stem(key) { return key.replace(/^(music|sfx)-/, ''); }
+  private _stem(key: string): string { return key.replace(/^(music|sfx)-/, ''); }
 }

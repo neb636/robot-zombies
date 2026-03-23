@@ -1,31 +1,45 @@
+import Phaser from 'phaser';
+import type { BattlePlayer } from '../types.js';
+import type { Enemy } from '../entities/Enemy.js';
+
+interface HudEntity {
+  name: string;
+  hp: number;
+  maxHp: number;
+}
+
 /**
  * BattleHUD — HP bars and action menu rendered with Phaser Graphics + Text.
  */
 export class BattleHUD {
-  constructor(scene) {
-    this.scene     = scene;
-    this._player   = null;
-    this._enemy    = null;
-    this._gfx      = scene.add.graphics().setDepth(10);
-    this._texts    = [];
-    this._menuGrp  = scene.add.group();
+  private readonly scene:    Phaser.Scene;
+  private _player:           HudEntity | null = null;
+  private _enemy:            HudEntity | null = null;
+  private readonly _gfx:     Phaser.GameObjects.Graphics;
+  private _texts:            Phaser.GameObjects.Text[] = [];
+  private readonly _menuGrp: Phaser.GameObjects.Group;
+
+  constructor(scene: Phaser.Scene) {
+    this.scene    = scene;
+    this._gfx     = scene.add.graphics().setDepth(10);
+    this._menuGrp = scene.add.group();
   }
 
-  bind(player, enemy) {
+  bind(player: BattlePlayer, enemy: Enemy): void {
     this._player = player;
     this._enemy  = enemy;
   }
 
-  update() {
+  update(): void {
     this._gfx.clear();
-    this._texts.forEach(t => t.destroy());
+    this._texts.forEach(t => { t.destroy(); });
     this._texts = [];
 
     if (this._player) this._drawBar(this._player, 16, 16,  0x44ff88, 'KAI');
     if (this._enemy)  this._drawBar(this._enemy,  16, 60, 0xff4444, this._enemy.name);
   }
 
-  showMenu(items, selectedIndex) {
+  showMenu(items: Array<{ label: string; action: string }>, selectedIndex: number): void {
     this._menuGrp.clear(true, true);
     const x = 30;
     const y = this.scene.scale.height - 160;
@@ -36,10 +50,10 @@ export class BattleHUD {
         x, y + i * 34,
         `${sel ? '► ' : '  '}${item.label}`,
         {
-          fontFamily: 'monospace',
-          fontSize:   '18px',
-          color:      sel ? '#7af' : '#aac',
-          stroke:     '#000',
+          fontFamily:      'monospace',
+          fontSize:        '18px',
+          color:           sel ? '#7af' : '#aac',
+          stroke:          '#000',
           strokeThickness: 3,
         },
       ).setDepth(11);
@@ -47,11 +61,11 @@ export class BattleHUD {
     });
   }
 
-  hideMenu() {
+  hideMenu(): void {
     this._menuGrp.clear(true, true);
   }
 
-  _drawBar(entity, x, y, color, label) {
+  private _drawBar(entity: HudEntity, x: number, y: number, color: number, label: string): void {
     const w   = 200;
     const pct = Math.max(0, entity.hp / entity.maxHp);
 

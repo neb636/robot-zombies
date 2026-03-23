@@ -14,14 +14,14 @@ export class DialogueScene extends Phaser.Scene {
     super({ key: 'DialogueScene', active: true });
   }
 
-  create() {
-    this.input.keyboard.on('keydown-SPACE', () => {
+  create(): void {
+    this.input.keyboard!.on('keydown-SPACE', () => {
       document.dispatchEvent(new CustomEvent('dialogue:advance'));
     });
-    this.input.keyboard.on('keydown-ENTER', () => {
+    this.input.keyboard!.on('keydown-ENTER', () => {
       document.dispatchEvent(new CustomEvent('dialogue:advance'));
     });
-    this.input.keyboard.on('keydown-M', () => {
+    this.input.keyboard!.on('keydown-M', () => {
       tts.toggleMute();
     });
   }

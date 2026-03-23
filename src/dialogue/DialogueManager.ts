@@ -1,16 +1,20 @@
+import Phaser from 'phaser';
 import { DialogueBox } from './DialogueBox.js';
 import { bus }         from '../utils/EventBus.js';
 import { EVENTS }      from '../utils/constants.js';
 
 export class DialogueManager {
-  constructor(_scene) {
+  private static _box: DialogueBox | null = null;
+  private readonly box: DialogueBox;
+
+  constructor(_scene: Phaser.Scene) {
     if (!DialogueManager._box) {
       DialogueManager._box = new DialogueBox();
     }
     this.box = DialogueManager._box;
   }
 
-  show(speaker, lines, onClose) {
+  show(speaker: string, lines: string[], onClose?: () => void): void {
     bus.emit(EVENTS.DIALOGUE_OPEN, { speaker, lines });
     this.box.open(speaker, lines, () => {
       bus.emit(EVENTS.DIALOGUE_CLOSE, {});
@@ -18,5 +22,5 @@ export class DialogueManager {
     });
   }
 
-  isActive() { return this.box.isActive(); }
+  isActive(): boolean { return this.box.isActive(); }
 }

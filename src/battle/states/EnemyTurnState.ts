@@ -2,24 +2,23 @@ import { BattleState }  from '../BattleState.js';
 import { BATTLE_STATES } from '../../utils/constants.js';
 
 export class EnemyTurnState extends BattleState {
-  constructor(manager) {
-    super(manager);
-    this._timer = 0;
-    this._delay = 1200;
-    this._acted = false;
-  }
+  private _timer: number = 0;
+  private readonly _delay: number = 1200;
+  private _acted: boolean = false;
 
-  enter() {
+  enter(): void {
     this._timer = 0;
     this._acted = false;
     const { enemy, dialogueManager, audioManager } = this.manager;
 
-    if (enemy.sprite.play) enemy.sprite.play('robot-attack');
+    if ('play' in enemy.sprite) {
+      (enemy.sprite as Phaser.GameObjects.Sprite).play('robot-attack');
+    }
     audioManager.speakRobotLine(enemy.getTauntLine());
     dialogueManager.show(enemy.name, [enemy.getTauntLine()]);
   }
 
-  update(_time, delta) {
+  update(_time: number, delta: number): void {
     if (this._acted) return;
     this._timer += delta;
     if (this._timer >= this._delay) {
@@ -28,7 +27,7 @@ export class EnemyTurnState extends BattleState {
     }
   }
 
-  _act() {
+  private _act(): void {
     const { enemy, player, audioManager } = this.manager;
     const action = enemy.chooseAction();
 
@@ -36,7 +35,9 @@ export class EnemyTurnState extends BattleState {
       const dead = player.takeDamage(action.damage);
       audioManager.playSfx('sfx-attack');
 
-      if (enemy.sprite.play) enemy.sprite.play('robot-idle');
+      if ('play' in enemy.sprite) {
+        (enemy.sprite as Phaser.GameObjects.Sprite).play('robot-idle');
+      }
       this.manager.goTo(dead ? BATTLE_STATES.DEFEAT : BATTLE_STATES.PLAYER_TURN);
     }
   }
