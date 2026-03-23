@@ -9,7 +9,7 @@ export class Player extends AnimatedSprite {
     this.hp     = this.maxHp;
     this.attack = BASE_PLAYER_ATK;
     this.level  = 1;
-    this.name   = 'Kai';
+    this.name   = scene.registry.get('playerName') || 'KAI';
 
     this.speed    = 160;
     this.isMoving = false;

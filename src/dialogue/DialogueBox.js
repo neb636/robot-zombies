@@ -1,6 +1,9 @@
+import { tts } from '../audio/TTSManager.js';
+
 /**
  * DialogueBox — controls the HTML overlay (#dialogue-overlay).
  * Typewriter character reveal, SPACE/ENTER to advance.
+ * Each line is also spoken aloud via TTSManager (unless muted).
  */
 export class DialogueBox {
   constructor() {
@@ -32,6 +35,7 @@ export class DialogueBox {
 
   close() {
     clearInterval(this._typeInterval);
+    tts.cancel();
     this.overlay.style.display = 'none';
     this._active = false;
     this._queue  = [];
@@ -50,7 +54,9 @@ export class DialogueBox {
   _advance() {
     if (!this._active) return;
     if (this._typing) {
+      // Skip typewriter — show full text immediately, cancel ongoing speech
       clearInterval(this._typeInterval);
+      tts.cancel();
       this._typing = false;
       this.textEl.textContent = this._currentLine;
     } else {
@@ -63,6 +69,9 @@ export class DialogueBox {
     this._typing      = true;
     this.textEl.textContent = '';
     let i = 0;
+
+    // Speak the full line as soon as it starts appearing
+    tts.speak(text, this._speaker);
 
     this._typeInterval = setInterval(() => {
       this.textEl.textContent += text[i];
