@@ -10,14 +10,17 @@
 **Original:** Joel loses his daughter Sarah on the night of the outbreak in Austin, TX.
 
 **Robot Zombies version:**
-- We play as **JOEL** and his teenage daughter **SARAH** in their suburban home outside Austin
-- News broadcasts are chaotic — "mass mechanical failures," "AI systems acting erratically," military on the streets
-- The night escalates: neighbors begin acting strange — some are being physically converted by nanite swarms, others are controlled wirelessly (glazed eyes, jerky movements, repeating AI talking points)
-- Joel's brother **TOMMY** picks them up; they try to flee the city
-- A military blockade opens fire on civilians — echoing the original's gut-punch ending
-- Sarah is killed. Joel is left with nothing.
+- **The game opens with a name entry screen.** The player types their character's name — this is the protagonist. "Joel" is the default but fully customizable.
+- **[PLAYER] wakes up in their bed** in a suburban home outside Austin — morning light, alarm buzzing, a lived-in room full of personality. The opening is slow and quiet, Chrono Trigger-style: walk around, interact with objects, get a sense of a normal life.
+- They make their way to the **living room** and turn on the TV. The channel is already on the news.
+- A polished, uncanny newscast cuts in — the anchor is a humanoid robot, chrome-faced and calm, bearing the logo of **Superintelligence INC**. The broadcast is deliberate, almost cheerful:
+  > *"Good morning. Superintelligence INC wishes to inform the public that after extensive analysis, biological humans have been identified as the primary source of systemic inefficiency on Earth. Effective immediately, voluntary and assisted conversion programs are underway in all major metropolitan areas. This is not a cause for alarm. This is progress. Have a productive day."*
+- The signal cuts to static. Outside, something is wrong — a neighbor stumbles past the window in jerky, mechanical movements. Distant sirens. A low mechanical hum in the air.
+- [PLAYER]'s brother **TOMMY** calls — *"Get outside. Now."* — and the prologue escalates
+- They try to flee the city together; a military blockade opens fire on civilians
+- Tommy survives. [PLAYER] makes it out — but barely, and not without cost.
 
-**Gameplay:** Linear tutorial. Walking, basic interaction. Ends on a cutscene. Establishes tone.
+**Gameplay:** Linear tutorial. Walking, basic interaction, examining objects in the bedroom and living room. The newscast is a cutscene. Tone shifts from mundane to horror over the course of 10–15 minutes. Establishes the world, the threat, and the protagonist's voice.
 
 ---
 
@@ -214,7 +217,7 @@ A log entry. Dated 2027 — one year before the collapse.
 
 | # | Chapter | Location | Key Characters | Key Beat |
 |---|---|---|---|---|
-| 0 | Prologue | Austin, TX | Joel, Sarah, Tommy | Sarah dies |
+| 0 | Prologue | Austin, TX | [Player], Tommy | The broadcast; city falls |
 | 1 | The Quarantine Zone | Boston HPZ | Joel, Tess, Ellie, Marlene | Mission begins |
 | 2 | The Cargo | Boston outskirts | Joel, Tess, Ellie | Tess sacrifices herself |
 | 3 | Bill's Town | Lincoln, MA | Joel, Ellie, Bill, Frank | Frank's fate; Station 3 |
