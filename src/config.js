@@ -1,10 +1,12 @@
 import Phaser from 'phaser';
-import { BootScene }     from './scenes/BootScene.js';
-import { PreloadScene }  from './scenes/PreloadScene.js';
-import { TitleScene }    from './scenes/TitleScene.js';
-import { WorldMapScene } from './scenes/WorldMapScene.js';
-import { BattleScene }   from './scenes/BattleScene.js';
-import { DialogueScene } from './scenes/DialogueScene.js';
+import { BootScene }       from './scenes/BootScene.js';
+import { PreloadScene }    from './scenes/PreloadScene.js';
+import { TitleScene }      from './scenes/TitleScene.js';
+import { NameEntryScene }  from './scenes/NameEntryScene.js';
+import { PrologueScene }   from './scenes/PrologueScene.js';
+import { WorldMapScene }   from './scenes/WorldMapScene.js';
+import { BattleScene }     from './scenes/BattleScene.js';
+import { DialogueScene }   from './scenes/DialogueScene.js';
 
 export const gameConfig = {
   type: Phaser.AUTO,
@@ -25,6 +27,8 @@ export const gameConfig = {
     BootScene,
     PreloadScene,
     TitleScene,
+    NameEntryScene,
+    PrologueScene,
     WorldMapScene,
     BattleScene,
     DialogueScene,

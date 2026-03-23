@@ -104,7 +104,7 @@ export class TitleScene extends Phaser.Scene {
 
   _startGame() {
     this.cameras.main.fade(600, 0, 0, 0, false, (_cam, progress) => {
-      if (progress === 1) this.scene.start('WorldMapScene');
+      if (progress === 1) this.scene.start('NameEntryScene');
     });
   }
 
