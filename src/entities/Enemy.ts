@@ -1,8 +1,7 @@
 import Phaser from 'phaser';
-import { BASE_ENEMY_HP, BASE_ENEMY_ATK } from '../utils/constants.js';
+import { EnemyAIStateMachine } from '../battle/EnemyAIStateMachine.js';
 import type { EnemyAction, EnemyTag, ActiveStatusEffect, Tech } from '../types.js';
 
-const NAMES: readonly string[] = ['HELPBOT-9', 'SERVAMAX', 'KINDROID', 'UTIL-1TY', 'ASSIZTRON'];
 const TAUNTS: readonly string[] = [
   'OPTIMIZING your existence. Please hold.',
   'I have scheduled your deletion for maximum efficiency.',
@@ -163,6 +162,7 @@ export class Enemy {
   readonly tier: EnemyTier;
   readonly name: string;
   readonly sprite: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
+  readonly ai: EnemyAIStateMachine;
 
   private readonly _taunts: readonly string[];
 
@@ -179,10 +179,11 @@ export class Enemy {
     this.int    = stats?.int ?? cfg.int;
     this.spd    = stats?.spd ?? cfg.spd;
     this.lck    = stats?.lck ?? cfg.lck;
-    this.tags   = cfg.tags;
-    this.tier   = cfg.tier;
-    this.name   = cfg.name;
+    this.tags    = cfg.tags;
+    this.tier    = cfg.tier;
+    this.name    = cfg.name;
     this._taunts = cfg.taunts;
+    this.ai      = new EnemyAIStateMachine(cfg.tier);
 
     const { width, height } = scene.scale;
 

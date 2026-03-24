@@ -11,12 +11,13 @@
  *  - Ally   → auto-attack inline (same as old AllyTurnState), reset ATB
  */
 import Phaser from 'phaser';
-import { BattleState }       from '../BattleState.js';
-import { CombatantQueue }    from '../CombatantQueue.js';
-import { calcDamage }        from '../CombatEngine.js';
-import { BATTLE_STATES }     from '../../utils/constants.js';
-import type { ATBCombatant } from '../../types.js';
-import type { Enemy }        from '../../entities/Enemy.js';
+import { BattleState }             from '../BattleState.js';
+import { CombatantQueue }          from '../CombatantQueue.js';
+import { calcDamage }              from '../CombatEngine.js';
+import * as SE                     from '../StatusEffectSystem.js';
+import { BATTLE_STATES }           from '../../utils/constants.js';
+import type { ATBCombatant }       from '../../types.js';
+import type { Enemy }              from '../../entities/Enemy.js';
 
 /** ATB points added per 60ms tick: max(1, ceil(spd / 5)). */
 function fillRate(spd: number): number {
@@ -63,10 +64,10 @@ export class ATBTickingState extends BattleState {
 
     const enemy = this.manager.enemy;
 
-    // ── Enemy acts? Resolve inline, stay in ATB_TICKING ──
+    // ── Enemy acts? Delegate to EnemyAIStateMachine, stay in ATB_TICKING ──
     if ((entry.combatant as unknown) === enemy) {
       this._queue.pop();
-      this._resolveEnemyAction(enemy);
+      enemy.ai.tick(enemy, this.manager);
       return;
     }
 
@@ -78,9 +79,27 @@ export class ATBTickingState extends BattleState {
       return;
     }
 
-    // ── Player acts → pause, hand off to PLAYER_TURN ──
+    // ── Player acts → check Stunned, then hand off to PLAYER_TURN ──
     this._queue.pop();
-    this.manager.activeMenuCombatant = entry.combatant;
+    const pc = entry.combatant;
+
+    if (SE.hasStatus(pc, 'Stunned')) {
+      this.manager.dialogueManager.show(pc.name, [`${pc.name} is stunned!`]);
+      pc.atb = 0;
+      return;
+    }
+
+    // Burning on player's turn
+    if (SE.hasStatus(pc, 'Burning')) {
+      pc.takeDamage(10);
+      this.manager.dialogueManager.show(pc.name, [`${pc.name} takes 10 burn damage!`]);
+      if (!pc.isAlive()) {
+        this.manager.goTo(BATTLE_STATES.DEFEAT);
+        return;
+      }
+    }
+
+    this.manager.activeMenuCombatant = pc;
     this.manager.pauseATB();
     this.manager.goTo(BATTLE_STATES.PLAYER_TURN);
   }
@@ -97,7 +116,10 @@ export class ATBTickingState extends BattleState {
     // Fill player ATB
     if (player.isAlive() && !this._inQueue(player)) {
       player.atb = Math.min(100, player.atb + fillRate(player.spd));
-      if (player.atb >= 100) this._queue.push(player, now);
+      if (player.atb >= 100) {
+        SE.tickAll(player);   // tick statuses when ready to act
+        this._queue.push(player, now);
+      }
     }
 
     // Fill ally ATBs
@@ -105,7 +127,10 @@ export class ATBTickingState extends BattleState {
       const ally = a as ATBCombatant;
       if (ally.isAlive() && !this._inQueue(ally)) {
         ally.atb = Math.min(100, ally.atb + fillRate(ally.spd));
-        if (ally.atb >= 100) this._queue.push(ally, performance.now());
+        if (ally.atb >= 100) {
+          SE.tickAll(ally);
+          this._queue.push(ally, performance.now());
+        }
       }
     }
 
@@ -113,6 +138,7 @@ export class ATBTickingState extends BattleState {
     if (enemy.isAlive() && !this._inQueueEnemy(enemy)) {
       enemy.atb = Math.min(100, enemy.atb + fillRate(enemy.spd));
       if (enemy.atb >= 100) {
+        SE.tickAll(enemy as unknown as ATBCombatant);
         // Push enemy as ATBCombatant-compatible (duck type) using a cast
         // ATBTickingState.update() re-identifies enemies via reference check
         const pseudo = enemy as unknown as ATBCombatant;
@@ -131,29 +157,31 @@ export class ATBTickingState extends BattleState {
 
   // ─── Action resolution ────────────────────────────────────────────────────
 
-  private _resolveEnemyAction(enemy: Enemy): void {
-    enemy.atb = 0;
-    const { player, dialogueManager, scripted } = this.manager;
-    const p = player as ATBCombatant;
-
-    let dmg = calcDamage(enemy.str, p.def, 'Physical', p.tags);
-
-    // Scripted battles: player can't die
-    if (scripted) dmg = Math.min(dmg, Math.max(0, p.hp - 1));
-
-    const dead = p.takeDamage(dmg);
-    dialogueManager.show(enemy.name, [`${enemy.getTauntLine()} (${dmg} damage)`]);
-
-    if (dead) {
-      this.manager.goTo(BATTLE_STATES.DEFEAT);
-    }
-  }
-
   private _resolveAllyAction(ally: ATBCombatant): void {
     ally.atb = 0;
     const { enemy, dialogueManager } = this.manager;
 
+    // Stunned: skip turn
+    if (SE.hasStatus(ally, 'Stunned')) {
+      dialogueManager.show(ally.name, [`${ally.name} is stunned!`]);
+      return;
+    }
+
+    // Burning on ally's turn
+    if (SE.hasStatus(ally, 'Burning')) {
+      ally.takeDamage(10);
+      dialogueManager.show(ally.name, [`${ally.name} takes 10 burn damage!`]);
+    }
+
+    if (!ally.isAlive()) return;
+
     const dmg  = calcDamage(ally.str, enemy.def, 'Physical', enemy.tags);
+    // Shield on enemy
+    if (SE.tryAbsorbWithShield(enemy as unknown as ATBCombatant)) {
+      dialogueManager.show(ally.name, [`${ally.name} attacks — enemy shield absorbs it!`]);
+      return;
+    }
+
     const dead = enemy.takeDamage(dmg);
     dialogueManager.show(ally.name, [`${ally.name} attacks for ${dmg} damage!`]);
 

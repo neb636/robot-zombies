@@ -6,7 +6,7 @@ export class MarcusConversionState extends BattleState {
     const { dialogueManager, scene } = this.manager;
     const marcus = this.manager.allies.find(a => a.name === 'MARCUS');
     if (!marcus) {
-      this.manager.goTo(BATTLE_STATES.PLAYER_TURN);
+      this.manager.goTo(BATTLE_STATES.ATB_TICKING);
       return;
     }
 
@@ -74,7 +74,7 @@ export class MarcusConversionState extends BattleState {
               // Step 9: Brief pause, then player continues alone
               dialogueManager.show('SYSTEM', ['You are alone now.']);
               document.addEventListener('dialogue:advance', () => {
-                this.manager.goTo(BATTLE_STATES.PLAYER_TURN);
+                this.manager.goTo(BATTLE_STATES.ATB_TICKING);
               }, { once: true });
             },
           });

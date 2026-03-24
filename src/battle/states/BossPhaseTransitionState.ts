@@ -5,13 +5,13 @@ export class BossPhaseTransitionState extends BattleState {
   enter(): void {
     const { bossConfig, dialogueManager, enemy } = this.manager;
     if (!bossConfig) {
-      this.manager.goTo(BATTLE_STATES.PLAYER_TURN);
+      this.manager.goTo(BATTLE_STATES.ATB_TICKING);
       return;
     }
 
     const phase = bossConfig.phases[this.manager.currentBossPhase];
     if (!phase) {
-      this.manager.goTo(BATTLE_STATES.PLAYER_TURN);
+      this.manager.goTo(BATTLE_STATES.ATB_TICKING);
       return;
     }
 
@@ -38,7 +38,7 @@ export class BossPhaseTransitionState extends BattleState {
     }
 
     document.addEventListener('dialogue:advance', () => {
-      this.manager.goTo(BATTLE_STATES.PLAYER_TURN);
+      this.manager.goTo(BATTLE_STATES.ATB_TICKING);
     }, { once: true });
   }
 }
