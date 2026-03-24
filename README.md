@@ -20,6 +20,23 @@ npm run dev       # localhost:5173
 npm run typecheck
 ```
 
+## Dev Scene Jumping
+
+In dev mode, jump directly to any scene without playing through the full game flow.
+
+**URL parameter** — append `?dev=<SceneName>` when opening the game:
+
+```
+localhost:5173?dev=WorldMapScene
+localhost:5173?dev=BattleScene&enemy=warden_alpha
+```
+
+**In-game overlay** — press backtick (`` ` ``) at any time to toggle a scene-jump panel in the bottom-right corner.
+
+Both methods seed `playerName = 'Dev'` and empty flags automatically. The dev overlay is stripped from production builds.
+
+---
+
 ## Docs
 
 Story, characters, combat, and world design live in `planning/`. Build order in `tasks.md`.

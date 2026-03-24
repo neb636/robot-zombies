@@ -9,6 +9,21 @@ import { SubwayScene }     from './scenes/SubwayScene.js';
 import { WorldMapScene }   from './scenes/WorldMapScene.js';
 import { BattleScene }     from './scenes/BattleScene.js';
 import { DialogueScene }   from './scenes/DialogueScene.js';
+import { DevScene }        from './scenes/DevScene.js';
+
+const scenes: Phaser.Types.Core.GameConfig['scene'] = [
+  BootScene,
+  PreloadScene,
+  TitleScene,
+  NameEntryScene,
+  PrologueScene,
+  NewBostonScene,
+  SubwayScene,
+  WorldMapScene,
+  BattleScene,
+  DialogueScene,
+  ...(import.meta.env.DEV ? [DevScene] : []),
+];
 
 export const gameConfig: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -25,16 +40,5 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
     default: 'arcade',
     arcade: { debug: false },
   },
-  scene: [
-    BootScene,
-    PreloadScene,
-    TitleScene,
-    NameEntryScene,
-    PrologueScene,
-    NewBostonScene,
-    SubwayScene,
-    WorldMapScene,
-    BattleScene,
-    DialogueScene,
-  ],
+  scene: scenes,
 };
