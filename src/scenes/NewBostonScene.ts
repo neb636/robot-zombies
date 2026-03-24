@@ -1,7 +1,13 @@
 import Phaser from 'phaser';
 import { Player }          from '../entities/Player.js';
 import { DialogueManager } from '../dialogue/DialogueManager.js';
-import type { WasdKeys }   from '../types.js';
+import { bus }             from '../utils/EventBus.js';
+import {
+  EVENTS,
+  MARCUS_HP, MARCUS_ATK,
+  GAME_FLAGS, setFlag,
+} from '../utils/constants.js';
+import type { WasdKeys, BattleInitData } from '../types.js';
 import {
   MAP_W, MAP_H,
   PLAYER_START_X, PLAYER_START_Y,
@@ -12,11 +18,16 @@ import {
 
 // ─── Phase keys ──────────────────────────────────────────────────────────────
 const PHASE = {
-  ARRIVING:    'ARRIVING',
-  MEET_MARCUS: 'MEET_MARCUS',
-  IN_SCENE:    'IN_SCENE',
-  CHECKPOINT:  'CHECKPOINT',
-  DONE:        'DONE',
+  ARRIVING:        'ARRIVING',
+  MEET_MARCUS:     'MEET_MARCUS',
+  IN_SCENE:        'IN_SCENE',
+  CHECKPOINT:      'CHECKPOINT',
+  TUTORIAL_BATTLE: 'TUTORIAL_BATTLE',
+  POST_TUTORIAL:   'POST_TUTORIAL',
+  BOSS_APPROACH:   'BOSS_APPROACH',
+  BOSS_BATTLE:     'BOSS_BATTLE',
+  POST_BOSS:       'POST_BOSS',
+  DONE:            'DONE',
 } as const;
 type Phase = typeof PHASE[keyof typeof PHASE];
 
@@ -422,16 +433,116 @@ export class NewBostonScene extends Phaser.Scene {
     this._citizenTimer = null;
 
     this.dialogMgr.show('MARCUS', [
-      "Down through here. Subway entrance is about two blocks.",
-      "I've got a bad feeling about the checkpoint.",
-      "...Well. Worse than usual.",
+      "Checkpoint's just ahead.",
+      "Stay behind me.",
+    ], () => { this._launchTutorialBattle(); });
+  }
+
+  // ─── Tutorial battle (1C) ──────────────────────────────────────────────────
+
+  private _launchTutorialBattle(): void {
+    this._phase = PHASE.TUTORIAL_BATTLE;
+
+    const initData: BattleInitData = {
+      enemyKey:    'compliance_drone',
+      returnScene: 'NewBostonScene',
+      scripted:    true,
+      allies: [{
+        name:  'MARCUS',
+        hp:    MARCUS_HP,
+        maxHp: MARCUS_HP,
+        attack: MARCUS_ATK,
+        color: 0xddaa44,
+      }],
+    };
+
+    bus.once(EVENTS.BATTLE_END, () => {
+      this._onTutorialBattleEnd();
+    });
+
+    this.scene.pause();
+    this.scene.launch('BattleScene', initData);
+  }
+
+  private _onTutorialBattleEnd(): void {
+    this._phase = PHASE.POST_TUTORIAL;
+    setFlag(this.registry, GAME_FLAGS.TUTORIAL_BATTLE_COMPLETE, true);
+
+    this.dialogMgr.show('MARCUS', [
+      "That was a drone. The small ones.",
+      "The Wardens are worse.",
+      "...a lot worse.",
+    ], () => { this._approachBoss(); });
+  }
+
+  // ─── Boss fight (1D) ──────────────────────────────────────────────────────
+
+  private _approachBoss(): void {
+    this._phase = PHASE.BOSS_APPROACH;
+
+    this.dialogMgr.show('SYSTEM', [
+      "Something large moves between the buildings ahead.",
+      "A red searchlight sweeps the street.",
+    ], () => { this._launchBossBattle(); });
+  }
+
+  private _launchBossBattle(): void {
+    this._phase = PHASE.BOSS_BATTLE;
+
+    const initData: BattleInitData = {
+      enemyKey:    'warden_alpha',
+      returnScene: 'NewBostonScene',
+      allies: [{
+        name:  'MARCUS',
+        hp:    MARCUS_HP,
+        maxHp: MARCUS_HP,
+        attack: MARCUS_ATK,
+        color: 0xddaa44,
+      }],
+      bossConfig: {
+        phases: [
+          {
+            hpThreshold: 0.6,
+            atkBoost:    4,
+            dialogue: ['The Warden reconfigures. Its arms extend.'],
+          },
+          {
+            hpThreshold: 0.3,
+            atkBoost:    6,
+            dialogue: [
+              'WARNING: COMPLIANCE PROTOCOL ESCALATED.',
+              'LETHAL RESPONSE AUTHORIZED.',
+            ],
+          },
+        ],
+        conversionTriggerHp: 0.4,
+      },
+    };
+
+    bus.once(EVENTS.BATTLE_END, () => {
+      this._onBossBattleEnd();
+    });
+
+    this.scene.pause();
+    this.scene.launch('BattleScene', initData);
+  }
+
+  private _onBossBattleEnd(): void {
+    this._phase = PHASE.POST_BOSS;
+    setFlag(this.registry, GAME_FLAGS.WARDEN_ALPHA_DEFEATED, true);
+
+    this.dialogMgr.show(this._playerName, [
+      "Marcus is gone.",
+      "You saw it happen.",
+      "He's not dead. He's not the same.",
+      "The subway. You have to keep moving.",
     ], () => { this._endScene(); });
   }
 
   private _endScene(): void {
     this._phase = PHASE.DONE;
     this.cameras.main.fadeOut(1000, 0, 0, 0, (_cam: Phaser.Cameras.Scene2D.Camera, p: number) => {
-      if (p === 1) this.scene.start('WorldMapScene');
+      if (p === 1) this.scene.start('SubwayScene');
     });
   }
 

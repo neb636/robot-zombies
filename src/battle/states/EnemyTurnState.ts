@@ -31,13 +31,33 @@ export class EnemyTurnState extends BattleState {
     const action = enemy.chooseAction();
 
     if (action.type === 'ATTACK') {
-      const dead = player.takeDamage(action.damage);
+      let { damage } = action;
+
+      // In scripted battles, clamp damage so player never dies
+      if (this.manager.scripted && player.hp - damage <= 0) {
+        damage = Math.max(0, player.hp - 1);
+      }
+
+      const dead = player.takeDamage(damage);
       audioManager.playSfx('sfx-attack');
 
       if ('play' in enemy.sprite) {
         (enemy.sprite as Phaser.GameObjects.Sprite).play('robot-idle');
       }
-      this.manager.goTo(dead ? BATTLE_STATES.DEFEAT : BATTLE_STATES.PLAYER_TURN);
+
+      if (dead) {
+        this.manager.goTo(BATTLE_STATES.DEFEAT);
+        return;
+      }
+
+      // Check boss thresholds after enemy acts (in case of counter-effects later)
+      const bossState = this.manager.checkBossThresholds();
+      if (bossState) {
+        this.manager.goTo(bossState);
+        return;
+      }
+
+      this.manager.goTo(BATTLE_STATES.PLAYER_TURN);
     }
   }
 }

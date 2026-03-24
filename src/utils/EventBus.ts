@@ -32,6 +32,17 @@ class EventBus extends EventTarget {
     this.addEventListener(eventName, listener);
     return () => this.removeEventListener(eventName, listener);
   }
+
+  once<K extends BusEventName>(
+    eventName: K,
+    handler: (detail: BusEventMap[K]) => void,
+  ): void {
+    const listener = (e: Event): void => {
+      this.removeEventListener(eventName, listener);
+      handler((e as CustomEvent<BusEventMap[K]>).detail);
+    };
+    this.addEventListener(eventName, listener);
+  }
 }
 
 export const bus = new EventBus();

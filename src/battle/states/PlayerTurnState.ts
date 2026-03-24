@@ -5,12 +5,7 @@ import type { BattleMenuAction }        from '../../types.js';
 
 export class PlayerTurnState extends BattleState {
   private menuIndex: number = 0;
-  private readonly menuItems: BattleMenuAction[] = [
-    { label: 'ATTACK',  action: PLAYER_ACTIONS.ATTACK  },
-    { label: 'HEAL',    action: PLAYER_ACTIONS.HEAL    },
-    { label: 'SPECIAL', action: PLAYER_ACTIONS.SPECIAL },
-    { label: 'FLEE',    action: PLAYER_ACTIONS.FLEE    },
-  ];
+  private menuItems: BattleMenuAction[] = [];
 
   private _upKey?:    Phaser.Input.Keyboard.Key;
   private _downKey?:  Phaser.Input.Keyboard.Key;
@@ -18,6 +13,8 @@ export class PlayerTurnState extends BattleState {
   private _spaceKey?: Phaser.Input.Keyboard.Key;
 
   enter(): void {
+    this.menuItems = this._getMenuItems();
+    this.menuIndex = 0;
     this.manager.hud.showMenu(this.menuItems, this.menuIndex);
     this._setupKeys();
   }
@@ -56,6 +53,32 @@ export class PlayerTurnState extends BattleState {
     if (item) this._executeAction(item.action);
   }
 
+  private _getMenuItems(): BattleMenuAction[] {
+    const items: BattleMenuAction[] = [
+      { label: 'ATTACK',  action: PLAYER_ACTIONS.ATTACK  },
+      { label: 'HEAL',    action: PLAYER_ACTIONS.HEAL    },
+      { label: 'SPECIAL', action: PLAYER_ACTIONS.SPECIAL },
+    ];
+    if (!this.manager.scripted) {
+      items.push({ label: 'FLEE', action: PLAYER_ACTIONS.FLEE });
+    }
+    return items;
+  }
+
+  /** After dealing damage, determine next state (boss threshold, ally turn, or enemy turn). */
+  private _afterDamage(dead: boolean): void {
+    if (dead) {
+      this.manager.goTo(BATTLE_STATES.VICTORY);
+      return;
+    }
+    const bossState = this.manager.checkBossThresholds();
+    if (bossState) {
+      this.manager.goTo(bossState);
+      return;
+    }
+    this.manager.goTo(this.manager.getNextTurnState());
+  }
+
   private _executeAction(action: string): void {
     const { player, enemy, audioManager, dialogueManager } = this.manager;
 
@@ -64,31 +87,31 @@ export class PlayerTurnState extends BattleState {
         const dmg  = player.attack + Math.floor(Math.random() * 8);
         const dead = enemy.takeDamage(dmg);
         audioManager.playSfx('sfx-attack');
-        dialogueManager.show('Kai', [`You strike ${enemy.name} for ${dmg} damage!`]);
-        this.manager.goTo(dead ? BATTLE_STATES.VICTORY : BATTLE_STATES.ENEMY_TURN);
+        dialogueManager.show(player.name, [`You strike ${enemy.name} for ${dmg} damage!`]);
+        this._afterDamage(dead);
         break;
       }
       case PLAYER_ACTIONS.HEAL: {
         const amt = 25;
         player.heal(amt);
         audioManager.playSfx('sfx-heal');
-        dialogueManager.show('Kai', [`You recover ${amt} HP.`]);
-        this.manager.goTo(BATTLE_STATES.ENEMY_TURN);
+        dialogueManager.show(player.name, [`You recover ${amt} HP.`]);
+        this.manager.goTo(this.manager.getNextTurnState());
         break;
       }
       case PLAYER_ACTIONS.SPECIAL: {
         const dmg  = player.attack * 2 + Math.floor(Math.random() * 12);
         const dead = enemy.takeDamage(dmg);
         audioManager.playSfx('sfx-attack');
-        dialogueManager.show('Kai', [
+        dialogueManager.show(player.name, [
           'TEMPORAL SLASH!',
           `You deal ${dmg} damage through time itself!`,
         ]);
-        this.manager.goTo(dead ? BATTLE_STATES.VICTORY : BATTLE_STATES.ENEMY_TURN);
+        this._afterDamage(dead);
         break;
       }
       case PLAYER_ACTIONS.FLEE:
-        dialogueManager.show('Kai', ['You flee into the timeline...']);
+        dialogueManager.show(player.name, ['You flee into the timeline...']);
         this.manager.endBattle(false);
         break;
       default:

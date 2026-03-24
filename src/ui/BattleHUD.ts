@@ -15,9 +15,11 @@ export class BattleHUD {
   private readonly scene:    Phaser.Scene;
   private _player:           HudEntity | null = null;
   private _enemy:            HudEntity | null = null;
+  private _allies:           HudEntity[] = [];
   private readonly _gfx:     Phaser.GameObjects.Graphics;
   private _texts:            Phaser.GameObjects.Text[] = [];
   private readonly _menuGrp: Phaser.GameObjects.Group;
+  private _darkenedAllies:   Set<string> = new Set();
 
   constructor(scene: Phaser.Scene) {
     this.scene    = scene;
@@ -25,9 +27,18 @@ export class BattleHUD {
     this._menuGrp = scene.add.group();
   }
 
-  bind(player: BattlePlayer, enemy: Enemy): void {
+  bind(player: BattlePlayer, enemy: Enemy, allies?: BattlePlayer[]): void {
     this._player = player;
     this._enemy  = enemy;
+    this._allies = allies ?? [];
+  }
+
+  darkenAlly(name: string): void {
+    this._darkenedAllies.add(name);
+  }
+
+  removeAlly(name: string): void {
+    this._allies = this._allies.filter(a => a.name !== name);
   }
 
   update(): void {
@@ -35,8 +46,14 @@ export class BattleHUD {
     this._texts.forEach(t => { t.destroy(); });
     this._texts = [];
 
-    if (this._player) this._drawBar(this._player, 16, 16,  0x44ff88, 'KAI');
+    if (this._player) this._drawBar(this._player, 16, 16, 0x44ff88, this._player.name);
     if (this._enemy)  this._drawBar(this._enemy,  16, 60, 0xff4444, this._enemy.name);
+
+    this._allies.forEach((ally, i) => {
+      const darkened = this._darkenedAllies.has(ally.name);
+      const color = darkened ? 0x555555 : 0xddaa44;
+      this._drawBar(ally, 16, 104 + i * 44, color, ally.name);
+    });
   }
 
   showMenu(items: Array<{ label: string; action: string }>, selectedIndex: number): void {

@@ -14,6 +14,33 @@ export interface WasdKeys {
 
 // ─── Battle ──────────────────────────────────────────────────────────────────
 
+export interface AllyConfig {
+  name: string;
+  hp: number;
+  maxHp: number;
+  attack: number;
+  color: number;
+}
+
+export interface BossPhase {
+  hpThreshold: number;
+  atkBoost: number;
+  dialogue: string[];
+}
+
+export interface BossConfig {
+  phases: BossPhase[];
+  conversionTriggerHp?: number;
+}
+
+export interface BattleInitData {
+  enemyKey: string;
+  returnScene: string;
+  allies?: AllyConfig[];
+  scripted?: boolean;
+  bossConfig?: BossConfig;
+}
+
 export interface BattlePlayer {
   sprite: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
   name: string;

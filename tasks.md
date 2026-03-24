@@ -35,30 +35,30 @@ Expand the existing prologue from a small apartment to the full planned prologue
 - [x] Marcus has no techs in battle — just a basic attack (screwdriver). Make this visible in the HUD so player notices he's different.
 
 ### 1C — The Checkpoint (tutorial battle)
-- [ ] Trigger battle when player reaches checkpoint zone in New Boston
-- [ ] Marcus fights beside the player in this battle
-- [ ] Make this battle scripted (player cannot lose — enemy HP artificially limited)
-- [ ] After battle: continue toward harbor district, approaching Compliance Warden Alpha
+- [x] Trigger battle when player reaches checkpoint zone in New Boston
+- [x] Marcus fights beside the player in this battle
+- [x] Make this battle scripted (player cannot lose — enemy HP artificially limited)
+- [x] After battle: continue toward harbor district, approaching Compliance Warden Alpha
 
 ### 1D — Compliance Warden Alpha (prologue boss) + Marcus loss
-- [ ] Create boss encounter for Compliance Warden Alpha
-- [ ] Phase structure: 3 phases (Phase 2 and 3 can be simple HP thresholds for now)
-- [ ] Marcus conversion scene: cutscene triggers when Warden reaches ~40% HP
+- [x] Create boss encounter for Compliance Warden Alpha
+- [x] Phase structure: 3 phases (Phase 2 and 3 can be simple HP thresholds for now)
+- [x] Marcus conversion scene: cutscene triggers when Warden reaches ~40% HP
   - Marcus pulls aggro — a quick scripted animation
   - Conversion beam hits him
   - He stands, eyes glow (subtle — just a color shift on the sprite)
   - He walks away toward the harbor in a straight line, out of frame
   - No dialogue. No death screen. His HUD portrait goes dark.
   - Player regains control to finish the fight — now alone
-- [ ] After boss: player flees into the subway tunnels
+- [x] After boss: player flees into the subway tunnels
 
 ### 1E — Red Line Tunnels (safe house + Maya recruit)
-- [ ] Create `SubwayScene.ts` — underground survivor hideout
-- [ ] Place NPCs representing the survivor cell
-- [ ] Write and trigger Maya's introduction dialogue (bitter, brilliant, establishing her voice)
-- [ ] Add Maya to party after cutscene completes
-- [ ] Story beat: Maya gives player the EMP device hint
-- [ ] Optional: player can ask Maya "did you see what happened to my friend?" — she says she knows what conversion is. She doesn't sugarcoat it.
+- [x] Create `SubwayScene.ts` — underground survivor hideout
+- [x] Place NPCs representing the survivor cell
+- [x] Write and trigger Maya's introduction dialogue (bitter, brilliant, establishing her voice)
+- [x] Add Maya to party after cutscene completes
+- [x] Story beat: Maya gives player the EMP device hint
+- [x] Optional: player can ask Maya "did you see what happened to my friend?" — she says she knows what conversion is. She doesn't sugarcoat it.
 
 ### 1F — Marcus sprite and portrait
 - [ ] Generate Marcus sprite: ordinary guy, work clothes, carries a flashlight and screwdriver

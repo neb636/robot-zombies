@@ -5,18 +5,13 @@ import { AudioManager }    from '../audio/AudioManager.js';
 import { DialogueManager } from '../dialogue/DialogueManager.js';
 import { EVENTS }          from '../utils/constants.js';
 import { bus }             from '../utils/EventBus.js';
-
-interface BattleSceneInitData {
-  enemyKey?:    string;
-  returnScene?: string;
-}
+import type { BattleInitData } from '../types.js';
 
 /**
- * BattleScene — launched in parallel on top of WorldMapScene.
+ * BattleScene — launched in parallel on top of another scene.
  */
 export class BattleScene extends Phaser.Scene {
-  private enemyKey!:    string;
-  private returnScene!: string;
+  private initData!:        BattleInitData;
   private audioManager!:    AudioManager;
   private dialogueManager!: DialogueManager;
   private battleManager!:   BattleManager;
@@ -25,9 +20,15 @@ export class BattleScene extends Phaser.Scene {
     super({ key: 'BattleScene' });
   }
 
-  init(data: BattleSceneInitData): void {
-    this.enemyKey    = data.enemyKey    ?? 'robot_zombie';
-    this.returnScene = data.returnScene ?? 'WorldMapScene';
+  init(data: Partial<BattleInitData>): void {
+    const base: BattleInitData = {
+      enemyKey:    data.enemyKey    ?? 'compliance_drone',
+      returnScene: data.returnScene ?? 'WorldMapScene',
+    };
+    if (data.allies)     base.allies     = data.allies;
+    if (data.scripted != null) base.scripted = data.scripted;
+    if (data.bossConfig) base.bossConfig = data.bossConfig;
+    this.initData = base;
   }
 
   create(): void {
@@ -37,7 +38,7 @@ export class BattleScene extends Phaser.Scene {
     this.dialogueManager = new DialogueManager(this);
     const hud            = new BattleHUD(this);
     this.battleManager   = new BattleManager(this, {
-      enemyKey:        this.enemyKey,
+      initData:        this.initData,
       hud,
       audioManager:    this.audioManager,
       dialogueManager: this.dialogueManager,
@@ -55,7 +56,7 @@ export class BattleScene extends Phaser.Scene {
     this.audioManager.stopMusic();
     bus.emit(EVENTS.BATTLE_END, { victory });
     this.scene.stop();
-    this.scene.resume(this.returnScene);
+    this.scene.resume(this.initData.returnScene);
   }
 
   private _buildBackground(): void {
