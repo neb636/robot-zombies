@@ -14,7 +14,7 @@
 
 const LS_KEY = 'rz_tts_muted';
 
-type VoiceGender = 'male' | 'female' | 'neutral';
+type VoiceGender = 'male' | 'female' | 'neutral' | 'robot';
 
 interface VoiceProfile {
   rate:   number;
@@ -82,8 +82,15 @@ class TTSManager {
   private _profileFor(speakerName: string): VoiceProfile {
     const n = speakerName.toUpperCase();
 
-    if (/SUPERINTELLIGENCE|BROADCAST|COLLECTIVE|SYSTEM|AI\b/.test(n)) {
-      return { rate: 0.82, pitch: 0.25, volume: 0.85, gender: 'neutral' };
+    // Robot / AI voices — target Fred/Zarvox for classic synthesizer sound
+    if (/SUPERINTELLIGENCE|BROADCAST|COLLECTIVE|ELISE|AI\b/.test(n)) {
+      return { rate: 0.72, pitch: 0.10, volume: 0.88, gender: 'robot' };
+    }
+    if (/ROBOT|DRONE|UNIT|SENTINEL|ENFORCER|COMPLIANCE/.test(n)) {
+      return { rate: 0.80, pitch: 0.10, volume: 0.85, gender: 'robot' };
+    }
+    if (/SYSTEM|BROADCAST/.test(n)) {
+      return { rate: 0.88, pitch: 0.15, volume: 0.85, gender: 'robot' };
     }
     if (/ALARM|BROWSER|SIGNAL/.test(n)) {
       return { rate: 1.35, pitch: 0.55, volume: 0.75, gender: 'neutral' };
@@ -103,7 +110,11 @@ class TTSManager {
     const MALE_RE    = /daniel|david|fred|james|mark|alex|google uk english male/i;
     const FEMALE_RE  = /karen|samantha|victoria|zira|google us english|microsoft zira/i;
     const NEUTRAL_RE = /google|microsoft|enhanced/i;
+    // Classic synthesizer voices — Fred (Macintalk) and Zarvox are the most robotic.
+    // Fall back to Albert (nasal/robotic on macOS), then any English voice.
+    const ROBOT_RE   = /fred|zarvox|albert|trinoids|cellos|bells/i;
 
+    if (gender === 'robot')  return this._voices.find(v => ROBOT_RE.test(v.name))   ?? this._voices.find(v => /english/i.test(v.lang)) ?? this._voices[0] ?? null;
     if (gender === 'male')   return this._voices.find(v => MALE_RE.test(v.name))    ?? this._voices[0] ?? null;
     if (gender === 'female') return this._voices.find(v => FEMALE_RE.test(v.name))  ?? this._voices[0] ?? null;
     return this._voices.find(v => NEUTRAL_RE.test(v.name)) ?? this._voices[0] ?? null;
