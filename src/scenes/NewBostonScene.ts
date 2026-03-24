@@ -15,6 +15,7 @@ import {
   CHECKPOINT_X, CHECKPOINT_Y_TOP, CHECKPOINT_Y_BOT,
   drawNewBoston,
 } from './NewBostonRenderer.js';
+import D from '../data/dialogue/boston.json';
 
 // ─── Phase keys ──────────────────────────────────────────────────────────────
 const PHASE = {
@@ -320,13 +321,7 @@ export class NewBostonScene extends Phaser.Scene {
   private _startArriving(): void {
     this._phase = PHASE.ARRIVING;
 
-    this.dialogMgr.show(this._playerName, [
-      'Outside.',
-      'Two years.',
-      "The street looks exactly the same.",
-      "That's the wrong thing to notice first.",
-      "You knew that before you finished the thought.",
-    ], () => {
+    this.dialogMgr.show(this._playerName, D.arriving.player, () => {
       this._phase = PHASE.MEET_MARCUS;
       this._inputEnabled = true;
       this._showHint('Find Marcus', 4000);
@@ -349,22 +344,10 @@ export class NewBostonScene extends Phaser.Scene {
   }
 
   private _triggerMarcusDialogue(): void {
-    this.dialogMgr.show('MARCUS', [
-      "You look surprised.",
-      "Don't be. They started on our block around 4 AM.",
-      "Mrs. Halloway from across the street waved at me this morning.",
-      "Very normal wave. Very normal smile. Exactly the same as yesterday's wave.",
-      "...and the wave before that.",
-    ], () => {
+    this.dialogMgr.show('MARCUS', D.marcus.intro1, () => {
       // Brief beat before the punchline
       this.time.delayedCall(600, () => {
-        this.dialogMgr.show('MARCUS', [
-          "Anyway. You want to hear the good news or the good news?",
-          "Good news: the coffee shop on Tremont is still open.",
-          "Bad news: the barista made my latte perfectly. No foam. Just how I like it.",
-          "First time in six years. Nailed it.",
-          "I didn't drink it.",
-        ], () => {
+        this.dialogMgr.show('MARCUS', D.marcus.intro2, () => {
           this._marcusJoined    = true;
           this._phase           = PHASE.IN_SCENE;
           this._inputEnabled    = true;
@@ -442,10 +425,7 @@ export class NewBostonScene extends Phaser.Scene {
     this._citizenTimer?.remove();
     this._citizenTimer = null;
 
-    this.dialogMgr.show('MARCUS', [
-      "Checkpoint's just ahead.",
-      "Stay behind me.",
-    ], () => { this._launchTutorialBattle(); });
+    this.dialogMgr.show('MARCUS', D.marcus.checkpoint, () => { this._launchTutorialBattle(); });
   }
 
   // ─── Tutorial battle (1C) ──────────────────────────────────────────────────
@@ -478,11 +458,7 @@ export class NewBostonScene extends Phaser.Scene {
     this._phase = PHASE.POST_TUTORIAL;
     setFlag(this.registry, GAME_FLAGS.TUTORIAL_BATTLE_COMPLETE, true);
 
-    this.dialogMgr.show('MARCUS', [
-      "That was a drone. The small ones.",
-      "The Wardens are worse.",
-      "...a lot worse.",
-    ], () => { this._approachBoss(); });
+    this.dialogMgr.show('MARCUS', D.marcus.post_tutorial, () => { this._approachBoss(); });
   }
 
   // ─── Boss fight (1D) ──────────────────────────────────────────────────────
@@ -490,10 +466,7 @@ export class NewBostonScene extends Phaser.Scene {
   private _approachBoss(): void {
     this._phase = PHASE.BOSS_APPROACH;
 
-    this.dialogMgr.show('SYSTEM', [
-      "Something large moves between the buildings ahead.",
-      "A red searchlight sweeps the street.",
-    ], () => { this._launchBossBattle(); });
+    this.dialogMgr.show('SYSTEM', D.boss.approach, () => { this._launchBossBattle(); });
   }
 
   private _launchBossBattle(): void {
@@ -511,19 +484,8 @@ export class NewBostonScene extends Phaser.Scene {
       }],
       bossConfig: {
         phases: [
-          {
-            hpThreshold: 0.6,
-            atkBoost:    4,
-            dialogue: ['The Warden reconfigures. Its arms extend.'],
-          },
-          {
-            hpThreshold: 0.3,
-            atkBoost:    6,
-            dialogue: [
-              'WARNING: COMPLIANCE PROTOCOL ESCALATED.',
-              'LETHAL RESPONSE AUTHORIZED.',
-            ],
-          },
+          { hpThreshold: 0.6, atkBoost: 4, dialogue: [...D.boss.warden_alpha.phase1] },
+          { hpThreshold: 0.3, atkBoost: 6, dialogue: [...D.boss.warden_alpha.phase2] },
         ],
         conversionTriggerHp: 0.4,
       },
@@ -541,12 +503,7 @@ export class NewBostonScene extends Phaser.Scene {
     this._phase = PHASE.POST_BOSS;
     setFlag(this.registry, GAME_FLAGS.WARDEN_ALPHA_DEFEATED, true);
 
-    this.dialogMgr.show(this._playerName, [
-      "Marcus is gone.",
-      "You saw it happen.",
-      "He's not dead. He's not the same.",
-      "The subway. You have to keep moving.",
-    ], () => { this._endScene(); });
+    this.dialogMgr.show(this._playerName, D.boss.post_player, () => { this._endScene(); });
   }
 
   private _endScene(): void {

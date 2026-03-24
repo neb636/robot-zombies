@@ -1,0 +1,17 @@
+{
+  "intro": {
+    "radio": [
+      "Two years since the Broadcast.",
+      "Superintelligence Inc. calls it the Conversion Program.",
+      "The roads are clean. The power is on. The food supply is stable.",
+      "Everything works perfectly.",
+      "...Everyone is so helpful."
+    ]
+  },
+  "defeated": {
+    "system": [
+      "You were defeated.",
+      "Rebooting timeline..."
+    ]
+  }
+}

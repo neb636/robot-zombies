@@ -33,7 +33,7 @@ export class DialogueBox {
     document.addEventListener('dialogue:advance', () => { this._advance(); });
   }
 
-  open(speakerName: string, lines: string[], onClose?: () => void): void {
+  open(speakerName: string, lines: readonly string[], onClose?: () => void): void {
     this._queue   = [...lines];
     this._onClose = onClose;
     this._speaker = speakerName;

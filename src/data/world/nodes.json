@@ -1,0 +1,262 @@
+{
+  "regions": [
+    {
+      "id": "boston",
+      "name": "Boston, MA",
+      "chapter": 0,
+      "nodes": [
+        {
+          "id": "beacon_hill",
+          "name": "Beacon Hill",
+          "type": "hot_zone",
+          "mapX": 90,
+          "mapY": 140,
+          "connections": ["red_line_tunnels", "seaport_district"],
+          "startUnlocked": true
+        },
+        {
+          "id": "red_line_tunnels",
+          "name": "Red Line Tunnels",
+          "type": "safe_house",
+          "mapX": 90,
+          "mapY": 260,
+          "connections": ["beacon_hill", "seaport_district"],
+          "startUnlocked": false
+        },
+        {
+          "id": "seaport_district",
+          "name": "Seaport District",
+          "type": "neutral_zone",
+          "mapX": 190,
+          "mapY": 200,
+          "connections": ["beacon_hill", "red_line_tunnels", "mit_campus"],
+          "startUnlocked": false
+        },
+        {
+          "id": "mit_campus",
+          "name": "MIT Campus",
+          "type": "ruins",
+          "mapX": 220,
+          "mapY": 120,
+          "connections": ["seaport_district", "blue_ridge_passage"],
+          "startUnlocked": false
+        }
+      ]
+    },
+    {
+      "id": "appalachia",
+      "name": "Appalachia",
+      "chapter": 1,
+      "nodes": [
+        {
+          "id": "blue_ridge_passage",
+          "name": "Blue Ridge Passage",
+          "type": "neutral_zone",
+          "mapX": 310,
+          "mapY": 160,
+          "connections": ["mit_campus", "ridge_camp"],
+          "startUnlocked": false
+        },
+        {
+          "id": "ridge_camp",
+          "name": "Ridge Camp",
+          "type": "safe_house",
+          "mapX": 360,
+          "mapY": 280,
+          "connections": ["blue_ridge_passage", "harlan_mine"],
+          "startUnlocked": false
+        },
+        {
+          "id": "harlan_mine",
+          "name": "Harlan Mine",
+          "type": "hot_zone",
+          "mapX": 410,
+          "mapY": 360,
+          "connections": ["ridge_camp", "mountain_pass"],
+          "startUnlocked": false
+        },
+        {
+          "id": "mountain_pass",
+          "name": "Mountain Pass",
+          "type": "neutral_zone",
+          "mapX": 460,
+          "mapY": 440,
+          "connections": ["harlan_mine", "new_memphis"],
+          "startUnlocked": false
+        }
+      ]
+    },
+    {
+      "id": "deep_south",
+      "name": "Deep South",
+      "chapter": 2,
+      "nodes": [
+        {
+          "id": "new_memphis",
+          "name": "New Memphis",
+          "type": "story_node",
+          "mapX": 520,
+          "mapY": 280,
+          "connections": ["mountain_pass", "mississippi_crossing"],
+          "startUnlocked": false
+        },
+        {
+          "id": "mississippi_crossing",
+          "name": "Mississippi Crossing",
+          "type": "hot_zone",
+          "mapX": 560,
+          "mapY": 380,
+          "connections": ["new_memphis", "the_bayou"],
+          "startUnlocked": false
+        },
+        {
+          "id": "the_bayou",
+          "name": "The Bayou",
+          "type": "neutral_zone",
+          "mapX": 540,
+          "mapY": 480,
+          "connections": ["mississippi_crossing", "vault_49"],
+          "startUnlocked": false
+        },
+        {
+          "id": "vault_49",
+          "name": "Vault 49",
+          "type": "safe_house",
+          "mapX": 630,
+          "mapY": 340,
+          "connections": ["the_bayou", "open_highway"],
+          "startUnlocked": false
+        }
+      ]
+    },
+    {
+      "id": "great_plains",
+      "name": "Great Plains",
+      "chapter": 3,
+      "nodes": [
+        {
+          "id": "open_highway",
+          "name": "Open Highway",
+          "type": "hot_zone",
+          "mapX": 680,
+          "mapY": 220,
+          "connections": ["vault_49", "harvest_town"],
+          "startUnlocked": false
+        },
+        {
+          "id": "harvest_town",
+          "name": "Harvest Town",
+          "type": "neutral_zone",
+          "mapX": 710,
+          "mapY": 360,
+          "connections": ["open_highway", "storm_corridor"],
+          "startUnlocked": false
+        },
+        {
+          "id": "storm_corridor",
+          "name": "Storm Corridor",
+          "type": "hot_zone",
+          "mapX": 730,
+          "mapY": 460,
+          "connections": ["harvest_town", "radio_tower_kansas"],
+          "startUnlocked": false
+        },
+        {
+          "id": "radio_tower_kansas",
+          "name": "Radio Tower (Kansas)",
+          "type": "fast_travel_hub",
+          "mapX": 770,
+          "mapY": 280,
+          "connections": ["open_highway", "storm_corridor", "high_altitude_camp"],
+          "startUnlocked": false
+        }
+      ]
+    },
+    {
+      "id": "rockies",
+      "name": "Rockies / Utah",
+      "chapter": 4,
+      "nodes": [
+        {
+          "id": "high_altitude_camp",
+          "name": "High Altitude Camp",
+          "type": "safe_house",
+          "mapX": 820,
+          "mapY": 180,
+          "connections": ["radio_tower_kansas", "ghost_town_utah"],
+          "startUnlocked": false
+        },
+        {
+          "id": "ghost_town_utah",
+          "name": "Ghost Town (Utah)",
+          "type": "ruins",
+          "mapX": 845,
+          "mapY": 300,
+          "connections": ["high_altitude_camp", "hermits_peak"],
+          "startUnlocked": false
+        },
+        {
+          "id": "hermits_peak",
+          "name": "Hermit's Peak",
+          "type": "story_node",
+          "mapX": 865,
+          "mapY": 400,
+          "connections": ["ghost_town_utah", "the_pass"],
+          "startUnlocked": false
+        },
+        {
+          "id": "the_pass",
+          "name": "The Pass",
+          "type": "hot_zone",
+          "mapX": 895,
+          "mapY": 490,
+          "connections": ["hermits_peak", "valley_approach"],
+          "startUnlocked": false
+        }
+      ]
+    },
+    {
+      "id": "silicon_valley",
+      "name": "Silicon Valley",
+      "chapter": 5,
+      "nodes": [
+        {
+          "id": "valley_approach",
+          "name": "The Valley Approach",
+          "type": "neutral_zone",
+          "mapX": 910,
+          "mapY": 240,
+          "connections": ["the_pass", "si_campus_perimeter"],
+          "startUnlocked": false
+        },
+        {
+          "id": "si_campus_perimeter",
+          "name": "SI Inc. Campus Perimeter",
+          "type": "story_node",
+          "mapX": 925,
+          "mapY": 360,
+          "connections": ["valley_approach", "mainframe_core"],
+          "startUnlocked": false
+        },
+        {
+          "id": "mainframe_core",
+          "name": "The Mainframe Core",
+          "type": "hot_zone",
+          "mapX": 942,
+          "mapY": 450,
+          "connections": ["si_campus_perimeter", "the_boardroom"],
+          "startUnlocked": false
+        },
+        {
+          "id": "the_boardroom",
+          "name": "The Boardroom",
+          "type": "story_node",
+          "mapX": 950,
+          "mapY": 530,
+          "connections": ["mainframe_core"],
+          "startUnlocked": false
+        }
+      ]
+    }
+  ]
+}

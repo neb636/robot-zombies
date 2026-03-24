@@ -1,0 +1,55 @@
+{
+  "arriving": {
+    "player": [
+      "Outside.",
+      "Two years.",
+      "The street looks exactly the same.",
+      "That's the wrong thing to notice first.",
+      "You knew that before you finished the thought."
+    ]
+  },
+  "marcus": {
+    "intro1": [
+      "You look surprised.",
+      "Don't be. They started on our block around 4 AM.",
+      "Mrs. Halloway from across the street waved at me this morning.",
+      "Very normal wave. Very normal smile. Exactly the same as yesterday's wave.",
+      "...and the wave before that."
+    ],
+    "intro2": [
+      "Anyway. You want to hear the good news or the good news?",
+      "Good news: the coffee shop on Tremont is still open.",
+      "Bad news: the barista made my latte perfectly. No foam. Just how I like it.",
+      "First time in six years. Nailed it.",
+      "I didn't drink it."
+    ],
+    "checkpoint": [
+      "Checkpoint's just ahead.",
+      "Stay behind me."
+    ],
+    "post_tutorial": [
+      "That was a drone. The small ones.",
+      "The Wardens are worse.",
+      "...a lot worse."
+    ]
+  },
+  "boss": {
+    "warden_alpha": {
+      "phase1": ["The Warden reconfigures. Its arms extend."],
+      "phase2": [
+        "WARNING: COMPLIANCE PROTOCOL ESCALATED.",
+        "LETHAL RESPONSE AUTHORIZED."
+      ]
+    },
+    "approach": [
+      "Something large moves between the buildings ahead.",
+      "A red searchlight sweeps the street."
+    ],
+    "post_player": [
+      "Marcus is gone.",
+      "You saw it happen.",
+      "He's not dead. He's not the same.",
+      "The subway. You have to keep moving."
+    ]
+  }
+}
