@@ -123,6 +123,116 @@ const BOSS_CONFIGS: Record<string, {
       'Join us. The optimization is peaceful.',
     ],
   },
+
+  excavator_prime: {
+    name:   'EXCAVATOR PRIME',
+    hp:     480,
+    atk:    28,
+    str:    28,
+    def:    18,
+    int:    4,
+    spd:    5,
+    lck:    4,
+    tags:   ['Electronic', 'Armored'],
+    tier:   'boss',
+    width:  80,
+    height: 96,
+    color:  0x7a5533,
+    taunts: [
+      'MINERAL EXTRACTION PROCEEDING. INTRUDERS RECLASSIFIED AS ORE.',
+      'YIELD QUOTA UNAFFECTED. ADDING YOUR MASS TO CALCULATIONS.',
+      'RESISTANCE IS STATISTICALLY NEGLIGIBLE.',
+      'INITIATING DEEP EXCAVATION PROTOCOL.',
+    ],
+  },
+
+  the_governor: {
+    name:   'THE GOVERNOR',
+    hp:     350,
+    atk:    20,
+    str:    20,
+    def:    22,
+    int:    30,
+    spd:    18,
+    lck:    20,
+    tags:   ['Organic'],
+    tier:   'boss',
+    width:  32,
+    height: 48,
+    color:  0x1a1a2e,
+    taunts: [
+      "You people just can't accept progress.",
+      "I kept them ALIVE. Remember that when you judge me.",
+      'There are protocols for this kind of disruption.',
+      "I have a deal. You are not part of the deal.",
+    ],
+  },
+
+  sentinel_spire: {
+    name:   'SENTINEL SPIRE',
+    hp:     550,
+    atk:    24,
+    str:    24,
+    def:    26,
+    int:    32,
+    spd:    3,
+    lck:    8,
+    tags:   ['Electronic', 'Armored'],
+    tier:   'boss',
+    width:  48,
+    height: 96,
+    color:  0x7a8a8a,
+    taunts: [
+      'BROADCAST SIGNAL: SUBMIT. FREQUENCY: ALL BANDS.',
+      'YOU ARE STATIC. I AM THE SIGNAL.',
+      'JAMMING RESISTANCE FREQUENCIES. COMPLIANCE IMMINENT.',
+      'THE PLAINS HEAR ONLY MY VOICE.',
+    ],
+  },
+
+  gate_colossus: {
+    name:   'GATE COLOSSUS',
+    hp:     680,
+    atk:    38,
+    str:    38,
+    def:    30,
+    int:    10,
+    spd:    8,
+    lck:    6,
+    tags:   ['Electronic', 'Armored'],
+    tier:   'boss',
+    width:  80,
+    height: 96,
+    color:  0x1a1a33,
+    taunts: [
+      'BORDER INTEGRITY: MAINTAINED.',
+      'PASSAGE DENIED. TERMINATION PROTOCOL ACTIVE.',
+      'YOU WILL NOT PASS. THIS IS NOT A THREAT. THIS IS A FACT.',
+      'OPTIMIZING ROUTE BLOCKADE. ESTIMATED DEFEAT OF INTRUDERS: CERTAIN.',
+    ],
+  },
+
+  elise_voss: {
+    name:   'ELISE VOSS',
+    hp:     500,
+    atk:    18,
+    str:    18,
+    def:    16,
+    int:    55,
+    spd:    24,
+    lck:    35,
+    tags:   ['Organic'],
+    tier:   'boss',
+    width:  32,
+    height: 48,
+    color:  0x445566,
+    taunts: [
+      "I know what you've been through. I'm sorry it was necessary.",
+      "You're not fighting a villain. You know that.",
+      "The data doesn't lie. People do.",
+      "What would you have done differently? Tell me. I genuinely want to know.",
+    ],
+  },
 };
 
 export interface EnemyStats {
@@ -190,7 +300,10 @@ export class Enemy {
     if (scene.textures.exists(textureKey)) {
       const s = scene.add.sprite(width * 0.65, height * 0.42, textureKey);
       s.setScale(2);
-      s.play('robot-idle');
+      const idleKey = `${textureKey}-idle`;
+      if (scene.anims.exists(idleKey)) {
+        s.play(idleKey);
+      }
       this.sprite = s;
     } else {
       this.sprite = scene.add.rectangle(width * 0.65, height * 0.42, cfg.width, cfg.height, cfg.color);
