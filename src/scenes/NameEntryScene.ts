@@ -28,7 +28,7 @@ export class NameEntryScene extends Phaser.Scene {
       sl.fillRect(0, y, width, 2);
     }
 
-    this.add.text(cx, height * 0.24, 'JUNE 12, 2028  —  AUSTIN, TEXAS', {
+    this.add.text(cx, height * 0.24, 'JUNE 12, 2028  —  BOSTON, MASSACHUSETTS', {
       fontFamily: 'monospace', fontSize: '13px', color: '#334455', letterSpacing: 3,
     }).setOrigin(0.5);
 
@@ -67,9 +67,6 @@ export class NameEntryScene extends Phaser.Scene {
       fontFamily: 'monospace', fontSize: '11px', color: '#223344',
     }).setOrigin(0.5);
 
-    this.add.text(cx, height * 0.74, '12 characters max. Default: KAI', {
-      fontFamily: 'monospace', fontSize: '10px', color: '#1a2a3a',
-    }).setOrigin(0.5);
 
     this._updateDisplay();
     this._setupInput();
@@ -112,7 +109,7 @@ export class NameEntryScene extends Phaser.Scene {
 
   private _confirm(): void {
     this._locked = true;
-    const name = this._name.trim() || 'KAI';
+    const name = this._name.trim();
     this.registry.set('playerName', name);
 
     this.cameras.main.fade(500, 0, 0, 0, false, (_cam: Phaser.Cameras.Scene2D.Camera, progress: number) => {

@@ -2,16 +2,11 @@ import Phaser from 'phaser';
 import { Player }          from '../entities/Player.js';
 import { DialogueManager } from '../dialogue/DialogueManager.js';
 import type { Interactable, WasdKeys } from '../types.js';
-
-// ─── Room constants ───────────────────────────────────────────────────────────
-const MAP_W      = 700;
-const MAP_H      = 440;
-const WALL_T     = 10;
-const DIVIDER_X  = 340;
-const DOOR_TOP   = 175;
-const DOOR_BOT   = 275;
-const FDOOR_TOP  = 178;
-const FDOOR_BOT  = 278;
+import {
+  MAP_W, MAP_H, WALL_T, DIVIDER_X,
+  DOOR_TOP, DOOR_BOT, FDOOR_TOP, FDOOR_BOT,
+  drawPrologueRoom,
+} from './PrologueRoomRenderer.js';
 
 // ─── Phase keys ──────────────────────────────────────────────────────────────
 const PHASE = {
@@ -55,7 +50,7 @@ export class PrologueScene extends Phaser.Scene {
     this._enteredLiving = false;
     this._playerName    = (this.registry.get('playerName') as string | undefined) ?? 'YOU';
 
-    this._drawRoom();
+    drawPrologueRoom(this);
     this._buildWalls();
     this._buildInteractables();
     this._buildPlayer();
@@ -75,188 +70,6 @@ export class PrologueScene extends Phaser.Scene {
     this._checkLivingTrigger();
     this._checkInteractProximity();
     if (this._phase === PHASE.OUTRO) this._checkFrontDoor();
-  }
-
-  // ─── Room Drawing ─────────────────────────────────────────────────────────
-
-  private _drawRoom(): void {
-    const g = this.add.graphics();
-
-    g.fillStyle(0x2a1f16);
-    g.fillRect(WALL_T, WALL_T, DIVIDER_X - WALL_T * 2, MAP_H - WALL_T * 2);
-
-    g.fillStyle(0x1a202e);
-    g.fillRect(DIVIDER_X + WALL_T, WALL_T, MAP_W - DIVIDER_X - WALL_T * 2, MAP_H - WALL_T * 2);
-
-    g.fillStyle(0x2a2438);
-    g.fillRect(0, 0, MAP_W, WALL_T);
-    g.fillRect(0, MAP_H - WALL_T, MAP_W, WALL_T);
-    g.fillRect(0, 0, WALL_T, MAP_H);
-    g.fillRect(MAP_W - WALL_T, 0, WALL_T, FDOOR_TOP);
-    g.fillRect(MAP_W - WALL_T, FDOOR_BOT, WALL_T, MAP_H - FDOOR_BOT);
-    g.fillRect(DIVIDER_X - 4, 0, 8, DOOR_TOP);
-    g.fillRect(DIVIDER_X - 4, DOOR_BOT, 8, MAP_H - DOOR_BOT);
-
-    g.fillStyle(0x5c3a1e);
-    g.fillRect(DIVIDER_X - 6, DOOR_TOP - 4, 12, 6);
-    g.fillRect(DIVIDER_X - 6, DOOR_BOT - 2, 12, 6);
-
-    // ── BEDROOM FURNITURE ─────────────────────────────────────────────────────
-
-    g.fillStyle(0x4a3020);
-    g.fillRect(28, 28, 190, 18);
-    g.fillStyle(0xd8ccba);
-    g.fillRect(28, 46, 190, 88);
-    g.fillStyle(0xf8f4ee);
-    g.fillRect(36, 52, 56, 28);
-    g.fillStyle(0xf0ece4);
-    g.fillRect(100, 52, 56, 28);
-    g.fillStyle(0x7060a0);
-    g.fillRect(28, 90, 190, 44);
-
-    g.fillStyle(0x3a3020);
-    g.fillRect(224, 46, 36, 30);
-    g.fillStyle(0xcc3300);
-    g.fillRect(228, 50, 28, 20);
-    g.fillStyle(0x111100);
-    g.fillRect(231, 53, 22, 12);
-    g.fillStyle(0x22ee44);
-    g.fillRect(233, 55, 18, 8);
-
-    g.fillStyle(0x4a3020);
-    g.fillRect(214, 150, 100, 62);
-    g.fillStyle(0x362815);
-    g.fillRect(216, 210, 10, 14);
-    g.fillRect(300, 210, 10, 14);
-    g.fillStyle(0x111122);
-    g.fillRect(224, 155, 64, 44);
-    g.fillStyle(0x001a44);
-    g.fillRect(228, 159, 56, 36);
-    g.fillStyle(0x0044cc, 0.7);
-    g.fillRect(232, 165, 48, 3);
-    g.fillRect(232, 172, 36, 3);
-    g.fillRect(232, 179, 44, 3);
-    g.fillStyle(0x222233);
-    g.fillRect(250, 199, 14, 8);
-    g.fillRect(244, 207, 26, 4);
-
-    g.fillStyle(0x2e2840);
-    g.fillRect(226, 218, 50, 36);
-    g.fillStyle(0x3a3454);
-    g.fillRect(228, 220, 46, 22);
-
-    g.fillStyle(0x2c1a0e);
-    g.fillRect(16, 196, 56, 130);
-    g.fillStyle(0x1a0c06);
-    g.fillRect(20, 200, 48, 122);
-    g.fillStyle(0x3c2414);
-    g.fillRect(18, 240, 52, 5);
-    g.fillRect(18, 278, 52, 5);
-    g.fillRect(18, 316, 52, 5);
-
-    const books: Array<[number, number]> = [
-      [0xaa3322, 0], [0x3366aa, 1], [0x33aa66, 2], [0xaa8822, 3], [0x884466, 4],
-      [0x4488aa, 0], [0xcc6600, 1], [0x226688, 2], [0x885522, 3],
-      [0xaa4444, 0], [0x448833, 1], [0x6644aa, 2], [0xaa7722, 3],
-    ];
-    books.forEach(([col, shelf]) => {
-      const bx = 22 + (shelf % 5) * 9;
-      const by = 206 + shelf * 38 + Math.floor(shelf / 5) * 4;
-      g.fillStyle(col);
-      g.fillRect(bx, by, 7, 32);
-    });
-
-    g.fillStyle(0x4a6080);
-    g.fillRect(100, 2, 120, 22);
-    g.fillStyle(0x88ccff);
-    g.fillRect(104, 4, 112, 18);
-    g.fillStyle(0xffffff);
-    g.fillRect(160, 4, 2, 18);
-    g.fillStyle(0xaaddff, 0.3);
-    g.fillRect(104, 4, 112, 6);
-
-    g.fillStyle(0x1a3a1a);
-    g.fillRect(170, 34, 44, 56);
-    g.fillStyle(0x22cc44);
-    g.fillRect(174, 38, 36, 28);
-    g.fillStyle(0x118833);
-    g.fillRect(174, 68, 36, 18);
-
-    // ── LIVING ROOM FURNITURE ─────────────────────────────────────────────────
-
-    g.fillStyle(0x1e1e1e);
-    g.fillRect(372, 22, 208, 84);
-    g.fillStyle(0x050508);
-    g.fillRect(378, 28, 196, 72);
-    g.fillStyle(0x303030);
-    g.fillRect(458, 106, 48, 10);
-    g.fillRect(468, 116, 28, 6);
-
-    g.fillStyle(0x4a6080);
-    g.fillRect(574, 2, 108, 22);
-    g.fillStyle(0x88ccff);
-    g.fillRect(578, 4, 100, 18);
-    g.fillStyle(0xffffff);
-    g.fillRect(628, 4, 2, 18);
-    g.fillStyle(0xaaddff, 0.3);
-    g.fillRect(578, 4, 100, 6);
-
-    g.fillStyle(0x4a3c30);
-    g.fillRect(358, 212, 224, 88);
-    g.fillStyle(0x6a5244);
-    g.fillRect(358, 214, 224, 32);
-    g.fillStyle(0x5a4438);
-    g.fillRect(366, 248, 96, 44);
-    g.fillStyle(0x584234);
-    g.fillRect(470, 248, 96, 44);
-    g.fillStyle(0x3a2c22);
-    g.fillRect(358, 212, 18, 88);
-    g.fillRect(564, 212, 18, 88);
-
-    g.fillStyle(0x4a3020);
-    g.fillRect(390, 308, 164, 34);
-    g.fillStyle(0x3a2416);
-    g.fillRect(392, 342, 8, 10);
-    g.fillRect(544, 342, 8, 10);
-    g.fillStyle(0x181818);
-    g.fillRect(486, 312, 44, 20);
-    g.fillStyle(0x444444);
-    g.fillRect(490, 315, 6, 6);
-    g.fillRect(500, 315, 6, 6);
-    g.fillRect(510, 315, 6, 6);
-    g.fillStyle(0x884422);
-    g.fillRect(432, 312, 18, 18);
-
-    g.fillStyle(0x3a2010);
-    g.fillRect(358, 354, 30, 26);
-    g.fillStyle(0x22aa44);
-    g.fillRect(358, 332, 30, 26);
-    g.fillStyle(0x339933);
-    g.fillRect(364, 318, 18, 18);
-    g.fillStyle(0x44cc55);
-    g.fillRect(368, 308, 10, 14);
-
-    g.fillStyle(0x5c3a1e);
-    g.fillRect(MAP_W - WALL_T - 2, FDOOR_TOP, WALL_T + 2, FDOOR_BOT - FDOOR_TOP);
-    g.fillStyle(0x7a5030);
-    g.fillRect(MAP_W - WALL_T + 1, FDOOR_TOP + 4, WALL_T - 4, FDOOR_BOT - FDOOR_TOP - 8);
-    g.fillStyle(0xd4aa20);
-    g.fillRect(MAP_W - 14, 222, 6, 6);
-
-    g.lineStyle(1, 0x000000, 0.06);
-    for (let x = WALL_T; x < DIVIDER_X; x += 32) {
-      g.moveTo(x, WALL_T);
-      g.lineTo(x, MAP_H - WALL_T);
-    }
-    for (let x = DIVIDER_X + WALL_T; x < MAP_W - WALL_T; x += 32) {
-      g.moveTo(x, WALL_T);
-      g.lineTo(x, MAP_H - WALL_T);
-    }
-    for (let y = WALL_T; y < MAP_H - WALL_T; y += 32) {
-      g.moveTo(WALL_T, y);
-      g.lineTo(MAP_W - WALL_T, y);
-    }
-    g.strokePath();
   }
 
   // ─── Physics Walls ────────────────────────────────────────────────────────
@@ -332,13 +145,6 @@ export class PrologueScene extends Phaser.Scene {
       },
       {
         id: 'couch', x: 476, y: 258, range: 70, label: 'Couch',
-        interact: () => { this.dialogMgr.show(n, [
-          "The throw blanket from next door is folded on the armrest.",
-          "Your neighbor always left the TV on when they went to bed.",
-        ]); },
-      },
-      {
-        id: 'tv', x: 474, y: 72, range: 74, label: 'TV',
         available: false,
         used: false,
         interact: () => { this._triggerNewscast(); },
@@ -420,8 +226,8 @@ export class PrologueScene extends Phaser.Scene {
     this._enteredLiving = true;
     this._inputEnabled  = false;
 
-    const tv = this._interactables.find(i => i.id === 'tv');
-    if (tv) tv.available = true;
+    const couch = this._interactables.find(i => i.id === 'couch');
+    if (couch) couch.available = true;
 
     this.dialogMgr.show(this._playerName, [
       "Next door. Your neighbor left their TV on again.",
@@ -429,14 +235,14 @@ export class PrologueScene extends Phaser.Scene {
       "Wait. That's not a normal channel.",
     ], () => {
       this._inputEnabled = true;
-      this._showHint('[ E ]  Turn on the TV', 4000);
+      this._showHint('[ E ]  Sit on the couch', 4000);
     });
   }
 
   private _triggerNewscast(): void {
-    const tv = this._interactables.find(i => i.id === 'tv');
-    if (!tv || tv.used) return;
-    tv.used = true;
+    const couch = this._interactables.find(i => i.id === 'couch');
+    if (!couch || couch.used) return;
+    couch.used = true;
 
     this._phase        = PHASE.NEWSCAST;
     this._inputEnabled = false;

@@ -1,11 +1,15 @@
 import Phaser from 'phaser';
+import { SaveManager } from '../save/SaveManager.js';
 
 function clamp(val: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, val));
 }
 
 /**
- * TitleScene — displayed after assets load. Player presses any key to begin.
+ * TitleScene — displayed after assets load.
+ *
+ * If no save exists: "PRESS ANY KEY TO BEGIN" (original behaviour).
+ * If a save exists:  "NEW GAME" / "CONTINUE" menu with keyboard navigation.
  */
 export class TitleScene extends Phaser.Scene {
   constructor() {
@@ -49,12 +53,6 @@ export class TitleScene extends Phaser.Scene {
       strokeThickness: 4,
     }).setOrigin(0.5).setAlpha(0);
 
-    const prompt = this.add.text(cx, height * 0.72, 'PRESS ANY KEY TO BEGIN', {
-      fontFamily: 'monospace',
-      fontSize:   clamp(width * 0.02, 13, 20) + 'px',
-      color:      '#88aacc',
-    }).setOrigin(0.5).setAlpha(0);
-
     this.add.text(cx, height * 0.92, 'v0.1.0  —  Save the world from unsolicited assistance', {
       fontFamily: 'monospace',
       fontSize:   '11px',
@@ -70,15 +68,147 @@ export class TitleScene extends Phaser.Scene {
       onComplete: () => {
         this.tweens.add({ targets: tagline, alpha: 1, duration: 600, delay: 100 });
         this.tweens.add({
-          targets: prompt, alpha: 1, duration: 600, delay: 400,
-          onComplete: () => { this._blinkPrompt(prompt); },
+          targets: tagline, alpha: 1, duration: 600, delay: 100,
+          onComplete: () => { this._showMenu(width, height); },
         });
-        this._enableStart();
       },
     });
 
     this._addFloatingRobots(width, height);
   }
+
+  // ─── Menu ──────────────────────────────────────────────────────────────────
+
+  private _showMenu(width: number, height: number): void {
+    const cx = width / 2;
+    const summary = SaveManager.getSummary();
+
+    if (summary === null) {
+      this._showPressAnyKey(cx, height);
+      return;
+    }
+
+    // Format save summary: "CONTINUE  —  Alex  ·  Ch.1  ·  Mar 24"
+    const dateStr = summary.savedAt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const continueLabel = `CONTINUE  —  ${summary.playerName}  ·  Ch.${summary.chapter}  ·  ${dateStr}`;
+
+    const fontSize = clamp(width * 0.022, 13, 20) + 'px';
+    const menuY = height * 0.72;
+    const gap = clamp(width * 0.18, 100, 180);
+
+    const newGameText = this.add.text(cx - gap, menuY, 'NEW GAME', {
+      fontFamily: 'monospace',
+      fontSize,
+      color: '#88aacc',
+    }).setOrigin(0.5).setAlpha(0);
+
+    const continueText = this.add.text(cx + gap, menuY, continueLabel, {
+      fontFamily: 'monospace',
+      fontSize,
+      color: '#88aacc',
+    }).setOrigin(0.5).setAlpha(0);
+
+    const hint = this.add.text(cx, menuY + 36, '← → to select   ENTER to confirm', {
+      fontFamily: 'monospace',
+      fontSize:   '11px',
+      color:      '#334455',
+    }).setOrigin(0.5).setAlpha(0);
+
+    this.tweens.add({ targets: [newGameText, continueText, hint], alpha: 1, duration: 500 });
+
+    // Selection state: 0 = NEW GAME, 1 = CONTINUE
+    let selected = 1;
+    this._highlightMenu(newGameText, continueText, selected);
+
+    const keys = this.input.keyboard!;
+
+    const onLeft = keys.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+    const onRight = keys.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+    const onEnter = keys.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
+
+    onLeft.on('down', () => {
+      selected = 0;
+      this._highlightMenu(newGameText, continueText, selected);
+    });
+    onRight.on('down', () => {
+      selected = 1;
+      this._highlightMenu(newGameText, continueText, selected);
+    });
+    onEnter.once('down', () => {
+      onLeft.destroy();
+      onRight.destroy();
+      if (selected === 0) {
+        this._fadeToScene('NameEntryScene');
+      } else {
+        this._loadAndContinue();
+      }
+    });
+
+    // Also support click/tap on each option
+    newGameText.setInteractive({ useHandCursor: true });
+    continueText.setInteractive({ useHandCursor: true });
+
+    newGameText.on('pointerdown', () => {
+      onLeft.destroy();
+      onRight.destroy();
+      onEnter.destroy();
+      this._fadeToScene('NameEntryScene');
+    });
+    continueText.on('pointerdown', () => {
+      onLeft.destroy();
+      onRight.destroy();
+      onEnter.destroy();
+      this._loadAndContinue();
+    });
+  }
+
+  private _highlightMenu(
+    newGame: Phaser.GameObjects.Text,
+    cont: Phaser.GameObjects.Text,
+    selected: number,
+  ): void {
+    newGame.setColor(selected === 0 ? '#ffffff' : '#446688');
+    cont.setColor(selected === 1 ? '#ffffff' : '#446688');
+    newGame.setStyle({ stroke: selected === 0 ? '#001133' : 'transparent', strokeThickness: 3 });
+    cont.setStyle({ stroke: selected === 1 ? '#001133' : 'transparent', strokeThickness: 3 });
+  }
+
+  private _showPressAnyKey(cx: number, height: number): void {
+    const prompt = this.add.text(cx, height * 0.72, 'PRESS ANY KEY TO BEGIN', {
+      fontFamily: 'monospace',
+      fontSize:   clamp(this.scale.width * 0.02, 13, 20) + 'px',
+      color:      '#88aacc',
+    }).setOrigin(0.5).setAlpha(0);
+
+    this.tweens.add({
+      targets: prompt, alpha: 1, duration: 600,
+      onComplete: () => { this._blinkPrompt(prompt); },
+    });
+
+    this.input.keyboard!.once('keydown', () => { this._fadeToScene('NameEntryScene'); });
+    this.input.once('pointerdown', () => { this._fadeToScene('NameEntryScene'); });
+  }
+
+  // ─── Navigation ────────────────────────────────────────────────────────────
+
+  private _loadAndContinue(): void {
+    const data = SaveManager.load();
+    if (data === null) {
+      // Save disappeared between check and selection — fall through to new game
+      this._fadeToScene('NameEntryScene');
+      return;
+    }
+    SaveManager.restore(this.game, data);
+    this._fadeToScene(data.currentScene);
+  }
+
+  private _fadeToScene(key: string): void {
+    this.cameras.main.fade(600, 0, 0, 0, false, (_cam: Phaser.Cameras.Scene2D.Camera, progress: number) => {
+      if (progress === 1) this.scene.start(key);
+    });
+  }
+
+  // ─── Helpers ───────────────────────────────────────────────────────────────
 
   private _blinkPrompt(text: Phaser.GameObjects.Text): void {
     this.tweens.add({
@@ -88,17 +218,6 @@ export class TitleScene extends Phaser.Scene {
       duration: 600,
       repeat:   -1,
       ease:     'Sine.easeInOut',
-    });
-  }
-
-  private _enableStart(): void {
-    this.input.keyboard!.once('keydown', () => { this._startGame(); });
-    this.input.once('pointerdown', () => { this._startGame(); });
-  }
-
-  private _startGame(): void {
-    this.cameras.main.fade(600, 0, 0, 0, false, (_cam: Phaser.Cameras.Scene2D.Camera, progress: number) => {
-      if (progress === 1) this.scene.start('NameEntryScene');
     });
   }
 
