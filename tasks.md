@@ -8,11 +8,11 @@
 
 These are quick fixes to bring existing code in line with the planning docs before building anything new.
 
-- [ ] **Fix prologue city** — Change `PrologueScene` setting from Austin TX to Boston. Update any dialogue/text that references Austin.
-- [ ] **Fix player default name** — Change default from `'KAI'` to something generic (e.g. `'YOU'`) since the player names themselves in the game.
-- [ ] **Fix friend's name** — Code currently uses "Dario". Rename to MARCUS throughout (phone call dialogue, any references).
-- [ ] **Fix WorldMapScene placeholder dialogue** — Remove the generic "robots have sentience / they only want to HELP" lines and replace with proper lore-based framing for after the prologue.
-- [ ] **Fix enemy key** — `BattleScene` uses `'robot_zombie'` as enemy key. Rename to `'compliance_drone'` to match the planned Tier 1 enemy.
+- [x] **Fix prologue city** — Change `PrologueScene` setting from Austin TX to Boston. Update any dialogue/text that references Austin.
+- [x] **Fix player default name** — Change default from `'KAI'` to something generic (e.g. `'YOU'`) since the player names themselves in the game.
+- [x] **Fix friend's name** — Code currently uses "Dario". Rename to MARCUS throughout (phone call dialogue, any references).
+- [x] **Fix WorldMapScene placeholder dialogue** — Remove the generic "robots have sentience / they only want to HELP" lines and replace with proper lore-based framing for after the prologue.
+- [x] **Fix enemy key** — `BattleScene` uses `'robot_zombie'` as enemy key. Rename to `'compliance_drone'` to match the planned Tier 1 enemy.
 
 ---
 
