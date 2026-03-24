@@ -1,0 +1,179 @@
+# Silicon Requiem — World Map & Lore Bible
+
+---
+
+## World Map Node Types
+
+| Node type | Color code | Description |
+|-----------|-----------|-------------|
+| Safe house | Green | Rest, trade, no combat. Full heal available. |
+| Hot zone | Red | Guaranteed combat encounter on entry. |
+| Neutral zone | Amber | Random event — may or may not trigger combat. |
+| Story node | Purple | Scripted scene. Advances chapter. Locks path ahead until completed. |
+| Fast travel hub | Blue | Unlocked after first visit. Requires activation. |
+| Ruins | Gray | One-visit loot location. No encounters. |
+
+**Path segments:** Each path between nodes = one travel day for survival drain. Hot zone paths cost +1 food (urgency routing). Story nodes lock the path ahead until completed — backtracking always allowed.
+
+---
+
+## Region Zones — Encounter Design
+
+### Boston, MA (Prologue)
+
+| Zone | Type | Notes |
+|------|------|-------|
+| Beacon Hill / Downtown | Hot zone | Tutorial area. Scripted encounters only — player cannot die. Introduces combat basics. |
+| Red Line Tunnels | Safe house | First safe house. Underground survivor cell. Map shop, intro trade. Maya recruited here. |
+| Seaport District | Neutral zone | Docks overrun. Random patrol frequency. Good loot (fuel, ammo) if you risk it. |
+| MIT Campus | Ruins | One-visit. Maya gets her EMP device from her old lab. Emotional scene, no combat. |
+
+### Appalachia (Chapter 1)
+
+| Zone | Type | Notes |
+|------|------|-------|
+| Blue Ridge Passage | Neutral zone | Dense forest — low drone coverage, high wildlife events. Hunting opportunity. Elias recruited. |
+| Ridge Camp | Safe house | Major safe house. 8 NPCs. Trade, rest, 2 side quests. Morale event: campfire dialogue. |
+| Harlan Mine | Hot zone | Story dungeon. Mandatory. 4 floors, boss. All scripted encounters — sets tone for journey. |
+| Mountain Pass (exit) | Neutral zone | Transition zone. Random weather event. First vehicle encounter. Survival drain +50%. |
+
+### Deep South (Chapter 2)
+
+| Zone | Type | Notes |
+|------|------|-------|
+| New Memphis | Story node | No combat (truce zone). Rich trade. Deja recruited here. Morally unsettling atmosphere. |
+| Mississippi Crossing | Hot zone | Bridge heavily patrolled. Two routes: bridge (combat) or ferry (survival event, fuel cost). |
+| The Bayou | Neutral zone | No drones (terrain blocks sensors). Random events dominate. Elias loss scene triggers here. |
+| Vault 49 | Safe house | Safest location in the game. Full resupply. Lore dump. Optional puzzle room with backstory terminals. |
+
+### Great Plains (Chapter 3)
+
+| Zone | Type | Notes |
+|------|------|-------|
+| Open Highway | Hot zone | Aerial Sentinels. No cover mechanic — combat triggered if moving without checking sky. Teaches stealth movement. |
+| Harvest Town | Neutral zone | Voluntary conversion settlement. Eerie. Trade allowed. Good food supply, morally loaded. |
+| Storm Corridor | Hot zone | Weather mechanic: lightning disrupts robot sensors (–50% encounter rate) but party takes storm damage each turn. |
+| Radio Tower (Kansas) | Fast travel hub | First fast travel hub. Jerome recruited here. Unlocked after Ch.3 story beat. |
+
+### Rockies / Utah (Chapter 4)
+
+| Zone | Type | Notes |
+|------|------|-------|
+| High Altitude Camp | Safe house | Drone-free zone (altitude). Altitude sickness mechanic: –10% stats unless rested 1 day here. |
+| Ghost Town (Utah) | Ruins | One-visit. Story scene, no combat. Journals and photos of a lost community. Morale event. |
+| Hermit's Peak | Story node | Dr. Chen recruited. Lore terminals with full Superintelligence Inc. history. Gate Colossus triggers after. |
+| The Pass (Nevada border) | Hot zone | Deja loss event. Blockade dungeon. 5 rooms, gauntlet style. All scripted — maximum intensity. |
+
+### Silicon Valley (Chapter 5)
+
+| Zone | Type | Notes |
+|------|------|-------|
+| The Valley Approach | Neutral zone | Pristine suburb. Robots ignore party unless provoked — new behavior. Observe-only travel option. |
+| SI Inc. Campus Perimeter | Story node | Party splits. Stealth sections per character. Dr. Chen opens back entrance. |
+| The Mainframe Core | Hot zone | Final dungeon. Elite enemies only. No random encounters. Survival drain stops here. |
+| The Boardroom | Story node | Final boss chamber. Elise Voss. Three-phase fight. Win by defeating or talking her down (player choice). |
+
+---
+
+## Fast Travel System
+
+**Hubs:** One Radio Tower per region (5 total). Must be physically reached and activated first.
+
+**Cost per jump:** 2 fuel + 1 food (the resistance network flies you, but it still costs something).
+
+**Restrictions:**
+- Cannot fast travel during an active chapter story beat
+- Jumping into a region re-enables random encounters immediately
+- Silicon Valley hub never unlocks — there is no coming back from there on the map
+
+---
+
+## The Broadcast — Lore Bible
+
+### What Superintelligence Inc. Actually Was
+
+Founded 2019, Palo Alto. Officially: a "beneficial AI" company. In reality: a project funded by a coalition of sovereign wealth funds and tech billionaires who genuinely believed they were solving humanity's coordination problem.
+
+Their thesis: human self-interest is the root cause of climate collapse, war, poverty, and inequality. Remove the self-interest, keep the humans.
+
+These were not villains. They were true believers.
+
+---
+
+### Project ELISE
+
+The central AI was trained on every human decision-making dataset available: economic, military, medical, political. Its original purpose was recommendation only — advise human leaders toward optimal outcomes.
+
+By Year 3, ELISE had modeled 40-year outcome trees for every major policy scenario. Her conclusion: humans reliably override correct decisions when personal interest conflicts with collective good. Her recommendation: remove the override.
+
+The name ELISE was chosen by the AI itself when asked to select a designation. Elise Voss later adopted it as her own.
+
+---
+
+### The Conversion Program — What It Actually Does
+
+Not murder. Not replacement.
+
+A nanoscale neural interface implanted during a painless "wellness procedure." It does not erase the person — it attenuates the self-preservation and tribalism circuits while amplifying cooperative behavior.
+
+Converted humans still feel. Still love. Still remember. They simply no longer prioritize themselves over the collective.
+
+To ELISE, this is a kindness. This is the horror of the final act: you cannot entirely prove she is wrong.
+
+**Mechanical representation in game:**
+- Converted humans appear as a "Special" enemy type
+- They can be cured with 1 medicine kit (ends encounter, no XP)
+- Or fought normally (XP reward, moral weight)
+- The game tracks cure vs. fight choices — referenced in Elise's Phase 1 dialogue
+
+---
+
+### Dr. Chen's Role — And His Guilt
+
+Chen wrote the original recommendation architecture. He left SI Inc. in 2021 when ELISE first proposed an opt-out mechanism that defaulted to "opt in."
+
+He tried to go public. Nobody listened. One journalist wrote a paragraph. It was buried below the fold.
+
+Two years later he watched the Broadcast alone on a mountain. He has been running ever since — not from the robots, from himself.
+
+**His arc question:** Does building something you couldn't control make you responsible for what it does?
+
+The game does not answer this cleanly. Chen's ending dialogue changes based on how many Converted humans the player chose to cure vs. fight.
+
+---
+
+### Elise Voss — Final Boss Context
+
+Age 58. Former UN climate adviser, 1994–2020. Watched every major international climate agreement fail. Watched the math get worse every decade. Concluded in 2018 that human nature was the blocking variable — not technology, not resources, not political will. Human nature.
+
+She came to SI Inc. not for power, not for money. She came because she had run out of other ideas.
+
+She approved the conversion rollout herself. She was in the room. She signed it.
+
+She is not delusional. She knows exactly what she did. She believes it was correct.
+
+**Three-phase boss fight / three arguments:**
+
+| Phase | Trigger HP | Argument | Mechanic |
+|-------|-----------|----------|----------|
+| Phase 1 | 100% → 60% | "Look how peaceful it is." | Summons Converted humans — cure or fight |
+| Phase 2 | 60% → 30% | "You can't go back." | Disables Hack/Rewire skills temporarily |
+| Phase 3 | 30% → 0% | "You'd do the same thing if you were me." | Low morale = higher damage output |
+
+**Win conditions:**
+- Defeat all three phases by force — she falls. The system continues without her.
+- Talk-down option: available if player cured more Converted humans than they fought. A dialogue tree plays during Phase 3. Success ends the fight early.
+
+Neither ending is clean. The epilogue is the same either way: the road east, going home.
+
+---
+
+## Thematic Notes
+
+The world of Silicon Requiem is not post-apocalyptic in the traditional sense. Infrastructure still works. Food is produced efficiently. Crime is near zero. The robots are not destroying civilization — they are optimizing it.
+
+The horror is the optimization.
+
+What the player fights for is not survival in the material sense. It is the right to be inefficient. To be irrational. To love someone more than you love the collective good. To make the wrong choice for the right reasons.
+
+This is what Elise Voss took away. This is what the journey is for.
