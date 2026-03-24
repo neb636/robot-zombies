@@ -23,7 +23,7 @@ This is progress.
 Have a productive day.
 ```
 
-A friend calls. "Go outside. You need to see this."
+MARCUS calls. "Go outside. You need to see this."
 
 The player steps outside. Intro music begins. Screen fades to black for 10 seconds.
 
@@ -38,14 +38,18 @@ The world has changed. Robots have implemented the majority of their conversion 
 
 ### Scenes
 
-1. **The Broadcast** — The TV flickers to life. Superintelligence Inc. announces the conversion program. Your friend calls — go outside.
-2. **The Fade** — You step outside. Music swells. Screen goes black. "Two years later." The world you knew is gone.
-3. **The New Boston** — Open-world intro. Ruined Beacon Hill, converted citizens walking in eerie synchronized patterns. Learn movement and basic combat.
-4. **The Checkpoint** — First encounter with Compliance Drones. Tutorial battle. Flee into the subway tunnels where survivors are hiding.
+1. **The Broadcast** — The TV flickers to life. Superintelligence Inc. announces the conversion program. Marcus calls — go outside.
+2. **The Fade** — You step outside and find Marcus on the corner. He's already there, watching the sky. He cracks a joke that doesn't land. Music swells. Screen goes black. "Two years later." The world you knew is gone.
+3. **The New Boston** — Open-world intro. Ruined Beacon Hill, converted citizens walking in eerie synchronized patterns. Marcus is with you — he joins the party as a temporary second character. He has a screwdriver and a flashlight and he's doing his best. Learn movement and basic combat together.
+4. **The Checkpoint** — First encounter with Compliance Drones. Tutorial battle — Marcus fights beside you. Afterward: flee deeper into the harbor district toward the subway tunnels.
 
 **Recruit:** MAYA — Former MIT robotics PhD. Bitter. Brilliant. She knows how they work.
 
 **Boss:** Compliance Warden Alpha — Enforcer bot patrolling the harbor district.
+
+**Loss:** MARCUS — During the Compliance Warden Alpha fight, Marcus draws the Warden's attention away from you and Maya to buy you time to get clear. The conversion beam hits him directly. He doesn't fall. He stands. His eyes glow. He turns and walks back toward the harbor in a straight line. The game does not explain this. You already know what it means.
+
+Marcus is not dead. He is converted. He is the first Converted human you have ever seen. Every choice afterward about curing vs. fighting Converted humans begins here.
 
 ---
 

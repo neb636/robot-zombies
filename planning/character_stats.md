@@ -19,6 +19,43 @@
 
 ---
 
+## Marcus
+
+**Class:** Civilian
+**Joined:** Prologue (The New Boston)
+**Weapon type:** Screwdriver / flashlight (improvised)
+**Status:** Converted during Prologue (Compliance Warden Alpha encounter). Not recoverable.
+
+*Your oldest friend. Boston electrician. He fixes things. He showed up outside your apartment the morning the world ended and cracked a joke that didn't land. He is the first person you fight alongside and the first person you lose — and you don't even lose him to a death screen. He just walks away.*
+
+### Base Stats (Prologue only)
+
+| Stat | Prologue |
+|------|---------|
+| HP | 160 |
+| STR | 38 |
+| DEF | 35 |
+| INT | 30 |
+| SPD | 52 |
+| LCK | 60 |
+
+### Techs
+
+None. Marcus has no techs. He just hits things with a screwdriver.
+
+### Passive
+- **Old Friend:** While Marcus is in the party, the player's LCK stat is +8. Removed permanently after his conversion.
+
+### Character Notes
+- Marcus exists for exactly one purpose in the game: to be known before he is lost.
+- He should feel warm and real in the brief time the player spends with him. Give him good dialogue. Let the player like him.
+- His conversion should feel wrong precisely because it is quiet. No dramatic speech, no farewell. He just walks away.
+- He reappears once in Ch.3 Harvest Town — optional, no gameplay, no resolution.
+- He is named by Elise Voss in Phase 3 of the final boss fight (talk-down route only).
+- His portrait in the HUD goes dark without a death animation. The UI handles his absence like a bug the game doesn't acknowledge.
+
+---
+
 ## Player (Protagonist)
 
 **Class:** Survivor  

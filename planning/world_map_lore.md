@@ -51,7 +51,7 @@
 | Zone | Type | Notes |
 |------|------|-------|
 | Open Highway | Hot zone | Aerial Sentinels. No cover mechanic — combat triggered if moving without checking sky. Teaches stealth movement. |
-| Harvest Town | Neutral zone | Voluntary conversion settlement. Eerie. Trade allowed. Good food supply, morally loaded. |
+| Harvest Town | Neutral zone | Voluntary conversion settlement. Eerie. Trade allowed. Good food supply, morally loaded. Marcus is here. Optional encounter — see Marcus entry in Lore Bible. |
 | Storm Corridor | Hot zone | Weather mechanic: lightning disrupts robot sensors (–50% encounter rate) but party takes storm damage each turn. |
 | Radio Tower (Kansas) | Fast travel hub | First fast travel hub. Jerome recruited here. Unlocked after Ch.3 story beat. |
 
@@ -139,6 +139,36 @@ Two years later he watched the Broadcast alone on a mountain. He has been runnin
 **His arc question:** Does building something you couldn't control make you responsible for what it does?
 
 The game does not answer this cleanly. Chen's ending dialogue changes based on how many Converted humans the player chose to cure vs. fight.
+
+---
+
+### Marcus — The Friend
+
+The first person the player interacts with. Oldest friend. Boston electrician — practical, warm, not exceptional at anything except being reliable. He's the one who calls after the broadcast. He's already outside when you get there.
+
+He fights beside the player during the tutorial battle at The Checkpoint. During the Compliance Warden Alpha boss fight he pulls the Warden's attention to buy the player and Maya time. The conversion beam hits him. He walks away. He doesn't look back.
+
+**Mechanical role:** Marcus is a temporary second party member in the prologue only (The New Boston through Compliance Warden Alpha). He has no techs. He has a screwdriver. He uses it. He disappears from the party roster after conversion — no death screen, no fanfare. His portrait simply goes dark.
+
+**Harvest Town encounter (Ch.3, optional):**
+
+Marcus is here. He is tending a community garden near the town center. He looks healthy — better fed than anyone in your party. If the player approaches and interacts:
+
+> *He looks at you for a moment that is one second too long.*
+> *"This is a good place," he says. "You should consider the program."*
+> *He goes back to weeding.*
+
+Maya will walk you away without asking. Neither of you brings it up at camp that night.
+
+The player cannot cure him here. This is not a battle. There is nothing to do. You have to leave.
+
+**Elise Voss Phase 3 dialogue (talk-down route only):**
+
+If the player chose the talk-down option and has cured more Converted than they fought, Elise references Marcus by name in Phase 3:
+
+> *"Your friend — Marcus, wasn't it? He's alive. He's well-fed. He's at peace. He's not running. He's not afraid. Can you say the same for yourself, standing here?"*
+
+She means it as an argument. It lands as one.
 
 ---
 
