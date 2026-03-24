@@ -18,14 +18,14 @@ const PHASE = {
   WAKE_UP:   'WAKE_UP',
   EXPLORING: 'EXPLORING',
   NEWSCAST:  'NEWSCAST',
-  DARIO:     'DARIO',
+  MARCUS:    'MARCUS',
   OUTRO:     'OUTRO',
   DONE:      'DONE',
 } as const;
 type Phase = typeof PHASE[keyof typeof PHASE];
 
 /**
- * PrologueScene — "Before the Fall" (June 2028, Austin TX)
+ * PrologueScene — "Before the Fall" (June 2028, Boston MA)
  */
 export class PrologueScene extends Phaser.Scene {
   cursors!:  Phaser.Types.Input.Keyboard.CursorKeys;
@@ -35,7 +35,7 @@ export class PrologueScene extends Phaser.Scene {
   private _phase:          Phase   = PHASE.WAKE_UP;
   private _inputEnabled:   boolean = false;
   private _enteredLiving:  boolean = false;
-  private _playerName:     string  = 'KAI';
+  private _playerName:     string  = 'YOU';
   private _wallBodies:     Phaser.GameObjects.Zone[] = [];
   private _interactables:  Interactable[] = [];
   private _nearInteract:   Interactable | null = null;
@@ -53,7 +53,7 @@ export class PrologueScene extends Phaser.Scene {
     this._phase         = PHASE.WAKE_UP;
     this._inputEnabled  = false;
     this._enteredLiving = false;
-    this._playerName    = (this.registry.get('playerName') as string | undefined) ?? 'KAI';
+    this._playerName    = (this.registry.get('playerName') as string | undefined) ?? 'YOU';
 
     this._drawRoom();
     this._buildWalls();
@@ -326,7 +326,7 @@ export class PrologueScene extends Phaser.Scene {
       {
         id: 'poster', x: 192, y: 62, range: 50, label: 'Poster',
         interact: () => { this.dialogMgr.show(n, [
-          'A state parks poster. Big Bend, 2024.',
+          'A state parks poster. Acadia, 2024.',
           "You kept meaning to go.",
         ]); },
       },
@@ -377,7 +377,7 @@ export class PrologueScene extends Phaser.Scene {
   // ─── HUD ──────────────────────────────────────────────────────────────────
 
   private _buildHUD(): void {
-    this.add.text(10, 10, 'AUSTIN, TX  ·  JUNE 12, 2028', {
+    this.add.text(10, 10, 'BOSTON, MA  ·  JUNE 12, 2028', {
       fontFamily: 'monospace',
       fontSize:   '10px',
       color:      '#2a3a4a',
@@ -493,17 +493,17 @@ export class PrologueScene extends Phaser.Scene {
         'The air outside sounds different.',
         'It hums.',
       ], () => {
-        this._phase = PHASE.DARIO;
-        this.time.delayedCall(600, () => { this._triggerDarioCall(); });
+        this._phase = PHASE.MARCUS;
+        this.time.delayedCall(600, () => { this._triggerMarcusCall(); });
       });
     });
   }
 
-  private _triggerDarioCall(): void {
+  private _triggerMarcusCall(): void {
     const { width, height } = this.scale;
     const buzz = this.add.text(
       width / 2, height / 2 - 80,
-      '📱  INCOMING CALL — DARIO', {
+      '📱  INCOMING CALL — MARCUS', {
         fontFamily:      'monospace',
         fontSize:        '14px',
         color:           '#44dd88',
@@ -526,7 +526,7 @@ export class PrologueScene extends Phaser.Scene {
           onComplete: () => {
             this.time.delayedCall(600, () => {
               buzz.destroy();
-              this.dialogMgr.show('DARIO  [ PHONE ]', [
+              this.dialogMgr.show('MARCUS  [ PHONE ]', [
                 "Hey. Are you watching this?",
                 "Don't answer that. Get outside. Right now.",
                 "Don't go near anyone who's acting strange. Anyone.",

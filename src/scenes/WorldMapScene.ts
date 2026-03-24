@@ -46,11 +46,12 @@ export class WorldMapScene extends Phaser.Scene {
       }
     });
 
-    this.dialogueManager.show('SYSTEM', [
-      'The robots have achieved sentience.',
-      'They only want to HELP.',
-      'Nobody asked them to.',
-      'You must stop them, Kai.',
+    this.dialogueManager.show('RADIO FRAGMENT — STATIC', [
+      'Two years since the Broadcast.',
+      'Superintelligence Inc. calls it the Conversion Program.',
+      'The roads are clean. The power is on. The food supply is stable.',
+      'Everything works perfectly.',
+      '...Everyone is so helpful.',
     ]);
   }
 
@@ -129,7 +130,7 @@ export class WorldMapScene extends Phaser.Scene {
   private _startBattle(): void {
     this.audioManager.stopMusic();
     this.scene.launch('BattleScene', {
-      enemyKey:    'robot_zombie',
+      enemyKey:    'compliance_drone',
       returnScene: 'WorldMapScene',
     });
     this.scene.pause();
