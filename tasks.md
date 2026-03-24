@@ -25,14 +25,14 @@ Expand the existing prologue from a small apartment to the full planned prologue
 - [x] Update phone call: caller is MARCUS, not "Dario". Dialogue: "Go outside. You need to see this."
 - [x] Add the "TWO YEARS LATER" black screen fade (10 second hold, then text overlay)
 
-### 1B — The New Boston (new scene)
-- [ ] Create `NewBostonScene.ts` — top-down exterior scene
-- [ ] Build ruined Beacon Hill environment with placeholder colored rectangles (no art yet)
-- [ ] Player finds Marcus standing on the corner outside — he joins the party as a second character
-- [ ] Marcus dialogue: a dark joke that doesn't quite land. Warm but scared underneath.
-- [ ] Add converted citizen NPCs that walk in eerie synchronized patterns (simple path loop)
-- [ ] Add movement tutorial prompts — frame them around Marcus being there ("Marcus says: try moving with...")
-- [ ] Marcus has no techs in battle — just a basic attack (screwdriver). Make this visible in the HUD so player notices he's different.
+### 1B — The New Boston (new scene) - revisit
+- [x] Create `NewBostonScene.ts` — top-down exterior scene
+- [x] Build ruined Beacon Hill environment with placeholder colored rectangles (no art yet)
+- [x] Player finds Marcus standing on the corner outside — he joins the party as a second character
+- [x] Marcus dialogue: a dark joke that doesn't quite land. Warm but scared underneath.
+- [x] Add converted citizen NPCs that walk in eerie synchronized patterns (simple path loop)
+- [x] Add movement tutorial prompts — frame them around Marcus being there ("Marcus says: try moving with...")
+- [x] Marcus has no techs in battle — just a basic attack (screwdriver). Make this visible in the HUD so player notices he's different.
 
 ### 1C — The Checkpoint (tutorial battle)
 - [ ] Trigger battle when player reaches checkpoint zone in New Boston
