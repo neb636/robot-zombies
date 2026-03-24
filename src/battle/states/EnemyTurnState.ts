@@ -9,12 +9,11 @@ export class EnemyTurnState extends BattleState {
   enter(): void {
     this._timer = 0;
     this._acted = false;
-    const { enemy, dialogueManager, audioManager } = this.manager;
+    const { enemy, dialogueManager } = this.manager;
 
     if ('play' in enemy.sprite) {
       (enemy.sprite as Phaser.GameObjects.Sprite).play('robot-attack');
     }
-    audioManager.speakRobotLine(enemy.getTauntLine());
     dialogueManager.show(enemy.name, [enemy.getTauntLine()]);
   }
 

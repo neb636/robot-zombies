@@ -3,31 +3,14 @@ import Phaser from 'phaser';
 
 /**
  * AudioManager — unified interface for:
- *   1. Background music  (Howler.js, looped)
- *   2. Sound effects     (Howler.js, one-shot)
- *   3. Robot voice lines (Web SpeechSynthesis API)
+ *   1. Background music (Howler.js, looped)
+ *   2. Sound effects    (Howler.js, one-shot)
  */
 export class AudioManager {
-  private _music:      Howl | null = null;
-  private _sfxCache:   Map<string, Howl> = new Map();
-  private _synth:      SpeechSynthesis | null;
-  private _robotVoice: SpeechSynthesisVoice | null = null;
+  private _music:    Howl | null = null;
+  private _sfxCache: Map<string, Howl> = new Map();
 
-  constructor(_scene: Phaser.Scene) {
-    this._synth = 'speechSynthesis' in window ? window.speechSynthesis : null;
-
-    if (this._synth) {
-      const pick = (): void => {
-        const voices = this._synth!.getVoices();
-        this._robotVoice =
-          voices.find(v => /daniel|karen|google|microsoft/i.test(v.name)) ??
-          voices[0] ??
-          null;
-      };
-      pick();
-      this._synth.onvoiceschanged = pick;
-    }
-  }
+  constructor(_scene: Phaser.Scene) {}
 
   // ─── Music ──────────────────────────────────────────────────────────────────
 
@@ -66,19 +49,6 @@ export class AudioManager {
       this._sfxCache.set(key, howl);
     }
     howl.play();
-  }
-
-  // ─── Robot voice (SpeechSynthesis) ──────────────────────────────────────────
-
-  speakRobotLine(text: string): void {
-    if (!this._synth) return;
-    this._synth.cancel();
-    const utt   = new SpeechSynthesisUtterance(text);
-    utt.voice   = this._robotVoice;
-    utt.rate    = 1.2;
-    utt.pitch   = 0.35;
-    utt.volume  = 0.6;
-    this._synth.speak(utt);
   }
 
   // ─── Global ─────────────────────────────────────────────────────────────────

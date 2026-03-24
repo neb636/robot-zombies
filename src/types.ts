@@ -40,6 +40,35 @@ export interface IBattleScene extends Phaser.Scene {
   endBattle(victory: boolean): void;
 }
 
+// ─── Save System ─────────────────────────────────────────────────────────────
+
+/**
+ * Versioned save file shape. All fields must be JSON-serialisable.
+ *
+ * When adding fields:
+ *   1. Add the field here with its type.
+ *   2. Read/write it in SaveManager.save() / SaveManager.restore().
+ *   3. Bump CURRENT_VERSION in SaveManager.ts.
+ *   4. Add a migration function in the MIGRATIONS map.
+ */
+export interface SaveData {
+  /** Schema version — always the first field checked on load. */
+  version: number;
+  /** Unix timestamp (Date.now()) when the save was written. */
+  savedAt: number;
+  playerName: string;
+  /** Phaser scene key to resume from (e.g. 'WorldMapScene'). */
+  currentScene: string;
+  /** Current story chapter (1–5). */
+  chapter: number;
+  /** Arbitrary story-progression flags (gate checks, seen-cutscenes, etc.). */
+  flags: Record<string, boolean>;
+  /** Moral tracking: how many Converted humans were cured. */
+  convertedCured: number;
+  /** Moral tracking: how many Converted humans were fought. */
+  convertedFought: number;
+}
+
 // ─── Prologue ─────────────────────────────────────────────────────────────────
 
 export interface Interactable {
