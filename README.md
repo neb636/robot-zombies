@@ -1,25 +1,23 @@
 # Silicon Requiem
 
-## Overview
+A browser-based SNES-style JRPG (think *Chrono Trigger*, *Final Fantasy VI*). An AI called ELISE quietly took over the world two years ago — not through war, but through optimization. You travel from Boston to Silicon Valley to reach the source.
 
-AI Robot take over from Superintelligence Inc. company.
+**The horror isn't the robots. It's how well everything works.**
 
+---
 
-## Gameplay Style
+## Stack
 
-A web based SNES JRPG game like - Chrono Trigger and Final Fantasy
+Phaser 3 · TypeScript · Vite · Howler
 
-Modeled after **Chrono Trigger**:
+## Run
 
-- Top-down / isometric 2D perspective
-- Active-time or turn-based hybrid combat
-- Exploration of overworld, towns, and dungeons
-- Strong emphasis on character interaction and story beats between combat
-- Combo/dual-tech style attacks between party members
+```bash
+npm install
+npm run dev       # localhost:5173
+npm run typecheck
+```
 
+## Docs
 
-## Story Inspiration
-
-- IT and The Body from Stephen King: showing how a small group of people under existential pressure reveals character. Your survivor ensemble dynamics live here.
-- The Stand from Stephen King: A long road ahead in face of advicaries and need to pick up allies
-- Seven Samurai — Recruiting specialists along the route.
+Story, characters, combat, and world design live in `planning/`. Build order in `tasks.md`.
