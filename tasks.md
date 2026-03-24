@@ -21,9 +21,9 @@ These are quick fixes to bring existing code in line with the planning docs befo
 Expand the existing prologue from a small apartment to the full planned prologue arc.
 
 ### 1A — The Broadcast (already partially built — polish it)
-- [ ] Write final broadcast text matching the planning doc verbatim
-- [ ] Update phone call: caller is MARCUS, not "Dario". Dialogue: "Go outside. You need to see this."
-- [ ] Add the "TWO YEARS LATER" black screen fade (10 second hold, then text overlay)
+- [x] Write final broadcast text matching the planning doc verbatim
+- [x] Update phone call: caller is MARCUS, not "Dario". Dialogue: "Go outside. You need to see this."
+- [x] Add the "TWO YEARS LATER" black screen fade (10 second hold, then text overlay)
 
 ### 1B — The New Boston (new scene)
 - [ ] Create `NewBostonScene.ts` — top-down exterior scene
