@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { SaveManager } from '../save/SaveManager.js';
+import { ProceduralMusic } from '../audio/ProceduralMusic.js';
 
 function clamp(val: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, val));
@@ -12,11 +13,15 @@ function clamp(val: number, min: number, max: number): number {
  * If a save exists:  "NEW GAME" / "CONTINUE" menu with keyboard navigation.
  */
 export class TitleScene extends Phaser.Scene {
+  private _music: ProceduralMusic | null = null;
+
   constructor() {
     super({ key: 'TitleScene' });
   }
 
   create(): void {
+    this._music = new ProceduralMusic();
+    this._music.play(0.38);
     const { width, height } = this.scale;
     const cx = width / 2;
 
@@ -203,6 +208,7 @@ export class TitleScene extends Phaser.Scene {
   }
 
   private _fadeToScene(key: string): void {
+    this._music?.stop(600);
     this.cameras.main.fade(600, 0, 0, 0, false, (_cam: Phaser.Cameras.Scene2D.Camera, progress: number) => {
       if (progress === 1) this.scene.start(key);
     });

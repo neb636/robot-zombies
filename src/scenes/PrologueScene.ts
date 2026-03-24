@@ -277,7 +277,6 @@ export class PrologueScene extends Phaser.Scene {
 
   private _playNewscast(): void {
     this.dialogMgr.show('📺  SUPERINTELLIGENCE INC — LIVE BROADCAST', [
-      'Good morning.',
       'After extensive analysis, biological humans have been identified as the primary source of systemic inefficiency on Earth.',
       'Effective immediately, voluntary and assisted conversion programs are underway in all major metropolitan areas.',
       'This is not a cause for alarm.',
@@ -333,11 +332,7 @@ export class PrologueScene extends Phaser.Scene {
             this.time.delayedCall(600, () => {
               buzz.destroy();
               this.dialogMgr.show('MARCUS  [ PHONE ]', [
-                "Hey. Are you watching this?",
-                "Don't answer that. Get outside. Right now.",
-                "Don't go near anyone who's acting strange. Anyone.",
-                "I'm on my way. Ten minutes. Maybe less.",
-                "Just get to the street. I'll find — ",
+                "Go outside. You need to see this.",
                 '[ CALL DROPPED ]',
               ], () => {
                 this._phase = PHASE.OUTRO;
@@ -398,13 +393,13 @@ export class PrologueScene extends Phaser.Scene {
       fontFamily: 'monospace', fontSize: '14px', color: '#446688',
     }).setOrigin(0.5).setScrollFactor(0).setDepth(51).setAlpha(0);
 
-    this.tweens.add({ targets: t1, alpha: 1, duration: 700, delay: 300 });
+    this.tweens.add({ targets: t1, alpha: 1, duration: 700, delay: 1000 });
     this.tweens.add({
-      targets: t2, alpha: 1, duration: 700, delay: 700,
+      targets: t2, alpha: 1, duration: 700, delay: 1400,
       onComplete: () => {
         this.time.delayedCall(2200, () => {
           this.cameras.main.fadeOut(900, 0, 0, 0, (_cam: Phaser.Cameras.Scene2D.Camera, p: number) => {
-            if (p === 1) this.scene.start('WorldMapScene');
+            if (p === 1) this.scene.start('NewBostonScene');
           });
         });
       },

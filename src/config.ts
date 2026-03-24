@@ -3,7 +3,9 @@ import { BootScene }       from './scenes/BootScene.js';
 import { PreloadScene }    from './scenes/PreloadScene.js';
 import { TitleScene }      from './scenes/TitleScene.js';
 import { NameEntryScene }  from './scenes/NameEntryScene.js';
-import { PrologueScene }   from './scenes/PrologueScene.js';
+import { PrologueScene }    from './scenes/PrologueScene.js';
+import { NewBostonScene }  from './scenes/NewBostonScene.js';
+import { SubwayScene }     from './scenes/SubwayScene.js';
 import { WorldMapScene }   from './scenes/WorldMapScene.js';
 import { BattleScene }     from './scenes/BattleScene.js';
 import { DialogueScene }   from './scenes/DialogueScene.js';
@@ -29,6 +31,8 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
     TitleScene,
     NameEntryScene,
     PrologueScene,
+    NewBostonScene,
+    SubwayScene,
     WorldMapScene,
     BattleScene,
     DialogueScene,

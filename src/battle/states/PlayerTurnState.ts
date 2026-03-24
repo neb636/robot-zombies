@@ -1,30 +1,38 @@
 import Phaser from 'phaser';
-import { BattleState }                  from '../BattleState.js';
+import { BattleState }                   from '../BattleState.js';
+import { calcDamage }                    from '../CombatEngine.js';
+import { execute as executeTech }        from '../TechExecutor.js';
+import { checkCombo }                    from '../ComboSystem.js';
 import { BATTLE_STATES, PLAYER_ACTIONS } from '../../utils/constants.js';
-import type { BattleMenuAction }        from '../../types.js';
+import type { ATBCombatant, BattleMenuAction, Tech } from '../../types.js';
 
 export class PlayerTurnState extends BattleState {
-  private menuIndex: number = 0;
-  private readonly menuItems: BattleMenuAction[] = [
-    { label: 'ATTACK',  action: PLAYER_ACTIONS.ATTACK  },
-    { label: 'HEAL',    action: PLAYER_ACTIONS.HEAL    },
-    { label: 'SPECIAL', action: PLAYER_ACTIONS.SPECIAL },
-    { label: 'FLEE',    action: PLAYER_ACTIONS.FLEE    },
-  ];
+  private menuIndex:  number = 0;
+  private menuItems:  BattleMenuAction[] = [];
+
+  private _inTechsSubmenu: boolean = false;
+  private _techItems:      Tech[] = [];
+  private _techIndex:      number = 0;
 
   private _upKey?:    Phaser.Input.Keyboard.Key;
   private _downKey?:  Phaser.Input.Keyboard.Key;
   private _enterKey?: Phaser.Input.Keyboard.Key;
   private _spaceKey?: Phaser.Input.Keyboard.Key;
+  private _escKey?:   Phaser.Input.Keyboard.Key;
 
   enter(): void {
+    this._inTechsSubmenu = false;
+    this.menuItems = this._getMenuItems();
+    this.menuIndex = 0;
     this.manager.hud.showMenu(this.menuItems, this.menuIndex);
+    this.manager.pauseATB();
     this._setupKeys();
   }
 
   exit(): void {
     this._removeKeys();
     this.manager.hud.hideMenu();
+    this.manager.resumeATB();
   }
 
   private _setupKeys(): void {
@@ -33,66 +41,155 @@ export class PlayerTurnState extends BattleState {
     this._downKey  = kb.addKey('DOWN');
     this._enterKey = kb.addKey('ENTER');
     this._spaceKey = kb.addKey('SPACE');
+    this._escKey   = kb.addKey('ESC');
 
     this._upKey.on('down',    () => { this._navigate(-1); });
     this._downKey.on('down',  () => { this._navigate(1); });
     this._enterKey.on('down', () => { this._confirm(); });
     this._spaceKey.on('down', () => { this._confirm(); });
+    this._escKey.on('down',   () => { this._back(); });
   }
 
   private _removeKeys(): void {
-    [this._upKey, this._downKey, this._enterKey, this._spaceKey]
+    [this._upKey, this._downKey, this._enterKey, this._spaceKey, this._escKey]
       .forEach(k => { k?.destroy(); });
   }
 
   private _navigate(dir: number): void {
-    this.menuIndex = (this.menuIndex + dir + this.menuItems.length) % this.menuItems.length;
-    this.manager.hud.showMenu(this.menuItems, this.menuIndex);
+    if (this._inTechsSubmenu) {
+      this._techIndex = (this._techIndex + dir + this._techItems.length) % this._techItems.length;
+      this.manager.hud.showMenu(this._techMenuItems(), this._techIndex);
+    } else {
+      this.menuIndex = (this.menuIndex + dir + this.menuItems.length) % this.menuItems.length;
+      this.manager.hud.showMenu(this.menuItems, this.menuIndex);
+    }
     this.manager.audioManager.playSfx('sfx-menu');
   }
 
+  private _back(): void {
+    if (this._inTechsSubmenu) {
+      this._inTechsSubmenu = false;
+      this.manager.hud.showMenu(this.menuItems, this.menuIndex);
+    }
+  }
+
   private _confirm(): void {
-    const item = this.menuItems[this.menuIndex];
-    if (item) this._executeAction(item.action);
+    if (this._inTechsSubmenu) {
+      const tech = this._techItems[this._techIndex];
+      if (tech) this._executeTech(tech);
+    } else {
+      const item = this.menuItems[this.menuIndex];
+      if (item) this._executeAction(item.action);
+    }
+  }
+
+  private _getMenuItems(): BattleMenuAction[] {
+    const actor    = (this.manager.activeMenuCombatant ?? this.manager.player) as ATBCombatant;
+    const hasTechs = actor.techs.length > 0;
+    const items: BattleMenuAction[] = [
+      { label: 'ATTACK', action: PLAYER_ACTIONS.ATTACK },
+    ];
+    if (hasTechs) {
+      items.push({ label: 'TECHS', action: PLAYER_ACTIONS.TECHS });
+    }
+    items.push({ label: 'HEAL', action: PLAYER_ACTIONS.HEAL });
+    if (!this.manager.scripted) {
+      items.push({ label: 'FLEE', action: PLAYER_ACTIONS.FLEE });
+    }
+    return items;
+  }
+
+  private _techMenuItems(): BattleMenuAction[] {
+    const back: BattleMenuAction[] = [{ label: '← BACK', action: 'BACK' }];
+    return [
+      ...this._techItems.map(t => ({ label: t.label, action: t.id })),
+      ...back,
+    ];
+  }
+
+  /** After dealing damage, determine next state. */
+  private _afterDamage(dead: boolean): void {
+    if (dead) {
+      this.manager.goTo(BATTLE_STATES.VICTORY);
+      return;
+    }
+    const bossState = this.manager.checkBossThresholds();
+    if (bossState) {
+      this.manager.goTo(bossState);
+      return;
+    }
+    this._returnToATB();
+  }
+
+  private _returnToATB(): void {
+    const actor = (this.manager.activeMenuCombatant ?? this.manager.player) as ATBCombatant;
+    actor.atb = 0;
+    this.manager.activeMenuCombatant = null;
+    this.manager.goTo(BATTLE_STATES.ATB_TICKING);
   }
 
   private _executeAction(action: string): void {
-    const { player, enemy, audioManager, dialogueManager } = this.manager;
+    const actor  = (this.manager.activeMenuCombatant ?? this.manager.player) as ATBCombatant;
+    const { enemy, audioManager, dialogueManager } = this.manager;
 
     switch (action) {
       case PLAYER_ACTIONS.ATTACK: {
-        const dmg  = player.attack + Math.floor(Math.random() * 8);
+        const dmg  = calcDamage(actor.str, enemy.def, 'Physical', enemy.tags);
         const dead = enemy.takeDamage(dmg);
         audioManager.playSfx('sfx-attack');
-        dialogueManager.show('Kai', [`You strike ${enemy.name} for ${dmg} damage!`]);
-        this.manager.goTo(dead ? BATTLE_STATES.VICTORY : BATTLE_STATES.ENEMY_TURN);
+        dialogueManager.show(actor.name, [`You strike ${enemy.name} for ${dmg} damage!`]);
+
+        this._recordAndCheckCombo(actor);
+
+        this._afterDamage(dead);
         break;
       }
       case PLAYER_ACTIONS.HEAL: {
-        const amt = 25;
-        player.heal(amt);
+        actor.heal(25);
         audioManager.playSfx('sfx-heal');
-        dialogueManager.show('Kai', [`You recover ${amt} HP.`]);
-        this.manager.goTo(BATTLE_STATES.ENEMY_TURN);
+        dialogueManager.show(actor.name, ['You recover 25 HP.']);
+        this._returnToATB();
         break;
       }
-      case PLAYER_ACTIONS.SPECIAL: {
-        const dmg  = player.attack * 2 + Math.floor(Math.random() * 12);
-        const dead = enemy.takeDamage(dmg);
-        audioManager.playSfx('sfx-attack');
-        dialogueManager.show('Kai', [
-          'TEMPORAL SLASH!',
-          `You deal ${dmg} damage through time itself!`,
-        ]);
-        this.manager.goTo(dead ? BATTLE_STATES.VICTORY : BATTLE_STATES.ENEMY_TURN);
+      case PLAYER_ACTIONS.TECHS: {
+        // Open techs submenu
+        this._techItems  = [...actor.techs];
+        this._techIndex  = 0;
+        this._inTechsSubmenu = true;
+        this.manager.hud.showMenu(this._techMenuItems(), this._techIndex);
         break;
       }
       case PLAYER_ACTIONS.FLEE:
-        dialogueManager.show('Kai', ['You flee into the timeline...']);
+        dialogueManager.show(actor.name, ['You flee into the chaos...']);
         this.manager.endBattle(false);
         break;
       default:
         break;
     }
+  }
+
+  private _recordAndCheckCombo(actor: ATBCombatant): void {
+    const now  = performance.now();
+    // Player always registers as 'player' so combo table entries match regardless of chosen name
+    const name = actor === (this.manager.player as ATBCombatant) ? 'player' : actor.name.toLowerCase();
+    const prev = this.manager.lastPartyAction;
+
+    const combo = checkCombo(name, now, prev?.name ?? null, prev?.ts ?? null);
+    if (combo) {
+      this.manager.hud.flashComboName(combo.label);
+      this.manager.discoveredCombos.add(combo.id);
+    }
+
+    this.manager.lastPartyAction = { name, ts: now };
+  }
+
+  private _executeTech(tech: Tech): void {
+    const actor = (this.manager.activeMenuCombatant ?? this.manager.player) as ATBCombatant;
+    executeTech(tech, actor, { enemy: this.manager.enemy }, this.manager);
+
+    this._recordAndCheckCombo(actor);
+
+    const dead = !this.manager.enemy.isAlive();
+    this._afterDamage(dead);
   }
 }
