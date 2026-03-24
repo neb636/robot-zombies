@@ -33,6 +33,11 @@ export class EnemyTurnState extends BattleState {
     if (action.type === 'ATTACK') {
       let { damage } = action;
 
+      // Back-row members take 70% physical damage
+      if (player.row === 'back') {
+        damage = Math.floor(damage * 0.7);
+      }
+
       // In scripted battles, clamp damage so player never dies
       if (this.manager.scripted && player.hp - damage <= 0) {
         damage = Math.max(0, player.hp - 1);

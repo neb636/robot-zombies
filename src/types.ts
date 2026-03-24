@@ -30,7 +30,9 @@ export type TechEffect =
   | { kind: 'status';  apply: StatusEffectKey; targetEnemy: boolean }
   | { kind: 'heal';    amount: number; allAllies: boolean }
   | { kind: 'reveal' }
-  | { kind: 'control'; turnsAsAlly: number };
+  | { kind: 'control'; turnsAsAlly: number }
+  /** Placeholder for abilities that need custom logic (e.g. ATB fill, passive triggers). */
+  | { kind: 'special'; description: string };
 
 export interface Tech {
   id: string;
@@ -64,11 +66,14 @@ export interface ATBCombatant extends BattlePlayer {
 // ─── Battle ──────────────────────────────────────────────────────────────────
 
 export interface AllyConfig {
+  /** Character id from CHARACTER_REGISTRY. Used to resolve full ATB stats. */
+  id?: string;
   name: string;
   hp: number;
   maxHp: number;
   attack: number;
   color: number;
+  row?: 'front' | 'back';
 }
 
 export interface BossPhase {
@@ -96,6 +101,7 @@ export interface BattlePlayer {
   hp: number;
   maxHp: number;
   attack: number;
+  row: 'front' | 'back';
   takeDamage(amount: number): boolean;
   heal(amount: number): void;
   isAlive(): boolean;
@@ -143,6 +149,54 @@ export interface SaveData {
   convertedCured: number;
   /** Moral tracking: how many Converted humans were fought. */
   convertedFought: number;
+}
+
+// ─── Characters ──────────────────────────────────────────────────────────────
+
+/** Integer stat block for one chapter. All values are whole numbers. */
+export interface CharacterStats {
+  hp: number;
+  maxHp: number;
+  str: number;
+  def: number;
+  int: number;
+  spd: number;
+  lck: number;
+}
+
+/**
+ * Static definition for a playable character.
+ * `chapterStats[0]` = stats at `joinChapter`, `[1]` = next chapter, etc.
+ */
+export interface CharacterDef {
+  id: string;
+  name: string;
+  /** Hex color for placeholder rectangle sprite. */
+  color: number;
+  /** First chapter the character is available (0 = prologue). */
+  joinChapter: number;
+  /** Stats indexed from joinChapter. [0] = joinChapter, [1] = joinChapter+1, … */
+  chapterStats: CharacterStats[];
+  techs: readonly Tech[];
+  /** Human-readable passive description (logic implemented in M2+). */
+  passive: string;
+  /** Chapter the character is permanently lost. Elias = 2, Deja = 4. */
+  lostAtChapter?: number;
+}
+
+/** Live party member state stored in the Phaser registry across scene transitions. */
+export interface PartyMember {
+  id: string;
+  name: string;
+  hp: number;
+  maxHp: number;
+  str: number;
+  def: number;
+  int: number;
+  spd: number;
+  lck: number;
+  row: 'front' | 'back';
+  equipment: { weapon?: string; armor?: string; accessory?: string };
 }
 
 // ─── Prologue ─────────────────────────────────────────────────────────────────

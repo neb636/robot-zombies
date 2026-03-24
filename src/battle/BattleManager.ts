@@ -11,6 +11,8 @@ import { AllyTurnState }           from './states/AllyTurnState.js';
 import { BossPhaseTransitionState } from './states/BossPhaseTransitionState.js';
 import { MarcusConversionState }    from './states/MarcusConversionState.js';
 import { BATTLE_STATES, BASE_PLAYER_HP } from '../utils/constants.js';
+import { PartyManager } from '../party/PartyManager.js';
+import { CHARACTER_REGISTRY } from '../characters/index.js';
 import type { ATBCombatant, IBattleScene, BattleInitData, AllyConfig, BossConfig } from '../types.js';
 import type { BattleHUD }      from '../ui/BattleHUD.js';
 import type { AudioManager }   from '../audio/AudioManager.js';
@@ -74,10 +76,11 @@ export class BattleManager {
     this.player = this._buildBattlePlayer();
     this.enemy  = new Enemy(scene, initData.enemyKey);
 
-    if (initData.allies) {
-      for (const cfg of initData.allies) {
-        this.allies.push(this._buildAlly(cfg, this.allies.length));
-      }
+    // Use explicit allies if provided; otherwise fall back to the party registry
+    const allyConfigs: AllyConfig[] = initData.allies
+      ?? new PartyManager(scene.registry).toAllyConfigs();
+    for (const cfg of allyConfigs) {
+      this.allies.push(this._buildAlly(cfg, this.allies.length));
     }
 
     this.fsm = new BattleStateMachine();
@@ -188,6 +191,7 @@ export class BattleManager {
       hp,
       maxHp:  hp,
       attack: PLAYER_STATS.str,
+      row:    'front' as const,
       str:    PLAYER_STATS.str,
       def:    PLAYER_STATS.def,
       int:    PLAYER_STATS.int,
@@ -211,13 +215,21 @@ export class BattleManager {
 
     const sprite = this.scene.add.rectangle(x, y, 28, 42, config.color);
 
-    // Use Marcus stats for the 'MARCUS' ally; fall back to config.attack for unknowns
+    // Look up full ATB stats from CHARACTER_REGISTRY if the ally has an id
+    const charDef  = config.id ? CHARACTER_REGISTRY[config.id] : undefined;
     const isMarcus = config.name === 'MARCUS';
-    const str      = isMarcus ? MARCUS_STATS.str  : config.attack;
-    const def      = isMarcus ? MARCUS_STATS.def  : 6;
-    const int_     = isMarcus ? MARCUS_STATS.int  : 4;
-    const spd      = isMarcus ? MARCUS_STATS.spd  : 8;
-    const lck      = isMarcus ? MARCUS_STATS.lck  : 8;
+
+    let str: number, def_: number, int_: number, spd: number, lck: number;
+    if (charDef) {
+      // Use chapter-0 stats from the def (proxy for current stats — M2 will pass chapter properly)
+      const s = charDef.chapterStats[0]!;
+      str  = s.str;  def_ = s.def;  int_ = s.int;  spd  = s.spd;  lck  = s.lck;
+    } else if (isMarcus) {
+      str = MARCUS_STATS.str; def_ = MARCUS_STATS.def; int_ = MARCUS_STATS.int;
+      spd = MARCUS_STATS.spd; lck  = MARCUS_STATS.lck;
+    } else {
+      str = config.attack; def_ = 6; int_ = 4; spd = 8; lck = 8;
+    }
 
     return {
       sprite,
@@ -225,14 +237,15 @@ export class BattleManager {
       hp:     config.hp,
       maxHp:  config.maxHp,
       attack: config.attack,
+      row:    config.row ?? 'front',
       str,
-      def,
+      def:    def_,
       int:    int_,
       spd,
       lck,
       atb:    0,
       statuses:     [],
-      techs:        [],
+      techs:        charDef?.techs ?? [],
       tags:         [],
       tagsRevealed: false,
       takeDamage(amount: number): boolean { this.hp = Math.max(0, this.hp - amount); return this.hp <= 0; },

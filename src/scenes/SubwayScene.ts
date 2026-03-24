@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { Player }          from '../entities/Player.js';
 import { DialogueManager } from '../dialogue/DialogueManager.js';
 import { GAME_FLAGS, setFlag } from '../utils/constants.js';
+import { PartyManager }    from '../party/PartyManager.js';
 import type { WasdKeys }   from '../types.js';
 import {
   MAP_W, MAP_H,
@@ -203,6 +204,7 @@ export class SubwayScene extends Phaser.Scene {
 
   private _mayaJoins(): void {
     setFlag(this.registry, GAME_FLAGS.MAYA_RECRUITED, true);
+    new PartyManager(this.registry).addMember('maya', 0);
 
     // Flash "MAYA joined the party"
     const { width, height } = this.scale;

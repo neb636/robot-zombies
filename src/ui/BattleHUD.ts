@@ -6,6 +6,7 @@ interface HudEntity {
   name:      string;
   hp:        number;
   maxHp:     number;
+  row?:      'front' | 'back';
   atb?:      number;
   statuses?: ActiveStatusEffect[];
 }
@@ -135,10 +136,11 @@ export class BattleHUD {
     this._gfx.lineStyle(1, 0x7af);
     this._gfx.strokeRect(x, y, w, 16);
 
-    // Name + HP text
+    // Name + HP text (row indicator appended when present)
+    const rowTag = entity.row ? ` [${entity.row === 'front' ? 'F' : 'B'}]` : '';
     const t = this.scene.add.text(
       x, y - 14,
-      `${label}  ${entity.hp}/${entity.maxHp}`,
+      `${label}${rowTag}  ${entity.hp}/${entity.maxHp}`,
       { fontFamily: 'monospace', fontSize: '12px', color: '#cde' },
     ).setDepth(11);
     this._texts.push(t);
