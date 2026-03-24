@@ -135,12 +135,18 @@ export class NewBostonScene extends Phaser.Scene {
     this._marcus = this.physics.add.sprite(MARCUS_START_X, MARCUS_START_Y, '__DEFAULT');
     this._marcus.setVisible(false);
 
-    // Draw his placeholder as a rectangle behind the sprite
+    // Draw his placeholder as a rectangle
     const marcusGfx = this.add.rectangle(MARCUS_START_X, MARCUS_START_Y, 18, 28, 0xddaa44);
     marcusGfx.setDepth(5);
 
-    // Store reference so we can move him in companion mode
+    // Name label above Marcus
+    const marcusLabel = this.add.text(MARCUS_START_X, MARCUS_START_Y - 24, 'MARCUS', {
+      fontFamily: 'monospace', fontSize: '8px', color: '#ddaa44',
+    }).setOrigin(0.5).setDepth(6);
+
+    // Store references so we can move them in companion mode
     this._marcus.setData('gfx', marcusGfx);
+    this._marcus.setData('label', marcusLabel);
     this._marcus.setCollideWorldBounds(true);
     (this._marcus.body as Phaser.Physics.Arcade.Body).setSize(18, 28);
   }
@@ -163,9 +169,13 @@ export class NewBostonScene extends Phaser.Scene {
       (this._marcus.body as Phaser.Physics.Arcade.Body).setVelocity(0, 0);
     }
 
-    // Sync the visible rectangle to the physics body
+    // Sync the visible rectangle and label to the physics body
     if (gfx) {
       gfx.setPosition(this._marcus.x, this._marcus.y);
+    }
+    const label = this._marcus.getData('label') as Phaser.GameObjects.Text | undefined;
+    if (label) {
+      label.setPosition(this._marcus.x, this._marcus.y - 24);
     }
   }
 

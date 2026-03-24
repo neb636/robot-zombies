@@ -393,9 +393,9 @@ export class PrologueScene extends Phaser.Scene {
       fontFamily: 'monospace', fontSize: '14px', color: '#446688',
     }).setOrigin(0.5).setScrollFactor(0).setDepth(51).setAlpha(0);
 
-    this.tweens.add({ targets: t1, alpha: 1, duration: 700, delay: 10000 });
+    this.tweens.add({ targets: t1, alpha: 1, duration: 700, delay: 1000 });
     this.tweens.add({
-      targets: t2, alpha: 1, duration: 700, delay: 10400,
+      targets: t2, alpha: 1, duration: 700, delay: 1400,
       onComplete: () => {
         this.time.delayedCall(2200, () => {
           this.cameras.main.fadeOut(900, 0, 0, 0, (_cam: Phaser.Cameras.Scene2D.Camera, p: number) => {
