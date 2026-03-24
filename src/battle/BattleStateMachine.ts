@@ -25,5 +25,9 @@ export class BattleStateMachine {
     this._current?.update(time, delta);
   }
 
+  getState(key: string): BattleState | null {
+    return this._states.get(key) ?? null;
+  }
+
   get currentKey(): string | null { return this._currentKey; }
 }
