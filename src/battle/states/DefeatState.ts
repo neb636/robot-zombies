@@ -8,10 +8,8 @@ export class DefeatState extends BattleState {
       'CONNECTION LOST.',
       'The robots have optimized you out of existence.',
       'Initiating temporal reboot...',
-    ]);
-
-    document.addEventListener('dialogue:advance', () => {
+    ], () => {
       this.manager.endBattle(false);
-    }, { once: true });
+    });
   }
 }

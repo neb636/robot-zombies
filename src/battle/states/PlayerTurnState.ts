@@ -170,7 +170,8 @@ export class PlayerTurnState extends BattleState {
 
   private _recordAndCheckCombo(actor: ATBCombatant): void {
     const now  = performance.now();
-    const name = actor.name.toLowerCase();
+    // Player always registers as 'player' so combo table entries match regardless of chosen name
+    const name = actor === (this.manager.player as ATBCombatant) ? 'player' : actor.name.toLowerCase();
     const prev = this.manager.lastPartyAction;
 
     const combo = checkCombo(name, now, prev?.name ?? null, prev?.ts ?? null);

@@ -17,10 +17,8 @@ export class VictoryState extends BattleState {
           'The timeline breathes again.',
         ];
 
-    dialogueManager.show('SYSTEM', lines);
-
-    document.addEventListener('dialogue:advance', () => {
+    dialogueManager.show('SYSTEM', lines, () => {
       this.manager.endBattle(true);
-    }, { once: true });
+    });
   }
 }

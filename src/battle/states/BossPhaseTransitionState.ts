@@ -19,9 +19,6 @@ export class BossPhaseTransitionState extends BattleState {
     enemy.attack += phase.atkBoost;
     this.manager.currentBossPhase += 1;
 
-    // Show phase dialogue
-    dialogueManager.show(enemy.name, phase.dialogue);
-
     // Flash enemy sprite to indicate phase shift
     const sprite = enemy.sprite;
     if (sprite) {
@@ -31,14 +28,13 @@ export class BossPhaseTransitionState extends BattleState {
         duration: 150,
         yoyo: true,
         repeat: 2,
-        onComplete: () => {
-          sprite.setAlpha(1);
-        },
+        onComplete: () => { sprite.setAlpha(1); },
       });
     }
 
-    document.addEventListener('dialogue:advance', () => {
+    // Show phase dialogue; resume ATB once player advances
+    dialogueManager.show(enemy.name, phase.dialogue, () => {
       this.manager.goTo(BATTLE_STATES.ATB_TICKING);
-    }, { once: true });
+    });
   }
 }

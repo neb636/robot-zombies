@@ -1,4 +1,5 @@
 import { BattleState }  from '../BattleState.js';
+import { calcDamage }   from '../CombatEngine.js';
 import { BATTLE_STATES } from '../../utils/constants.js';
 
 export class AllyTurnState extends BattleState {
@@ -36,10 +37,10 @@ export class AllyTurnState extends BattleState {
     }
 
     const { enemy, audioManager, dialogueManager } = this.manager;
-    const dmg  = ally.attack + Math.floor(Math.random() * 6);
+    const dmg  = calcDamage(ally.str, enemy.def, 'Physical', enemy.tags);
     const dead = enemy.takeDamage(dmg);
     audioManager.playSfx('sfx-attack');
-    dialogueManager.show(ally.name, [`${ally.name} strikes with his screwdriver for ${dmg} damage!`]);
+    dialogueManager.show(ally.name, [`${ally.name} attacks for ${dmg} damage!`]);
 
     if (dead) {
       this.manager.goTo(BATTLE_STATES.VICTORY);

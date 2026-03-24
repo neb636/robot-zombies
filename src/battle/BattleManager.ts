@@ -10,21 +10,16 @@ import { DefeatState }       from './states/DefeatState.js';
 import { AllyTurnState }           from './states/AllyTurnState.js';
 import { BossPhaseTransitionState } from './states/BossPhaseTransitionState.js';
 import { MarcusConversionState }    from './states/MarcusConversionState.js';
-import { BATTLE_STATES, BASE_PLAYER_HP } from '../utils/constants.js';
+import { BATTLE_STATES } from '../utils/constants.js';
 import { PartyManager } from '../party/PartyManager.js';
-import { CHARACTER_REGISTRY } from '../characters/index.js';
+import { CHARACTER_REGISTRY, PLAYER_DEF } from '../characters/index.js';
 import type { ATBCombatant, IBattleScene, BattleInitData, AllyConfig, BossConfig } from '../types.js';
 import type { BattleHUD }      from '../ui/BattleHUD.js';
 import type { AudioManager }   from '../audio/AudioManager.js';
 import type { DialogueManager } from '../dialogue/DialogueManager.js';
 
-/** Player Ch.1 stats (from planning/character_stats.md). */
-const PLAYER_STATS = {
-  str: 18, def: 12, int: 8, spd: 14, lck: 10,
-} as const;
-
-/** Marcus stats (Prologue only). */
-const MARCUS_STATS = {
+/** Marcus fallback stats used when the CHARACTER_REGISTRY entry is absent. */
+const MARCUS_FALLBACK_STATS = {
   str: 14, def: 8, int: 6, spd: 10, lck: 12,
 } as const;
 
@@ -173,33 +168,36 @@ export class BattleManager {
   private _buildBattlePlayer(): ATBCombatant {
     const { width, height } = this.scene.scale;
     const playerName = (this.scene.registry.get('playerName') as string | undefined) ?? 'KAI';
+    const chapter    = (this.scene.registry.get('chapter')    as number | undefined) ?? 0;
+
+    const statIdx = Math.min(chapter, PLAYER_DEF.chapterStats.length - 1);
+    const s       = PLAYER_DEF.chapterStats[statIdx]!;
 
     let sprite: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
     if (this.scene.textures.exists('hero')) {
-      const s = this.scene.add.sprite(width * 0.25, height * 0.55, 'hero');
-      s.setScale(2);
-      s.play('hero-idle');
-      sprite = s;
+      const sp = this.scene.add.sprite(width * 0.25, height * 0.55, 'hero');
+      sp.setScale(2);
+      sp.play('hero-idle');
+      sprite = sp;
     } else {
-      sprite = this.scene.add.rectangle(width * 0.25, height * 0.55, 32, 48, 0x4488ff);
+      sprite = this.scene.add.rectangle(width * 0.25, height * 0.55, 32, 48, PLAYER_DEF.color);
     }
 
-    const hp = BASE_PLAYER_HP;
     return {
       sprite,
       name:   playerName,
-      hp,
-      maxHp:  hp,
-      attack: PLAYER_STATS.str,
+      hp:     s.hp,
+      maxHp:  s.maxHp,
+      attack: s.str,
       row:    'front' as const,
-      str:    PLAYER_STATS.str,
-      def:    PLAYER_STATS.def,
-      int:    PLAYER_STATS.int,
-      spd:    PLAYER_STATS.spd,
-      lck:    PLAYER_STATS.lck,
+      str:    s.str,
+      def:    s.def,
+      int:    s.int,
+      spd:    s.spd,
+      lck:    s.lck,
       atb:    0,
       statuses:     [],
-      techs:        [],
+      techs:        PLAYER_DEF.techs,
       tags:         [],
       tagsRevealed: false,
       takeDamage(amount: number): boolean { this.hp = Math.max(0, this.hp - amount); return this.hp <= 0; },
@@ -216,17 +214,18 @@ export class BattleManager {
     const sprite = this.scene.add.rectangle(x, y, 28, 42, config.color);
 
     // Look up full ATB stats from CHARACTER_REGISTRY if the ally has an id
-    const charDef  = config.id ? CHARACTER_REGISTRY[config.id] : undefined;
-    const isMarcus = config.name === 'MARCUS';
+    const charDef      = config.id ? CHARACTER_REGISTRY[config.id] : undefined;
+    const isMarcus     = !charDef && config.name === 'MARCUS';
+    const chapter      = (this.scene.registry.get('chapter') as number | undefined) ?? 0;
 
     let str: number, def_: number, int_: number, spd: number, lck: number;
     if (charDef) {
-      // Use chapter-0 stats from the def (proxy for current stats — M2 will pass chapter properly)
-      const s = charDef.chapterStats[0]!;
+      const statIdx = Math.max(0, Math.min(chapter - charDef.joinChapter, charDef.chapterStats.length - 1));
+      const s = charDef.chapterStats[statIdx]!;
       str  = s.str;  def_ = s.def;  int_ = s.int;  spd  = s.spd;  lck  = s.lck;
     } else if (isMarcus) {
-      str = MARCUS_STATS.str; def_ = MARCUS_STATS.def; int_ = MARCUS_STATS.int;
-      spd = MARCUS_STATS.spd; lck  = MARCUS_STATS.lck;
+      str = MARCUS_FALLBACK_STATS.str; def_ = MARCUS_FALLBACK_STATS.def; int_ = MARCUS_FALLBACK_STATS.int;
+      spd = MARCUS_FALLBACK_STATS.spd; lck  = MARCUS_FALLBACK_STATS.lck;
     } else {
       str = config.attack; def_ = 6; int_ = 4; spd = 8; lck = 8;
     }
