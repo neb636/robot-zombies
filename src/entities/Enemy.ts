@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { BASE_ENEMY_HP, BASE_ENEMY_ATK } from '../utils/constants.js';
-import type { EnemyAction } from '../types.js';
+import type { EnemyAction, EnemyTag, ActiveStatusEffect, Tech } from '../types.js';
 
 const NAMES: readonly string[] = ['HELPBOT-9', 'SERVAMAX', 'KINDROID', 'UTIL-1TY', 'ASSIZTRON'];
 const TAUNTS: readonly string[] = [
@@ -12,20 +12,36 @@ const TAUNTS: readonly string[] = [
   'I am only trying to HELP. Resistance is a known bug.',
 ];
 
+type EnemyTier = 'drone' | 'enforcer' | 'sentinel' | 'boss' | 'converted';
+
 /** Boss-specific configurations keyed by textureKey / enemyKey. */
 const BOSS_CONFIGS: Record<string, {
-  name: string;
-  hp: number;
-  atk: number;
-  width: number;
+  name:   string;
+  hp:     number;
+  atk:    number;   // kept for BossPhaseTransitionState backward compat
+  str:    number;
+  def:    number;
+  int:    number;
+  spd:    number;
+  lck:    number;
+  tags:   readonly EnemyTag[];
+  tier:   EnemyTier;
+  width:  number;
   height: number;
-  color: number;
+  color:  number;
   taunts: readonly string[];
 }> = {
   warden_alpha: {
     name:   'WARDEN ALPHA',
     hp:     300,
     atk:    22,
+    str:    22,
+    def:    10,
+    int:    8,
+    spd:    8,
+    lck:    6,
+    tags:   ['Electronic'],
+    tier:   'boss',
     width:  64,
     height: 80,
     color:  0xcc2200,
@@ -36,21 +52,115 @@ const BOSS_CONFIGS: Record<string, {
       'YOUR COOPERATION WILL BE NOTED IN THE LOG.',
     ],
   },
+
+  compliance_drone: {
+    name:   'COMPLIANCE DRONE',
+    hp:     60,
+    atk:    12,
+    str:    12,
+    def:    4,
+    int:    2,
+    spd:    8,
+    lck:    4,
+    tags:   ['Electronic'],
+    tier:   'drone',
+    width:  48,
+    height: 64,
+    color:  0xff4422,
+    taunts: TAUNTS as string[],
+  },
+
+  enforcer_unit: {
+    name:   'ENFORCER UNIT',
+    hp:     100,
+    atk:    18,
+    str:    18,
+    def:    12,
+    int:    4,
+    spd:    6,
+    lck:    6,
+    tags:   ['Electronic', 'Armored'],
+    tier:   'enforcer',
+    width:  56,
+    height: 72,
+    color:  0xcc6600,
+    taunts: TAUNTS as string[],
+  },
+
+  sentinel: {
+    name:   'SENTINEL',
+    hp:     80,
+    atk:    14,
+    str:    14,
+    def:    8,
+    int:    6,
+    spd:    14,
+    lck:    8,
+    tags:   ['Electronic'],
+    tier:   'sentinel',
+    width:  52,
+    height: 68,
+    color:  0x884400,
+    taunts: TAUNTS as string[],
+  },
+
+  converted: {
+    name:   'CONVERTED',
+    hp:     50,
+    atk:    10,
+    str:    10,
+    def:    6,
+    int:    8,
+    spd:    10,
+    lck:    10,
+    tags:   ['Organic'],
+    tier:   'converted',
+    width:  32,
+    height: 48,
+    color:  0x6688aa,
+    taunts: [
+      'Please. Cooperate. It doesn\'t hurt.',
+      'I used to be like you.',
+      'Join us. The optimization is peaceful.',
+    ],
+  },
 };
 
 export interface EnemyStats {
-  hp?: number;
+  hp?:  number;
   atk?: number;
+  str?: number;
+  def?: number;
+  int?: number;
+  spd?: number;
+  lck?: number;
 }
 
 /**
- * Enemy — a robot enemy. No physics; battle-only sprite.
+ * Enemy — a robot (or converted human) enemy. No physics; battle-only.
+ *
+ * Keeps a `attack` field (= str) so BossPhaseTransitionState can write
+ * `enemy.attack += phase.atkBoost` without changes.
  */
 export class Enemy {
-  readonly scene: Phaser.Scene;
-  readonly maxHp: number;
-  hp: number;
-  attack: number;
+  readonly scene:   Phaser.Scene;
+  readonly maxHp:   number;
+  hp:       number;
+  /** Legacy field kept for BossPhaseTransitionState atkBoost writes. Mirrors str. */
+  attack:   number;
+  /** Strength — base physical damage stat. */
+  str:      number;
+  def:      number;
+  int:      number;
+  spd:      number;
+  lck:      number;
+  /** Current ATB gauge (0–100). */
+  atb:      number = 0;
+  statuses: ActiveStatusEffect[] = [];
+  readonly tags: readonly EnemyTag[];
+  tagsRevealed: boolean = false;
+  readonly techs: readonly Tech[] = [];
+  readonly tier: EnemyTier;
   readonly name: string;
   readonly sprite: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
 
@@ -59,13 +169,20 @@ export class Enemy {
   constructor(scene: Phaser.Scene, textureKey = 'compliance_drone', stats?: EnemyStats) {
     this.scene = scene;
 
-    const bossCfg = BOSS_CONFIGS[textureKey];
+    const cfg = BOSS_CONFIGS[textureKey] ?? BOSS_CONFIGS['compliance_drone']!;
 
-    this.maxHp  = stats?.hp  ?? bossCfg?.hp  ?? BASE_ENEMY_HP;
+    this.maxHp  = stats?.hp  ?? cfg.hp;
     this.hp     = this.maxHp;
-    this.attack = stats?.atk ?? bossCfg?.atk ?? BASE_ENEMY_ATK;
-    this.name   = bossCfg?.name ?? NAMES[Math.floor(Math.random() * NAMES.length)] ?? 'HELPBOT-9';
-    this._taunts = bossCfg?.taunts ?? TAUNTS;
+    this.str    = stats?.str ?? stats?.atk ?? cfg.str;
+    this.attack = this.str;    // legacy alias
+    this.def    = stats?.def ?? cfg.def;
+    this.int    = stats?.int ?? cfg.int;
+    this.spd    = stats?.spd ?? cfg.spd;
+    this.lck    = stats?.lck ?? cfg.lck;
+    this.tags   = cfg.tags;
+    this.tier   = cfg.tier;
+    this.name   = cfg.name;
+    this._taunts = cfg.taunts;
 
     const { width, height } = scene.scale;
 
@@ -75,15 +192,13 @@ export class Enemy {
       s.play('robot-idle');
       this.sprite = s;
     } else {
-      const rectW = bossCfg?.width  ?? 48;
-      const rectH = bossCfg?.height ?? 64;
-      const color = bossCfg?.color  ?? 0xff4422;
-      this.sprite = scene.add.rectangle(width * 0.65, height * 0.42, rectW, rectH, color);
+      this.sprite = scene.add.rectangle(width * 0.65, height * 0.42, cfg.width, cfg.height, cfg.color);
     }
   }
 
   takeDamage(amount: number): boolean {
     this.hp = Math.max(0, this.hp - amount);
+    this.attack = this.str;   // keep attack in sync after external atkBoost writes
     this._flashDamage();
     return this.hp <= 0;
   }

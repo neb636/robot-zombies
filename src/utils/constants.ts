@@ -5,6 +5,7 @@ export const GAME_HEIGHT = 600 as const;
 export const TILE_SIZE   = 32 as const;
 
 export const BATTLE_STATES = {
+  ATB_TICKING:           'ATB_TICKING',
   PLAYER_TURN:           'PLAYER_TURN',
   ALLY_TURN:             'ALLY_TURN',
   ENEMY_TURN:            'ENEMY_TURN',
@@ -27,6 +28,7 @@ export type EventKey = typeof EVENTS[keyof typeof EVENTS];
 
 export const PLAYER_ACTIONS = {
   ATTACK:  'ATTACK',
+  TECHS:   'TECHS',
   HEAL:    'HEAL',
   SPECIAL: 'SPECIAL',
   FLEE:    'FLEE',

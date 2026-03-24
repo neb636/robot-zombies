@@ -12,6 +12,55 @@ export interface WasdKeys {
   D: Phaser.Input.Keyboard.Key;
 }
 
+// ─── Battle — ATB types ───────────────────────────────────────────────────────
+
+export type EnemyTag      = 'Electronic' | 'Armored' | 'Organic';
+export type SkillType     = 'Physical' | 'EMP' | 'Fire' | 'Tech' | 'Support';
+export type StatusEffectKey = 'Stunned' | 'Burning' | 'Hacked' | 'Shielded' | 'Panicked';
+
+export interface ActiveStatusEffect {
+  key: StatusEffectKey;
+  /** Turns remaining. -1 = permanent until triggered (e.g. Shielded). */
+  turnsRemaining: number;
+}
+
+/** Discriminated union describing what a tech does when executed. */
+export type TechEffect =
+  | { kind: 'damage';  skillType: SkillType; multiplier: number }
+  | { kind: 'status';  apply: StatusEffectKey; targetEnemy: boolean }
+  | { kind: 'heal';    amount: number; allAllies: boolean }
+  | { kind: 'reveal' }
+  | { kind: 'control'; turnsAsAlly: number };
+
+export interface Tech {
+  id: string;
+  label: string;
+  /** ATB points drained from the caster on use (0–100). */
+  atbCost: number;
+  targeting: 'single_enemy' | 'all_enemies' | 'single_ally' | 'all_allies' | 'self';
+  effect: TechEffect;
+}
+
+/**
+ * Full ATB combatant — extends BattlePlayer without breaking existing callers.
+ * All numeric stats are integers.
+ */
+export interface ATBCombatant extends BattlePlayer {
+  str: number;
+  def: number;
+  int: number;
+  spd: number;
+  lck: number;
+  /** Current ATB gauge, 0–100. */
+  atb: number;
+  statuses: ActiveStatusEffect[];
+  techs: readonly Tech[];
+  /** Enemy damage-type tags (empty array for party members). */
+  tags: readonly EnemyTag[];
+  /** True once Maya's Analyze reveals enemy tags in the HUD. */
+  tagsRevealed: boolean;
+}
+
 // ─── Battle ──────────────────────────────────────────────────────────────────
 
 export interface AllyConfig {
