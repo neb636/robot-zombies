@@ -2,10 +2,12 @@ import Phaser from 'phaser';
 import { AnimatedSprite } from './Sprite.js';
 import { BASE_PLAYER_HP, BASE_PLAYER_ATK } from '../utils/constants.js';
 import type { WasdKeys } from '../types.js';
+import type { MobileControls } from '../utils/MobileControls.js';
 
 interface SceneWithInput {
   cursors: Phaser.Types.Input.Keyboard.CursorKeys;
   wasd: WasdKeys;
+  mobileControls?: MobileControls;
 }
 
 export class Player extends AnimatedSprite {
@@ -37,27 +39,27 @@ export class Player extends AnimatedSprite {
   }
 
   update(): void {
-    const { cursors, wasd } = this.scene as unknown as SceneWithInput;
+    const { cursors, wasd, mobileControls: mc } = this.scene as unknown as SceneWithInput;
     const body = this.sprite.body as Phaser.Physics.Arcade.Body;
 
     body.setVelocity(0);
     this.isMoving = false;
 
-    if (cursors.left.isDown || wasd.A.isDown) {
+    if (cursors.left.isDown || wasd.A.isDown || mc?.isLeft()) {
       body.setVelocityX(-this.speed);
       this.playAnim('hero-walk-left');
       this.isMoving = true;
-    } else if (cursors.right.isDown || wasd.D.isDown) {
+    } else if (cursors.right.isDown || wasd.D.isDown || mc?.isRight()) {
       body.setVelocityX(this.speed);
       this.playAnim('hero-walk-right');
       this.isMoving = true;
     }
 
-    if (cursors.up.isDown || wasd.W.isDown) {
+    if (cursors.up.isDown || wasd.W.isDown || mc?.isUp()) {
       body.setVelocityY(-this.speed);
       if (!this.isMoving) this.playAnim('hero-walk-up');
       this.isMoving = true;
-    } else if (cursors.down.isDown || wasd.S.isDown) {
+    } else if (cursors.down.isDown || wasd.S.isDown || mc?.isDown()) {
       body.setVelocityY(this.speed);
       if (!this.isMoving) this.playAnim('hero-walk-down');
       this.isMoving = true;

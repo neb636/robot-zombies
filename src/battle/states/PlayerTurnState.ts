@@ -24,7 +24,10 @@ export class PlayerTurnState extends BattleState {
     this._inTechsSubmenu = false;
     this.menuItems = this._getMenuItems();
     this.menuIndex = 0;
-    this.manager.hud.showMenu(this.menuItems, this.menuIndex);
+    this.manager.hud.showMenu(this.menuItems, this.menuIndex, (i) => {
+      this.menuIndex = i;
+      this._confirm();
+    });
     this.manager.pauseATB();
     this._setupKeys();
   }
@@ -58,10 +61,10 @@ export class PlayerTurnState extends BattleState {
   private _navigate(dir: number): void {
     if (this._inTechsSubmenu) {
       this._techIndex = (this._techIndex + dir + this._techItems.length) % this._techItems.length;
-      this.manager.hud.showMenu(this._techMenuItems(), this._techIndex);
+      this.manager.hud.showMenu(this._techMenuItems(), this._techIndex, this._techSelectCallback());
     } else {
       this.menuIndex = (this.menuIndex + dir + this.menuItems.length) % this.menuItems.length;
-      this.manager.hud.showMenu(this.menuItems, this.menuIndex);
+      this.manager.hud.showMenu(this.menuItems, this.menuIndex, this._mainSelectCallback());
     }
     this.manager.audioManager.playSfx('sfx-menu');
   }
@@ -69,8 +72,20 @@ export class PlayerTurnState extends BattleState {
   private _back(): void {
     if (this._inTechsSubmenu) {
       this._inTechsSubmenu = false;
-      this.manager.hud.showMenu(this.menuItems, this.menuIndex);
+      this.manager.hud.showMenu(this.menuItems, this.menuIndex, this._mainSelectCallback());
     }
+  }
+
+  private _mainSelectCallback(): (i: number) => void {
+    return (i) => { this.menuIndex = i; this._confirm(); };
+  }
+
+  private _techSelectCallback(): (i: number) => void {
+    return (i) => {
+      if (i >= this._techItems.length) { this._back(); return; }
+      this._techIndex = i;
+      this._confirm();
+    };
   }
 
   private _confirm(): void {
@@ -156,7 +171,7 @@ export class PlayerTurnState extends BattleState {
         this._techItems  = [...actor.techs];
         this._techIndex  = 0;
         this._inTechsSubmenu = true;
-        this.manager.hud.showMenu(this._techMenuItems(), this._techIndex);
+        this.manager.hud.showMenu(this._techMenuItems(), this._techIndex, this._techSelectCallback());
         break;
       }
       case PLAYER_ACTIONS.FLEE:

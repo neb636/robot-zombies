@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { Player }          from '../entities/Player.js';
 import { DialogueManager } from '../dialogue/DialogueManager.js';
+import { MobileControls }  from '../utils/MobileControls.js';
 import { GAME_FLAGS, setFlag } from '../utils/constants.js';
 import { PartyManager }    from '../party/PartyManager.js';
 import type { WasdKeys }   from '../types.js';
@@ -13,6 +14,7 @@ import {
   drawSubway,
 } from './SubwayRenderer.js';
 import D from '../data/dialogue/subway.json';
+import { pauseMenu } from '../ui/PauseMenu.js';
 
 const PHASE = {
   ARRIVING:      'ARRIVING',
@@ -28,10 +30,11 @@ type Phase = typeof PHASE[keyof typeof PHASE];
  * Underground survivor cell. Maya is here.
  */
 export class SubwayScene extends Phaser.Scene {
-  cursors!:   Phaser.Types.Input.Keyboard.CursorKeys;
-  wasd!:      WasdKeys;
-  player!:    Player;
-  dialogMgr!: DialogueManager;
+  cursors!:        Phaser.Types.Input.Keyboard.CursorKeys;
+  wasd!:           WasdKeys;
+  player!:         Player;
+  dialogMgr!:      DialogueManager;
+  mobileControls!: MobileControls;
 
   private _phase:        Phase   = PHASE.ARRIVING;
   private _inputEnabled: boolean = false;
@@ -64,7 +67,9 @@ export class SubwayScene extends Phaser.Scene {
     this._buildNPCs();
     this._buildCamera();
 
-    this.dialogMgr = new DialogueManager(this);
+    this.dialogMgr      = new DialogueManager(this);
+    this.mobileControls = new MobileControls();
+    this.events.once('shutdown', () => { this.mobileControls.destroy(); });
 
     this.cameras.main.fadeIn(800, 0, 0, 0);
     this.time.delayedCall(900, () => { this._startArriving(); });
@@ -73,7 +78,7 @@ export class SubwayScene extends Phaser.Scene {
   update(): void {
     if (this._phase === PHASE.DONE) return;
 
-    if (this._inputEnabled) {
+    if (this._inputEnabled && !pauseMenu.isOpen()) {
       this.player.update();
       this._checkNPCProximity();
       this._checkExit();

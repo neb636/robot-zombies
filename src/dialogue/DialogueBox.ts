@@ -31,6 +31,7 @@ export class DialogueBox {
     this.textEl  = textEl;
 
     document.addEventListener('dialogue:advance', () => { this._advance(); });
+    this.overlay.addEventListener('click', () => { this._advance(); });
   }
 
   open(speakerName: string, lines: readonly string[], onClose?: () => void): void {

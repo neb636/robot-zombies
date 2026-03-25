@@ -5,10 +5,11 @@ import Phaser from 'phaser';
  * Stores the result in game.registry under 'playerName'.
  */
 export class NameEntryScene extends Phaser.Scene {
-  private _name:       string  = '';
-  private _locked:     boolean = false;
-  private _nameText!:  Phaser.GameObjects.Text;
+  private _name:        string           = '';
+  private _locked:      boolean          = false;
+  private _nameText!:   Phaser.GameObjects.Text;
   private _cursorText!: Phaser.GameObjects.Text;
+  private _htmlInput!:  HTMLInputElement;
 
   constructor() {
     super({ key: 'NameEntryScene' });
@@ -63,15 +64,19 @@ export class NameEntryScene extends Phaser.Scene {
       ease:     'Stepped',
     });
 
-    this.add.text(cx, height * 0.68, '[ ENTER ]  to confirm  |  BACKSPACE to delete', {
+    this.add.text(cx, height * 0.68, '[ ENTER / DONE ]  to confirm  |  tap box to open keyboard', {
       fontFamily: 'monospace', fontSize: '11px', color: '#223344',
     }).setOrigin(0.5);
 
 
     this._updateDisplay();
     this._setupInput();
+    this._createHtmlInput(cx, height * 0.51, boxW, boxH);
 
     this.cameras.main.fadeIn(600, 0, 0, 0);
+
+    this.events.once('shutdown', this._destroyHtmlInput, this);
+    this.events.once('destroy',  this._destroyHtmlInput, this);
   }
 
   private _updateDisplay(): void {
@@ -86,25 +91,76 @@ export class NameEntryScene extends Phaser.Scene {
   }
 
   private _setupInput(): void {
+    // Keyboard fallback for desktop (HTML input handles mobile).
     this.input.keyboard!.on('keydown', (event: KeyboardEvent) => {
       if (this._locked) return;
-
       if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
         if (this._name.trim().length > 0) this._confirm();
-        return;
-      }
-
-      if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.BACKSPACE) {
-        this._name = this._name.slice(0, -1);
-        this._updateDisplay();
-        return;
-      }
-
-      if (this._name.length < 12 && /^[a-zA-Z0-9 ]$/.test(event.key)) {
-        this._name += event.key.toUpperCase();
-        this._updateDisplay();
       }
     });
+  }
+
+  private _createHtmlInput(x: number, y: number, w: number, h: number): void {
+    const canvas = this.sys.game.canvas;
+    const parent = canvas.parentElement ?? document.body;
+
+    const input = document.createElement('input');
+    input.type        = 'text';
+    input.maxLength   = 12;
+    input.autocomplete = 'off';
+    input.autocapitalize = 'characters';
+    input.spellcheck  = false;
+    input.enterKeyHint = 'done';
+
+    // Position exactly over the Phaser input box.
+    const scaleX = canvas.offsetWidth  / canvas.width;
+    const scaleY = canvas.offsetHeight / canvas.height;
+    input.style.cssText = [
+      'position:absolute',
+      `left:${canvas.offsetLeft + x * scaleX}px`,
+      `top:${canvas.offsetTop  + y * scaleY}px`,
+      `width:${w * scaleX}px`,
+      `height:${h * scaleY}px`,
+      'background:transparent',
+      'border:none',
+      'outline:none',
+      'color:transparent',
+      'caret-color:transparent',
+      'font-size:1px',
+      'padding:0',
+      'margin:0',
+      'opacity:1',
+      'z-index:9999',
+      '-webkit-user-select:text',
+      'user-select:text',
+    ].join(';');
+
+    input.addEventListener('input', () => {
+      if (this._locked) return;
+      const filtered = input.value.replace(/[^a-zA-Z0-9 ]/g, '').slice(0, 12).toUpperCase();
+      input.value = filtered;
+      this._name  = filtered;
+      this._updateDisplay();
+    });
+
+    input.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (this._locked) return;
+      if (e.key === 'Enter' && this._name.trim().length > 0) {
+        e.preventDefault();
+        this._confirm();
+      }
+    });
+
+    parent.appendChild(input);
+    this._htmlInput = input;
+
+    // Auto-focus so desktop users can type immediately; on mobile the tap
+    // on the canvas area will focus the element and open the virtual keyboard.
+    input.focus();
+  }
+
+  private _destroyHtmlInput(): void {
+    this._htmlInput?.remove();
   }
 
   private _confirm(): void {

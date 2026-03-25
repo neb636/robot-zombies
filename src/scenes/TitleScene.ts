@@ -113,7 +113,7 @@ export class TitleScene extends Phaser.Scene {
       color: '#88aacc',
     }).setOrigin(0.5).setAlpha(0);
 
-    const hint = this.add.text(cx, menuY + 36, '← → to select   ENTER to confirm', {
+    const hint = this.add.text(cx, menuY + 36, '← → or tap to select  ·  ENTER or tap to confirm', {
       fontFamily: 'monospace',
       fontSize:   '11px',
       color:      '#334455',
