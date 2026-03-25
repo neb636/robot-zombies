@@ -11,11 +11,11 @@ export const EXIT_X         = 40;
 export const EXIT_Y_TOP     = 300;
 export const EXIT_Y_BOT     = 420;
 
-/** NPC positions for the survivor cell. */
+/** NPC spawn positions for the survivor cell. Dialogue lines live in src/data/dialogue/subway.json. */
 export const SURVIVOR_NPCS = [
-  { x: 280, y: 280, line: "Another one? From topside?" },
-  { x: 400, y: 420, line: 'Keep your voice down.' },
-  { x: 520, y: 300, line: "We don't go above street level after dark." },
+  { x: 280, y: 280 },
+  { x: 400, y: 420 },
+  { x: 520, y: 300 },
 ] as const;
 
 /**

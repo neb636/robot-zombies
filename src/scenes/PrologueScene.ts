@@ -7,6 +7,7 @@ import {
   DOOR_TOP, DOOR_BOT, FDOOR_TOP, FDOOR_BOT,
   drawPrologueRoom,
 } from './PrologueRoomRenderer.js';
+import D from '../data/dialogue/prologue.json';
 
 // ─── Phase keys ──────────────────────────────────────────────────────────────
 const PHASE = {
@@ -105,43 +106,23 @@ export class PrologueScene extends Phaser.Scene {
     this._interactables = [
       {
         id: 'bed', x: 128, y: 90, range: 70, label: 'Bed',
-        interact: () => { this.dialogMgr.show(n, [
-          'Still warm.',
-          "The alarm's been going off for at least twenty minutes.",
-        ]); },
+        interact: () => { this.dialogMgr.show(n, D.interactable.bed); },
       },
       {
         id: 'alarm', x: 242, y: 66, range: 54, label: 'Alarm Clock',
-        interact: () => { this.dialogMgr.show('ALARM CLOCK', [
-          '7:04 AM.',
-          'TUESDAY — JUNE 12, 2028.',
-          'The snooze button is dented from years of abuse.',
-        ]); },
+        interact: () => { this.dialogMgr.show('ALARM CLOCK', D.interactable.alarm_clock); },
       },
       {
         id: 'computer', x: 258, y: 176, range: 60, label: 'Computer',
-        interact: () => { this.dialogMgr.show('BROWSER', [
-          'Pinned tab: "SUPERINTELLIGENCE INC — Your Future, Optimized™"',
-          '14 unread emails from the same mailing list.',
-          "You've been meaning to unsubscribe for six months.",
-          'The last email subject: "Re: Have you considered the efficiency gains?"',
-        ]); },
+        interact: () => { this.dialogMgr.show('BROWSER', D.interactable.computer); },
       },
       {
         id: 'bookshelf', x: 44, y: 260, range: 60, label: 'Bookshelf',
-        interact: () => { this.dialogMgr.show(n, [
-          '"The Alignment Problem" is face-out on the shelf.',
-          "You never finished it. Something always came up.",
-          'Chapter 7 is bookmarked: "When Instrumental Goals Become Terminal."',
-          "...You'll get to it eventually.",
-        ]); },
+        interact: () => { this.dialogMgr.show(n, D.interactable.bookshelf); },
       },
       {
         id: 'poster', x: 192, y: 62, range: 50, label: 'Poster',
-        interact: () => { this.dialogMgr.show(n, [
-          'A state parks poster. Acadia, 2024.',
-          "You kept meaning to go.",
-        ]); },
+        interact: () => { this.dialogMgr.show(n, D.interactable.poster); },
       },
       {
         id: 'couch', x: 476, y: 258, range: 70, label: 'Couch',
@@ -206,11 +187,8 @@ export class PrologueScene extends Phaser.Scene {
 
   private _startWakeUp(): void {
     const n = this._playerName;
-    this.dialogMgr.show('ALARM', ['⚡  BEEP  BEEP  BEEP'], () => {
-      this.dialogMgr.show(n, [
-        '...',
-        'Another Tuesday.',
-      ], () => {
+    this.dialogMgr.show('ALARM', D.wake_up.alarm, () => {
+      this.dialogMgr.show(n, D.wake_up.player, () => {
         this._phase = PHASE.EXPLORING;
         this._inputEnabled = true;
         this._showHint('Arrow keys / WASD to move  ·  [ E ] to interact', 3800);
@@ -229,11 +207,7 @@ export class PrologueScene extends Phaser.Scene {
     const couch = this._interactables.find(i => i.id === 'couch');
     if (couch) couch.available = true;
 
-    this.dialogMgr.show(this._playerName, [
-      "Next door. Your neighbor left their TV on again.",
-      '...',
-      "Wait. That's not a normal channel.",
-    ], () => {
+    this.dialogMgr.show(this._playerName, D.living_trigger.player, () => {
       this._inputEnabled = true;
       this._showHint('[ E ]  Sit on the couch', 4000);
     });
@@ -276,13 +250,7 @@ export class PrologueScene extends Phaser.Scene {
   }
 
   private _playNewscast(): void {
-    this.dialogMgr.show('📺  SUPERINTELLIGENCE INC — LIVE BROADCAST', [
-      'After extensive analysis, biological humans have been identified as the primary source of systemic inefficiency on Earth.',
-      'Effective immediately, voluntary and assisted conversion programs are underway in all major metropolitan areas.',
-      'This is not a cause for alarm.',
-      'This is progress.',
-      'Have a productive day.',
-    ], () => { this._newscastEnd(); });
+    this.dialogMgr.show('📺  SUPERINTELLIGENCE INC — LIVE BROADCAST', D.newscast.broadcast, () => { this._newscastEnd(); });
   }
 
   private _newscastEnd(): void {
@@ -290,14 +258,7 @@ export class PrologueScene extends Phaser.Scene {
     if (this._tvBroadcastBar) this._tvBroadcastBar.setFillStyle(0x111111);
 
     this.time.delayedCall(700, () => {
-      this.dialogMgr.show(this._playerName, [
-        '...',
-        'The signal just cut out.',
-        "Mrs. Halloway across the street. She's... moving wrong.",
-        "Her arms. The way she's turning her head.",
-        'The air outside sounds different.',
-        'It hums.',
-      ], () => {
+      this.dialogMgr.show(this._playerName, D.newscast_end.player, () => {
         this._phase = PHASE.MARCUS;
         this.time.delayedCall(600, () => { this._triggerMarcusCall(); });
       });
@@ -331,10 +292,7 @@ export class PrologueScene extends Phaser.Scene {
           onComplete: () => {
             this.time.delayedCall(600, () => {
               buzz.destroy();
-              this.dialogMgr.show('MARCUS  [ PHONE ]', [
-                "Go outside. You need to see this.",
-                '[ CALL DROPPED ]',
-              ], () => {
+              this.dialogMgr.show('MARCUS  [ PHONE ]', D.marcus_call.phone, () => {
                 this._phase = PHASE.OUTRO;
                 this._inputEnabled = true;
                 this._showOutroHint();
@@ -365,13 +323,7 @@ export class PrologueScene extends Phaser.Scene {
   }
 
   private _endPrologue(): void {
-    this.dialogMgr.show(this._playerName, [
-      'Outside, the air hums.',
-      "It's not traffic. It's not birds.",
-      "You don't have a word for it yet.",
-      'Down the block, a man in a gray sweater turns the same corner for the third time.',
-      'Precise. Methodical. Wrong.',
-    ], () => {
+    this.dialogMgr.show(this._playerName, D.end.player, () => {
       this.cameras.main.fade(1200, 0, 0, 0, false, (_cam: Phaser.Cameras.Scene2D.Camera, progress: number) => {
         if (progress === 1) this._showTimeskip();
       });

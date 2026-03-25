@@ -14,8 +14,8 @@ export class DialogueManager {
     this.box = DialogueManager._box;
   }
 
-  show(speaker: string, lines: string[], onClose?: () => void): void {
-    bus.emit(EVENTS.DIALOGUE_OPEN, { speaker, lines });
+  show(speaker: string, lines: readonly string[], onClose?: () => void): void {
+    bus.emit(EVENTS.DIALOGUE_OPEN, { speaker, lines: [...lines] });
     this.box.open(speaker, lines, () => {
       bus.emit(EVENTS.DIALOGUE_CLOSE, {});
       onClose?.();

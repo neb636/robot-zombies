@@ -12,6 +12,7 @@ import {
   SURVIVOR_NPCS,
   drawSubway,
 } from './SubwayRenderer.js';
+import D from '../data/dialogue/subway.json';
 
 const PHASE = {
   ARRIVING:      'ARRIVING',
@@ -121,10 +122,7 @@ export class SubwayScene extends Phaser.Scene {
   private _startArriving(): void {
     this._phase = PHASE.ARRIVING;
 
-    this.dialogMgr.show(this._playerName, [
-      'Underground. The air is stale.',
-      'People are down here.',
-    ], () => {
+    this.dialogMgr.show(this._playerName, D.arriving.player, () => {
       this._phase = PHASE.EXPLORING;
       this._inputEnabled = true;
     });
@@ -143,7 +141,7 @@ export class SubwayScene extends Phaser.Scene {
       if (dist < 60) {
         this._survivorTalked.add(i);
         this._inputEnabled = false;
-        this.dialogMgr.show('SURVIVOR', [npc.line], () => {
+        this.dialogMgr.show('SURVIVOR', D.survivor_lines[i] ?? [], () => {
           this._inputEnabled = true;
         });
       }
@@ -182,20 +180,9 @@ export class SubwayScene extends Phaser.Scene {
   // ─── Maya dialogue ────────────────────────────────────────────────────
 
   private _triggerMayaDialogue(): void {
-    this.dialogMgr.show('MAYA', [
-      "Stop.",
-      "Before you say anything — how many were following you?",
-    ], () => {
-      this.dialogMgr.show(this._playerName, [
-        "None. I think.",
-      ], () => {
-        this.dialogMgr.show('MAYA', [
-          "You think. Great. That's reassuring.",
-          "MIT Robotics, class of '28. Before that mattered.",
-          "I know what converted them. I know how the beam works. I know the frequency.",
-          "What I don't have is someone stupid enough to walk back up there with me.",
-          "...You're volunteering. I can tell by the look.",
-        ], () => {
+    this.dialogMgr.show('MAYA', D.maya.initial1, () => {
+      this.dialogMgr.show(this._playerName, D.maya.initial2_player, () => {
+        this.dialogMgr.show('MAYA', D.maya.initial3, () => {
           this._mayaJoins();
         });
       });
@@ -236,16 +223,8 @@ export class SubwayScene extends Phaser.Scene {
   }
 
   private _triggerMayaFollowUp(): void {
-    this.dialogMgr.show(this._playerName, [
-      "My friend. Marcus. He was—",
-    ], () => {
-      this.dialogMgr.show('MAYA', [
-        "Converted. I know what it looks like.",
-        "He's not dead. That's the worst part. He's still in there.",
-        "The frequency can be reversed. In theory.",
-        "I need an EMP device from the campus. My old lab.",
-        "One thing at a time.",
-      ], () => {
+    this.dialogMgr.show(this._playerName, D.maya.followup_player, () => {
+      this.dialogMgr.show('MAYA', D.maya.followup, () => {
         this._inputEnabled = true;
       });
     });

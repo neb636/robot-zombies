@@ -32,15 +32,25 @@ TypeScript is strict with `noUnusedLocals`, `noUnusedParameters`, `exactOptional
 ```
 src/
   scenes/       — Phaser scenes (one file per scene)
-  entities/     — Player, Enemy, Sprite
-  battle/       — BattleManager, BattleStateMachine, battle states
+  entities/     — Player, Enemy, AnimatedSprite
+  battle/       — BattleManager, BattleStateMachine, ATB states, CombatEngine
+  characters/   — Static CharacterDef data (one file per character)
+  party/        — PartyManager (live party state across scenes)
+  save/         — SaveManager (localStorage, versioned with migrations)
+  world/        — WorldMapManager (node graph for overworld travel)
   dialogue/     — DialogueManager, DialogueBox
-  audio/        — AudioManager, TTSManager
+  audio/        — AudioManager, ProceduralMusic, TTSManager
   ui/           — BattleHUD, MenuItem
-  utils/        — EventBus (bus), constants (EVENTS, TILE_SIZE)
+  utils/        — EventBus (bus), constants (EVENTS, TILE_SIZE, flags)
+  data/
+    dialogue/   — Dialogue lines as JSON (prologue.json, boston.json, subway.json, world_map.json)
+    world/      — nodes.json (all 6 regions, 24 nodes, connections, unlock rules)
   types.ts      — Shared interfaces
   config.ts     — Phaser game config and scene list
   main.ts       — Entry point
+
+public/assets/  — Game assets (art, audio, maps)
+  sprites/characters/, sprites/enemies/, tilesets/, ui/, audio/music/, audio/sfx/, maps/
 
 planning/       — Story and design documents (source of truth for game design)
 tasks.md        — Ordered milestone task list
@@ -48,17 +58,19 @@ tasks.md        — Ordered milestone task list
 
 New scenes must be registered in `src/config.ts`.
 
+**Dialogue rule:** Never hardcode dialogue strings in scene files. All lines belong in `src/data/dialogue/<scene>.json`. Import the JSON and pass arrays directly to `dialogMgr.show(speaker, lines)`. This keeps narrative editable without touching TypeScript.
+
 ---
 
 ## Scene flow (current)
 
 ```
-BootScene → PreloadScene → TitleScene → NameEntryScene → PrologueScene → WorldMapScene
-                                                                              ↕ (parallel)
-                                                                          BattleScene
+BootScene → PreloadScene → TitleScene → NameEntryScene → PrologueScene → NewBostonScene → SubwayScene → WorldMapScene
+                                                                                                              ↕ (launch/pause)
+                                                                                                          BattleScene
 ```
 
-`DialogueScene` runs in parallel on top of any scene via `DialogueManager`.
+`BattleScene` launches in parallel on top of the calling scene and pauses it. When battle ends, the parent resumes. `DialogueManager` uses an HTML overlay — no separate scene.
 
 ---
 
@@ -155,17 +167,19 @@ All stat values are integers. No floating point in any value shown to the player
 ## What is currently built (vs. planned)
 
 **Built:**
-- Title, name entry, prologue (apartment scenes — needs Boston fix + Marcus rename)
-- Basic battle loop (HP/attack only — ATB, stats, techs not yet implemented)
-- WorldMapScene with tile map and random encounter trigger
-- AudioManager, DialogueManager, EventBus
+- Full prologue flow: apartment → NewBostonScene (street + companion Marcus) → SubwayScene (Maya recruitment) → WorldMapScene
+- ATB battle system: BattleStateMachine, ATBTickingState (60ms tick), CombatEngine (damage math), StatusEffectSystem, TechExecutor, ComboSystem, EnemyAIStateMachine, BossPhaseTransitionState
+- Character system: CharacterDef data files for all 7 characters; PartyManager tracks live party state across scenes
+- WorldMapManager with full 6-region, 24-node graph (nodes.json); visited/unlocked state; renders as overlay on WorldMapScene
+- SaveManager: localStorage with versioned save + migration map
+- AudioManager (Howler), DialogueManager (HTML overlay + typewriter), EventBus
+- Dialogue extracted to JSON: `src/data/dialogue/*.json` — scenes import and pass arrays
 
 **Not yet built (see tasks.md for order):**
-- Marcus properly integrated (currently named "Dario" in code)
-- New Boston exterior scene and subway tunnels
-- ATB battle system, stats, techs, combos
-- Party system (Maya and others as actual party members)
-- World map node system (regions, node types, fast travel)
-- Survival layer
-- All chapter scenes beyond the prologue
-- Sprites (all placeholder rectangles currently)
+- Battle HUD wired to real ATB stats (currently shows placeholder HP bars)
+- Sprites — all characters and enemies are placeholder colored rectangles
+- Survival layer (food/fuel/medicine/morale/vehicleCondition)
+- World map node interaction UI (clicking nodes to travel, node entry scenes)
+- Chapter 1–5 scenes (Appalachia through Silicon Valley)
+- Equipment and item system
+- Music tracks and SFX (audio paths wired, files not yet produced)

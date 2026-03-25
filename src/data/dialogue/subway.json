@@ -1,0 +1,39 @@
+{
+  "arriving": {
+    "player": [
+      "Underground. The air is stale.",
+      "People are down here."
+    ]
+  },
+  "survivor_lines": [
+    ["Another one? From topside?"],
+    ["Keep your voice down."],
+    ["We don't go above street level after dark."]
+  ],
+  "maya": {
+    "initial1": [
+      "Stop.",
+      "Before you say anything — how many were following you?"
+    ],
+    "initial2_player": [
+      "None. I think."
+    ],
+    "initial3": [
+      "You think. Great. That's reassuring.",
+      "MIT Robotics, class of '28. Before that mattered.",
+      "I know what converted them. I know how the beam works. I know the frequency.",
+      "What I don't have is someone stupid enough to walk back up there with me.",
+      "...You're volunteering. I can tell by the look."
+    ],
+    "followup_player": [
+      "My friend. Marcus. He was—"
+    ],
+    "followup": [
+      "Converted. I know what it looks like.",
+      "He's not dead. That's the worst part. He's still in there.",
+      "The frequency can be reversed. In theory.",
+      "I need an EMP device from the campus. My old lab.",
+      "One thing at a time."
+    ]
+  }
+}

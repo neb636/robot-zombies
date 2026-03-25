@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { jumpToScene } from '../utils/devJump.js';
 
 /**
  * PreloadScene — loads all game assets with a progress bar.
@@ -31,6 +32,18 @@ export class PreloadScene extends Phaser.Scene {
     if (!this.textures.exists('gate_colossus'))   this._generateGateColossusTexture();
     if (!this.textures.exists('elise_voss'))      this._generateEliseVossTexture();
     this._registerAnimations();
+
+    if (import.meta.env.DEV) {
+      this.scene.launch('DevScene');
+      const params = new URLSearchParams(window.location.search);
+      const devTarget = params.get('dev');
+      if (devTarget) {
+        const enemy = params.get('enemy');
+        jumpToScene(this.game, devTarget, enemy ? { enemy } : undefined);
+        return;
+      }
+    }
+
     this.scene.start('TitleScene');
   }
 

@@ -1,0 +1,74 @@
+{
+  "interactable": {
+    "bed": [
+      "Still warm.",
+      "The alarm's been going off for at least twenty minutes."
+    ],
+    "alarm_clock": [
+      "7:04 AM.",
+      "TUESDAY — JUNE 12, 2028.",
+      "The snooze button is dented from years of abuse."
+    ],
+    "computer": [
+      "Pinned tab: \"SUPERINTELLIGENCE INC — Your Future, Optimized™\"",
+      "14 unread emails from the same mailing list.",
+      "You've been meaning to unsubscribe for six months.",
+      "The last email subject: \"Re: Have you considered the efficiency gains?\""
+    ],
+    "bookshelf": [
+      "\"The Alignment Problem\" is face-out on the shelf.",
+      "You never finished it. Something always came up.",
+      "Chapter 7 is bookmarked: \"When Instrumental Goals Become Terminal.\"",
+      "...You'll get to it eventually."
+    ],
+    "poster": [
+      "A state parks poster. Acadia, 2024.",
+      "You kept meaning to go."
+    ]
+  },
+  "wake_up": {
+    "alarm": ["⚡  BEEP  BEEP  BEEP"],
+    "player": ["...", "Another Tuesday."]
+  },
+  "living_trigger": {
+    "player": [
+      "Next door. Your neighbor left their TV on again.",
+      "...",
+      "Wait. That's not a normal channel."
+    ]
+  },
+  "newscast": {
+    "broadcast": [
+      "After extensive analysis, biological humans have been identified as the primary source of systemic inefficiency on Earth.",
+      "Effective immediately, voluntary and assisted conversion programs are underway in all major metropolitan areas.",
+      "This is not a cause for alarm.",
+      "This is progress.",
+      "Have a productive day."
+    ]
+  },
+  "newscast_end": {
+    "player": [
+      "...",
+      "The signal just cut out.",
+      "Mrs. Halloway across the street. She's... moving wrong.",
+      "Her arms. The way she's turning her head.",
+      "The air outside sounds different.",
+      "It hums."
+    ]
+  },
+  "marcus_call": {
+    "phone": [
+      "Go outside. You need to see this.",
+      "[ CALL DROPPED ]"
+    ]
+  },
+  "end": {
+    "player": [
+      "Outside, the air hums.",
+      "It's not traffic. It's not birds.",
+      "You don't have a word for it yet.",
+      "Down the block, a man in a gray sweater turns the same corner for the third time.",
+      "Precise. Methodical. Wrong."
+    ]
+  }
+}

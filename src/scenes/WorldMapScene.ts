@@ -5,10 +5,14 @@ import { DialogueManager } from '../dialogue/DialogueManager.js';
 import { TILE_SIZE, EVENTS } from '../utils/constants.js';
 import { bus }             from '../utils/EventBus.js';
 import type { WasdKeys }   from '../types.js';
+import D from '../data/dialogue/world_map.json';
+import { WorldMapManager, NODE_COLORS } from '../world/WorldMapManager.js';
+import nodeData from '../data/world/nodes.json';
 
 /**
  * WorldMapScene — overworld traversal on a Tiled tile map.
  * Random encounters trigger when walking on encounter-tagged tiles.
+ * Node graph is managed by WorldMapManager and rendered as an overlay.
  */
 export class WorldMapScene extends Phaser.Scene {
   cursors!:       Phaser.Types.Input.Keyboard.CursorKeys;
@@ -16,6 +20,7 @@ export class WorldMapScene extends Phaser.Scene {
   private player!:         Player;
   private audioManager!:   AudioManager;
   private dialogueManager!: DialogueManager;
+  private worldMap!:        WorldMapManager;
   private encounterRate:   number = 0.08;
   private mapWidth:        number = 0;
   private mapHeight:       number = 0;
@@ -34,25 +39,24 @@ export class WorldMapScene extends Phaser.Scene {
     this.audioManager    = new AudioManager(this);
     this.dialogueManager = new DialogueManager(this);
 
+    // Restore visited nodes from registry if available
+    const savedVisited = this.registry.get('visitedNodes') as string[] | undefined;
+    this.worldMap = new WorldMapManager(nodeData, savedVisited ?? []);
+    // Mark Boston prologue nodes as visited since we've already been there
+    this.worldMap.markVisited('beacon_hill');
+    this.worldMap.markVisited('red_line_tunnels');
+    this._buildNodeLayer();
+
     this.audioManager.playMusic('music-overworld');
 
     bus.on(EVENTS.BATTLE_END, ({ victory }) => {
       this.audioManager.playMusic('music-overworld');
       if (!victory) {
-        this.dialogueManager.show('SYSTEM', [
-          'You were defeated.',
-          'Rebooting timeline...',
-        ]);
+        this.dialogueManager.show('SYSTEM', D.defeated.system);
       }
     });
 
-    this.dialogueManager.show('RADIO FRAGMENT — STATIC', [
-      'Two years since the Broadcast.',
-      'Superintelligence Inc. calls it the Conversion Program.',
-      'The roads are clean. The power is on. The food supply is stable.',
-      'Everything works perfectly.',
-      '...Everyone is so helpful.',
-    ]);
+    this.dialogueManager.show('RADIO FRAGMENT — STATIC', D.intro.radio);
   }
 
   update(): void {
@@ -134,5 +138,57 @@ export class WorldMapScene extends Phaser.Scene {
       returnScene: 'WorldMapScene',
     });
     this.scene.pause();
+  }
+
+  /**
+   * Renders the node graph as an overlay on the map.
+   * Connections are drawn as lines, nodes as coloured circles with labels.
+   * Locked nodes render dimmed; visited nodes render with a check ring.
+   */
+  private _buildNodeLayer(): void {
+    const nodes = this.worldMap.getAllNodes();
+    const gfx   = this.add.graphics().setDepth(5);
+
+    // Draw connection lines first (below node circles)
+    const drawn = new Set<string>();
+    for (const node of nodes) {
+      for (const connId of node.connections) {
+        const key = [node.id, connId].sort().join('|');
+        if (drawn.has(key)) continue;
+        drawn.add(key);
+
+        const other = this.worldMap.getNode(connId);
+        if (!other) continue;
+
+        const unlocked = this.worldMap.isUnlocked(node.id) && this.worldMap.isUnlocked(connId);
+        gfx.lineStyle(1, unlocked ? 0x556655 : 0x2a332a, unlocked ? 0.8 : 0.35);
+        gfx.lineBetween(node.mapX, node.mapY, other.mapX, other.mapY);
+      }
+    }
+
+    // Draw nodes
+    for (const node of nodes) {
+      const unlocked = this.worldMap.isUnlocked(node.id);
+      const visited  = this.worldMap.isVisited(node.id);
+      const color    = NODE_COLORS[node.type];
+      const alpha    = unlocked ? 1 : 0.3;
+      const radius   = node.type === 'fast_travel_hub' ? 7 : 5;
+
+      // Outer ring for visited nodes
+      if (visited) {
+        gfx.lineStyle(1.5, 0xffffff, 0.6);
+        gfx.strokeCircle(node.mapX, node.mapY, radius + 3);
+      }
+
+      gfx.fillStyle(color, alpha);
+      gfx.fillCircle(node.mapX, node.mapY, radius);
+
+      // Label
+      this.add.text(node.mapX, node.mapY + radius + 4, node.name, {
+        fontFamily: 'monospace',
+        fontSize:   '6px',
+        color:      unlocked ? '#aabbaa' : '#445544',
+      }).setOrigin(0.5, 0).setDepth(6).setAlpha(unlocked ? 1 : 0.5);
+    }
   }
 }
