@@ -9,6 +9,8 @@ type BusEventMap = {
   [EVENTS.DIALOGUE_OPEN]:    { speaker: string; lines: string[] };
   [EVENTS.DIALOGUE_CLOSE]:   Record<string, never>;
   [EVENTS.SCENE_TRANSITION]: Record<string, never>;
+  [EVENTS.PAUSE_OPEN]:       Record<string, never>;
+  [EVENTS.PAUSE_CLOSE]:      Record<string, never>;
 };
 
 type BusEventName = keyof BusEventMap;

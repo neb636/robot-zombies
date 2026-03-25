@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { Player }          from '../entities/Player.js';
 import { DialogueManager } from '../dialogue/DialogueManager.js';
+import { MobileControls }  from '../utils/MobileControls.js';
 import type { Interactable, WasdKeys } from '../types.js';
 import {
   MAP_W, MAP_H, WALL_T, DIVIDER_X,
@@ -8,6 +9,7 @@ import {
   drawPrologueRoom,
 } from './PrologueRoomRenderer.js';
 import D from '../data/dialogue/prologue.json';
+import { pauseMenu } from '../ui/PauseMenu.js';
 
 // ─── Phase keys ──────────────────────────────────────────────────────────────
 const PHASE = {
@@ -40,6 +42,9 @@ export class PrologueScene extends Phaser.Scene {
   private _tvBroadcastBar?: Phaser.GameObjects.Rectangle;
   private _outroHintObj?:  Phaser.GameObjects.Text;
   dialogMgr!:              DialogueManager;
+  mobileControls!:         MobileControls;
+
+  private _interactTapHandler!: () => void;
 
   constructor() {
     super({ key: 'PrologueScene' });
@@ -59,6 +64,12 @@ export class PrologueScene extends Phaser.Scene {
     this._buildHUD();
     this._setupInput();
 
+    this.mobileControls = new MobileControls();
+    this.events.once('shutdown', () => {
+      document.removeEventListener('interact:tap', this._interactTapHandler);
+      this.mobileControls.destroy();
+    });
+
     this.dialogMgr = new DialogueManager(this);
 
     this.cameras.main.fadeIn(900, 0, 0, 0);
@@ -67,6 +78,7 @@ export class PrologueScene extends Phaser.Scene {
 
   update(): void {
     if (!this._inputEnabled) return;
+    if (pauseMenu.isOpen()) return;
     this.player.update();
     this._checkLivingTrigger();
     this._checkInteractProximity();
@@ -176,11 +188,22 @@ export class PrologueScene extends Phaser.Scene {
   private _setupInput(): void {
     this.input.keyboard!.on('keydown-E', () => {
       if (!this._inputEnabled)          return;
+      if (pauseMenu.isOpen())           return;
       if (this.dialogMgr?.isActive())   return;
       if (this._nearInteract) {
         this._nearInteract.interact();
       }
     });
+
+    this._interactTapHandler = () => {
+      if (!this._inputEnabled)          return;
+      if (pauseMenu.isOpen())           return;
+      if (this.dialogMgr?.isActive())   return;
+      if (this._nearInteract) {
+        this._nearInteract.interact();
+      }
+    };
+    document.addEventListener('interact:tap', this._interactTapHandler);
   }
 
   // ─── Story Flow ───────────────────────────────────────────────────────────
@@ -387,8 +410,10 @@ export class PrologueScene extends Phaser.Scene {
         .setText(`[ E ]  ${closest.label}`)
         .setPosition(px, py - 44)
         .setVisible(true);
+      this.mobileControls.showInteract(closest.label);
     } else {
       this._promptText.setVisible(false);
+      this.mobileControls.hideInteract();
     }
   }
 

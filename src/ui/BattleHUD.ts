@@ -70,7 +70,7 @@ export class BattleHUD {
     });
   }
 
-  showMenu(items: Array<{ label: string; action: string }>, selectedIndex: number): void {
+  showMenu(items: Array<{ label: string; action: string }>, selectedIndex: number, onSelect?: (i: number) => void): void {
     this._menuGrp.clear(true, true);
     const x = 30;
     const y = this.scene.scale.height - 160;
@@ -88,6 +88,12 @@ export class BattleHUD {
           strokeThickness: 3,
         },
       ).setDepth(11);
+
+      if (onSelect) {
+        text.setInteractive({ useHandCursor: true });
+        text.on('pointerdown', () => { onSelect(i); });
+      }
+
       this._menuGrp.add(text);
     });
   }

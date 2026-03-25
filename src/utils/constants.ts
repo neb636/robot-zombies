@@ -23,6 +23,8 @@ export const EVENTS = {
   DIALOGUE_OPEN:    'dialogue:open',
   DIALOGUE_CLOSE:   'dialogue:close',
   SCENE_TRANSITION: 'scene:transition',
+  PAUSE_OPEN:       'pause:open',
+  PAUSE_CLOSE:      'pause:close',
 } as const;
 export type EventKey = typeof EVENTS[keyof typeof EVENTS];
 
