@@ -137,30 +137,26 @@ export class NewBostonScene extends Phaser.Scene {
   // ─── Marcus NPC ───────────────────────────────────────────────────────────
 
   private _buildMarcus(): void {
-    // Placeholder: warm amber rectangle
-    this._marcus = this.physics.add.sprite(MARCUS_START_X, MARCUS_START_Y, '__DEFAULT');
-    this._marcus.setVisible(false);
-
-    // Draw his placeholder as a rectangle
-    const marcusGfx = this.add.rectangle(MARCUS_START_X, MARCUS_START_Y, 18, 28, 0xddaa44);
-    marcusGfx.setDepth(5);
+    const texture = this.textures.exists('marcus_idle') ? 'marcus_idle' : '__DEFAULT';
+    this._marcus = this.physics.add.sprite(MARCUS_START_X, MARCUS_START_Y, texture);
+    this._marcus.setScale(0.70);
+    this._marcus.setDepth(5);
+    if (this.anims.exists('marcus-idle')) {
+      this._marcus.play('marcus-idle');
+    }
 
     // Name label above Marcus
-    const marcusLabel = this.add.text(MARCUS_START_X, MARCUS_START_Y - 24, 'MARCUS', {
+    const marcusLabel = this.add.text(MARCUS_START_X, MARCUS_START_Y - 28, 'MARCUS', {
       fontFamily: 'monospace', fontSize: '8px', color: '#ddaa44',
     }).setOrigin(0.5).setDepth(6);
 
-    // Store references so we can move them in companion mode
-    this._marcus.setData('gfx', marcusGfx);
     this._marcus.setData('label', marcusLabel);
+    this._marcus.setData('animState', 'idle');
     this._marcus.setCollideWorldBounds(true);
     (this._marcus.body as Phaser.Physics.Arcade.Body).setSize(18, 28);
   }
 
   private _updateMarcusFollow(): void {
-    const gfx = this._marcus.getData('gfx') as Phaser.GameObjects.Rectangle | undefined;
-
-    // Target: slightly behind and to the side of the player
     const targetX = this.player.sprite.x - 36;
     const targetY = this.player.sprite.y + 8;
     const dist = Math.hypot(this._marcus.x - targetX, this._marcus.y - targetY);
@@ -171,17 +167,28 @@ export class NewBostonScene extends Phaser.Scene {
       const vx = Math.cos(angle) * speed;
       const vy = Math.sin(angle) * speed;
       (this._marcus.body as Phaser.Physics.Arcade.Body).setVelocity(vx, vy);
+
+      // Flip sprite to face movement direction
+      this._marcus.setFlipX(vx < 0);
+
+      // Walk animation
+      if (this._marcus.getData('animState') !== 'walk' && this.anims.exists('marcus-walk')) {
+        this._marcus.play('marcus-walk');
+        this._marcus.setData('animState', 'walk');
+      }
     } else {
       (this._marcus.body as Phaser.Physics.Arcade.Body).setVelocity(0, 0);
+
+      // Idle animation
+      if (this._marcus.getData('animState') !== 'idle' && this.anims.exists('marcus-idle')) {
+        this._marcus.play('marcus-idle');
+        this._marcus.setData('animState', 'idle');
+      }
     }
 
-    // Sync the visible rectangle and label to the physics body
-    if (gfx) {
-      gfx.setPosition(this._marcus.x, this._marcus.y);
-    }
     const label = this._marcus.getData('label') as Phaser.GameObjects.Text | undefined;
     if (label) {
-      label.setPosition(this._marcus.x, this._marcus.y - 24);
+      label.setPosition(this._marcus.x, this._marcus.y - 28);
     }
   }
 
@@ -285,9 +292,15 @@ export class NewBostonScene extends Phaser.Scene {
       fontFamily: 'monospace', fontSize: '8px', color: '#44cc44',
     }).setScrollFactor(0).setDepth(22);
 
-    // Marcus portrait (amber)
-    this.add.rectangle(panelX + 4, panelY + 48, 24, 24, 0xddaa44)
-      .setScrollFactor(0).setDepth(21).setOrigin(0, 0.5);
+    // Marcus portrait
+    if (this.textures.exists('marcus_idle')) {
+      this.add.image(panelX + 4 + 12, panelY + 48, 'marcus_idle', 0)
+        .setScale(24 / 128)
+        .setScrollFactor(0).setDepth(21).setOrigin(0.5);
+    } else {
+      this.add.rectangle(panelX + 4, panelY + 48, 24, 24, 0xddaa44)
+        .setScrollFactor(0).setDepth(21).setOrigin(0, 0.5);
+    }
 
     // Marcus name
     this.add.text(panelX + 20, panelY + 40, 'MARCUS', {

@@ -22,6 +22,14 @@ export class PreloadScene extends Phaser.Scene {
       frameWidth: 64, frameHeight: 64,
     });
 
+    // ── Compliance Drone enemy sprites ────────────────────────────────────
+    const DFW = 48, DFH = 48;
+    this.load.spritesheet('compliance_drone',        'assets/sprites/enemies/compliance_drone/idle.png',   { frameWidth: DFW, frameHeight: DFH });
+    this.load.spritesheet('compliance_drone_walk',   'assets/sprites/enemies/compliance_drone/walk.png',   { frameWidth: DFW, frameHeight: DFH });
+    this.load.spritesheet('compliance_drone_attack', 'assets/sprites/enemies/compliance_drone/attack.png', { frameWidth: DFW, frameHeight: DFH });
+    this.load.spritesheet('compliance_drone_hurt',   'assets/sprites/enemies/compliance_drone/hurt.png',   { frameWidth: DFW, frameHeight: DFH });
+    this.load.spritesheet('compliance_drone_death',  'assets/sprites/enemies/compliance_drone/death.png',  { frameWidth: DFW, frameHeight: DFH });
+
     // ── Abandoned vehicles (Post Apocalyptic pack) ────────────────────────
     this.load.image('car_black', 'assets/sprites/props/cars/Car Black.png');
     this.load.image('car_white', 'assets/sprites/props/cars/Car White.png');
@@ -47,6 +55,25 @@ export class PreloadScene extends Phaser.Scene {
     this.load.image('sign_no_entry', 'assets/sprites/props/signs/Sign No Entry.png');
     this.load.image('sign_stop',     'assets/sprites/props/signs/Sign Stop.png');
     this.load.image('sign_radioact', 'assets/sprites/props/signs/Sign RadioActive.png');
+
+    // ── Maya character sprites ─────────────────────────────────────────────
+    const YFW = 128, YFH = 128;
+    this.load.spritesheet('maya_idle',     'assets/sprites/characters/maya/idle.png',     { frameWidth: YFW, frameHeight: YFH });
+    this.load.spritesheet('maya_walk',     'assets/sprites/characters/maya/walk.png',     { frameWidth: YFW, frameHeight: YFH });
+    this.load.spritesheet('maya_run',      'assets/sprites/characters/maya/run.png',      { frameWidth: YFW, frameHeight: YFH });
+    this.load.spritesheet('maya_attack1',  'assets/sprites/characters/maya/attack_1.png', { frameWidth: YFW, frameHeight: YFH });
+    this.load.spritesheet('maya_attack2',  'assets/sprites/characters/maya/attack_2.png', { frameWidth: YFW, frameHeight: YFH });
+    this.load.spritesheet('maya_hurt',     'assets/sprites/characters/maya/hurt.png',     { frameWidth: YFW, frameHeight: YFH });
+    this.load.spritesheet('maya_dead',     'assets/sprites/characters/maya/dead.png',     { frameWidth: YFW, frameHeight: YFH });
+
+    // ── Marcus character sprites ───────────────────────────────────────────
+    const MFW = 128, MFH = 128;
+    this.load.spritesheet('marcus_idle',   'assets/sprites/characters/marcus/idle.png',   { frameWidth: MFW, frameHeight: MFH });
+    this.load.spritesheet('marcus_walk',   'assets/sprites/characters/marcus/walk.png',   { frameWidth: MFW, frameHeight: MFH });
+    this.load.spritesheet('marcus_run',    'assets/sprites/characters/marcus/run.png',    { frameWidth: MFW, frameHeight: MFH });
+    this.load.spritesheet('marcus_attack', 'assets/sprites/characters/marcus/attack.png', { frameWidth: MFW, frameHeight: MFH });
+    this.load.spritesheet('marcus_hurt',   'assets/sprites/characters/marcus/hurt.png',   { frameWidth: MFW, frameHeight: MFH });
+    this.load.spritesheet('marcus_dead',   'assets/sprites/characters/marcus/dead.png',   { frameWidth: MFW, frameHeight: MFH });
   }
 
   create(): void {
@@ -252,6 +279,22 @@ export class PreloadScene extends Phaser.Scene {
       });
     }
 
+    if (this.textures.exists('compliance_drone')) {
+      this.anims.create({ key: 'compliance_drone-idle',   frames: this.anims.generateFrameNumbers('compliance_drone',        { start: 0, end: 3 }), frameRate: 4,  repeat: -1 });
+    }
+    if (this.textures.exists('compliance_drone_walk')) {
+      this.anims.create({ key: 'compliance_drone-walk',   frames: this.anims.generateFrameNumbers('compliance_drone_walk',   { start: 0, end: 3 }), frameRate: 6,  repeat: -1 });
+    }
+    if (this.textures.exists('compliance_drone_attack')) {
+      this.anims.create({ key: 'compliance_drone-attack', frames: this.anims.generateFrameNumbers('compliance_drone_attack', { start: 0, end: 3 }), frameRate: 8,  repeat: 0  });
+    }
+    if (this.textures.exists('compliance_drone_hurt')) {
+      this.anims.create({ key: 'compliance_drone-hit',    frames: this.anims.generateFrameNumbers('compliance_drone_hurt',   { start: 0, end: 1 }), frameRate: 6,  repeat: 0  });
+    }
+    if (this.textures.exists('compliance_drone_death')) {
+      this.anims.create({ key: 'compliance_drone-death',  frames: this.anims.generateFrameNumbers('compliance_drone_death',  { start: 0, end: 5 }), frameRate: 6,  repeat: 0  });
+    }
+
     if (this.textures.exists('robot_zombie')) {
       this.anims.create({
         key:       'robot-walk',
@@ -271,6 +314,47 @@ export class PreloadScene extends Phaser.Scene {
         frameRate: 1,
         repeat:    -1,
       });
+    }
+
+    if (this.textures.exists('maya_idle')) {
+      this.anims.create({ key: 'maya-idle',    frames: this.anims.generateFrameNumbers('maya_idle',    { start: 0, end: 5  }), frameRate: 6,  repeat: -1 });
+    }
+    if (this.textures.exists('maya_walk')) {
+      this.anims.create({ key: 'maya-walk',    frames: this.anims.generateFrameNumbers('maya_walk',    { start: 0, end: 11 }), frameRate: 10, repeat: -1 });
+    }
+    if (this.textures.exists('maya_run')) {
+      this.anims.create({ key: 'maya-run',     frames: this.anims.generateFrameNumbers('maya_run',     { start: 0, end: 11 }), frameRate: 12, repeat: -1 });
+    }
+    if (this.textures.exists('maya_attack1')) {
+      this.anims.create({ key: 'maya-attack1', frames: this.anims.generateFrameNumbers('maya_attack1', { start: 0, end: 3  }), frameRate: 8,  repeat: 0  });
+    }
+    if (this.textures.exists('maya_attack2')) {
+      this.anims.create({ key: 'maya-attack2', frames: this.anims.generateFrameNumbers('maya_attack2', { start: 0, end: 3  }), frameRate: 8,  repeat: 0  });
+    }
+    if (this.textures.exists('maya_hurt')) {
+      this.anims.create({ key: 'maya-hurt',    frames: this.anims.generateFrameNumbers('maya_hurt',    { start: 0, end: 3  }), frameRate: 6,  repeat: 0  });
+    }
+    if (this.textures.exists('maya_dead')) {
+      this.anims.create({ key: 'maya-dead',    frames: this.anims.generateFrameNumbers('maya_dead',    { start: 0, end: 3  }), frameRate: 4,  repeat: 0  });
+    }
+
+    if (this.textures.exists('marcus_idle')) {
+      this.anims.create({ key: 'marcus-idle',   frames: this.anims.generateFrameNumbers('marcus_idle',   { start: 0, end: 5 }), frameRate: 6,  repeat: -1 });
+    }
+    if (this.textures.exists('marcus_walk')) {
+      this.anims.create({ key: 'marcus-walk',   frames: this.anims.generateFrameNumbers('marcus_walk',   { start: 0, end: 9 }), frameRate: 10, repeat: -1 });
+    }
+    if (this.textures.exists('marcus_run')) {
+      this.anims.create({ key: 'marcus-run',    frames: this.anims.generateFrameNumbers('marcus_run',    { start: 0, end: 9 }), frameRate: 12, repeat: -1 });
+    }
+    if (this.textures.exists('marcus_attack')) {
+      this.anims.create({ key: 'marcus-attack', frames: this.anims.generateFrameNumbers('marcus_attack', { start: 0, end: 3 }), frameRate: 8,  repeat: 0  });
+    }
+    if (this.textures.exists('marcus_hurt')) {
+      this.anims.create({ key: 'marcus-hurt',   frames: this.anims.generateFrameNumbers('marcus_hurt',   { start: 0, end: 2 }), frameRate: 6,  repeat: 0  });
+    }
+    if (this.textures.exists('marcus_dead')) {
+      this.anims.create({ key: 'marcus-dead',   frames: this.anims.generateFrameNumbers('marcus_dead',   { start: 0, end: 3 }), frameRate: 4,  repeat: 0  });
     }
 
     const bossKeys = [
