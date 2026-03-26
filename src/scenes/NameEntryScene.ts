@@ -3,13 +3,18 @@ import Phaser from 'phaser';
 /**
  * NameEntryScene — player types their character's name before the prologue begins.
  * Stores the result in game.registry under 'playerName'.
+ *
+ * Mobile strategy: a hidden off-screen <input> (font-size:16px to prevent iOS
+ * viewport zoom) is focused on tap/click. Its value is mirrored into the
+ * Phaser display. The visual box is an interactive hit zone that re-focuses
+ * the input on tap so the soft keyboard reappears if dismissed.
  */
 export class NameEntryScene extends Phaser.Scene {
-  private _name:        string           = '';
-  private _locked:      boolean          = false;
+  private _name:        string              = '';
+  private _locked:      boolean             = false;
   private _nameText!:   Phaser.GameObjects.Text;
   private _cursorText!: Phaser.GameObjects.Text;
-  private _htmlInput!:  HTMLInputElement;
+  private _input:       HTMLInputElement | null = null;
 
   constructor() {
     super({ key: 'NameEntryScene' });
@@ -64,19 +69,93 @@ export class NameEntryScene extends Phaser.Scene {
       ease:     'Stepped',
     });
 
-    this.add.text(cx, height * 0.68, '[ ENTER / DONE ]  to confirm  |  tap box to open keyboard', {
+    this.add.text(cx, height * 0.68, 'tap here to type  ·  ENTER or ✓ to confirm', {
       fontFamily: 'monospace', fontSize: '11px', color: '#223344',
     }).setOrigin(0.5);
 
+    // Invisible hit zone over the box — tap re-focuses the hidden input so the
+    // soft keyboard reappears on mobile if the player dismissed it.
+    this.add.zone(cx, height * 0.51 + boxH / 2, boxW, boxH)
+      .setInteractive()
+      .on('pointerdown', () => { this._focusInput(); });
 
     this._updateDisplay();
-    this._setupInput();
-    this._createHtmlInput(cx, height * 0.51, boxW, boxH);
+    this._createInput();
+
+    // Auto-focus works on desktop; mobile blocks it outside a user gesture,
+    // so the tap handler above covers that case.
+    this.time.delayedCall(150, () => { this._focusInput(); });
 
     this.cameras.main.fadeIn(600, 0, 0, 0);
 
     this.events.once('shutdown', this._destroyHtmlInput, this);
     this.events.once('destroy',  this._destroyHtmlInput, this);
+  }
+
+  /** Creates a hidden off-screen <input> and wires its events to Phaser state. */
+  private _createInput(): void {
+    const el = document.createElement('input');
+    el.type = 'text';
+    el.maxLength = 12;
+    // Attributes that improve mobile UX
+    el.setAttribute('autocomplete', 'off');
+    el.setAttribute('autocapitalize', 'characters'); // caps lock on mobile keyboards
+    el.setAttribute('autocorrect', 'off');
+    el.setAttribute('spellcheck', 'false');
+    // Positioned off-screen but still in the DOM flow so iOS will focus it.
+    // font-size:16px is critical — iOS Safari zooms the viewport for any
+    // input smaller than 16px. Keep it exactly at 16px.
+    Object.assign(el.style, {
+      position:       'fixed',
+      top:            '-200px',
+      left:           '50%',
+      width:          '1px',
+      height:         '1px',
+      fontSize:       '16px',
+      opacity:        '0',
+      border:         'none',
+      outline:        'none',
+      background:     'transparent',
+      color:          'transparent',
+      caretColor:     'transparent',
+      pointerEvents:  'none',
+    });
+    document.body.appendChild(el);
+    this._input = el;
+
+    el.addEventListener('input', () => {
+      if (this._locked) return;
+      // Strip anything outside our allowed character set; enforce uppercase.
+      const filtered = el.value.replace(/[^a-zA-Z0-9 ]/g, '').slice(0, 12).toUpperCase();
+      el.value = filtered;
+      this._name = filtered;
+      this._updateDisplay();
+    });
+
+    el.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (this._locked) return;
+      if (e.key === 'Enter' && this._name.trim().length > 0) {
+        e.preventDefault();
+        this._confirm();
+      }
+    });
+  }
+
+  private _focusInput(): void {
+    this._input?.focus();
+  }
+
+  private _destroyHtmlInput(): void {
+    if (this._input) {
+      this._input.blur();
+      this._input.remove();
+      this._input = null;
+    }
+  }
+
+  /** Called by Phaser when this scene is stopped/replaced. */
+  shutdown(): void {
+    this._destroyHtmlInput();
   }
 
   private _updateDisplay(): void {
@@ -88,79 +167,6 @@ export class NameEntryScene extends Phaser.Scene {
 
     const half = this._nameText.width / 2;
     this._cursorText.setPosition(cx + half + 3, cy);
-  }
-
-  private _setupInput(): void {
-    // Keyboard fallback for desktop (HTML input handles mobile).
-    this.input.keyboard!.on('keydown', (event: KeyboardEvent) => {
-      if (this._locked) return;
-      if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
-        if (this._name.trim().length > 0) this._confirm();
-      }
-    });
-  }
-
-  private _createHtmlInput(x: number, y: number, w: number, h: number): void {
-    const canvas = this.sys.game.canvas;
-    const parent = canvas.parentElement ?? document.body;
-
-    const input = document.createElement('input');
-    input.type        = 'text';
-    input.maxLength   = 12;
-    input.autocomplete = 'off';
-    input.autocapitalize = 'characters';
-    input.spellcheck  = false;
-    input.enterKeyHint = 'done';
-
-    // Position exactly over the Phaser input box.
-    const scaleX = canvas.offsetWidth  / canvas.width;
-    const scaleY = canvas.offsetHeight / canvas.height;
-    input.style.cssText = [
-      'position:absolute',
-      `left:${canvas.offsetLeft + x * scaleX}px`,
-      `top:${canvas.offsetTop  + y * scaleY}px`,
-      `width:${w * scaleX}px`,
-      `height:${h * scaleY}px`,
-      'background:transparent',
-      'border:none',
-      'outline:none',
-      'color:transparent',
-      'caret-color:transparent',
-      'font-size:1px',
-      'padding:0',
-      'margin:0',
-      'opacity:1',
-      'z-index:9999',
-      '-webkit-user-select:text',
-      'user-select:text',
-    ].join(';');
-
-    input.addEventListener('input', () => {
-      if (this._locked) return;
-      const filtered = input.value.replace(/[^a-zA-Z0-9 ]/g, '').slice(0, 12).toUpperCase();
-      input.value = filtered;
-      this._name  = filtered;
-      this._updateDisplay();
-    });
-
-    input.addEventListener('keydown', (e: KeyboardEvent) => {
-      if (this._locked) return;
-      if (e.key === 'Enter' && this._name.trim().length > 0) {
-        e.preventDefault();
-        this._confirm();
-      }
-    });
-
-    parent.appendChild(input);
-    this._htmlInput = input;
-
-    // Auto-focus so desktop users can type immediately; on mobile the tap
-    // on the canvas area will focus the element and open the virtual keyboard.
-    input.focus();
-  }
-
-  private _destroyHtmlInput(): void {
-    this._htmlInput?.remove();
   }
 
   private _confirm(): void {

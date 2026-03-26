@@ -21,6 +21,32 @@ export class PreloadScene extends Phaser.Scene {
     this.load.spritesheet('robot_zombie', 'assets/sprites/robot_zombie.png', {
       frameWidth: 64, frameHeight: 64,
     });
+
+    // ── Abandoned vehicles (Post Apocalyptic pack) ────────────────────────
+    this.load.image('car_black', 'assets/sprites/props/cars/Car Black.png');
+    this.load.image('car_white', 'assets/sprites/props/cars/Car White.png');
+    this.load.image('car_red',   'assets/sprites/props/cars/Car Red.png');
+    this.load.image('car_blue',  'assets/sprites/props/cars/Car Blue.png');
+    this.load.image('car_taxi',  'assets/sprites/props/cars/Car Taxi.png');
+    this.load.image('car_green', 'assets/sprites/props/cars/Car Green.png');
+
+    // ── Street props (Post Apocalyptic pack) ──────────────────────────────
+    this.load.image('prop_barrel',      'assets/sprites/props/misc/Barrel.png');
+    this.load.image('prop_crate',       'assets/sprites/props/misc/Crate.png');
+    this.load.image('prop_cone',        'assets/sprites/props/misc/Cone.png');
+    this.load.image('prop_skull',       'assets/sprites/props/misc/Skull.png');
+    this.load.image('prop_trash1',      'assets/sprites/props/misc/Trash Can 1.png');
+    this.load.image('prop_trash2',      'assets/sprites/props/misc/Trash Can 2.png');
+    this.load.image('prop_trash3',      'assets/sprites/props/misc/Trash Can 3.png');
+    this.load.image('prop_barrier_red', 'assets/sprites/props/misc/Barrier red.png');
+    this.load.image('prop_barrier_yel', 'assets/sprites/props/misc/Barrier yellow.png');
+
+    // ── Signs (Post Apocalyptic pack) ─────────────────────────────────────
+    this.load.image('sign_base',     'assets/sprites/props/signs/Sign Base.png');
+    this.load.image('sign_danger',   'assets/sprites/props/signs/Sign Danger.png');
+    this.load.image('sign_no_entry', 'assets/sprites/props/signs/Sign No Entry.png');
+    this.load.image('sign_stop',     'assets/sprites/props/signs/Sign Stop.png');
+    this.load.image('sign_radioact', 'assets/sprites/props/signs/Sign RadioActive.png');
   }
 
   create(): void {
