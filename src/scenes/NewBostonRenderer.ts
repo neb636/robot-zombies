@@ -221,28 +221,17 @@ export function drawNewBoston(scene: Phaser.Scene): void {
   g.fillRect(790, 56, 60, 8);
 
   // ── ABANDONED VEHICLES ──────────────────────────────────────────────────────
-  // Each car = dark gray body + rust strip + windshield dark rectangle
-  const vehicles: Array<{ x: number; y: number; w: number; h: number; angle?: number }> = [
-    { x: 170, y: 460, w: 70, h: 34 },
-    { x: 500, y: 690, w: 64, h: 32 },
-    { x: 840, y: 455, w: 68, h: 32 },
-    { x: 1060, y: 700, w: 66, h: 34 },
-    { x: 1280, y: 480, w: 72, h: 32 },
+  // Post Apocalyptic pack sprites (64×48), scaled ×2 for visibility
+  const vehicleSprites: Array<{ cx: number; cy: number; key: string }> = [
+    { cx: 205, cy: 477, key: 'car_black' },
+    { cx: 532, cy: 706, key: 'car_white' },
+    { cx: 874, cy: 471, key: 'car_red'   },
+    { cx: 1093, cy: 717, key: 'car_blue' },
+    { cx: 1316, cy: 496, key: 'car_taxi' },
   ];
 
-  for (const v of vehicles) {
-    // Body
-    g.fillStyle(0x2a2a2a);
-    g.fillRect(v.x, v.y, v.w, v.h);
-    // Rust strip along bottom
-    g.fillStyle(0x4a2010);
-    g.fillRect(v.x, v.y + v.h - 6, v.w, 6);
-    // Windshield (dark)
-    g.fillStyle(0x0c0c10);
-    g.fillRect(v.x + 10, v.y + 4, v.w - 20, v.h - 12);
-    // Roof
-    g.fillStyle(0x222222);
-    g.fillRect(v.x + 12, v.y, v.w - 24, 8);
+  for (const v of vehicleSprites) {
+    scene.add.image(v.cx, v.cy, v.key).setScale(2).setDepth(2);
   }
 
   // ── OVERGROWTH — dark green patches reclaiming sidewalks ───────────────────
@@ -309,31 +298,57 @@ export function drawNewBoston(scene: Phaser.Scene): void {
   g.fillStyle(0x0a1018);
   g.fillRect(1560, 380, 40, 440);
 
-  // Worn sign shape (directions to harbor)
-  g.fillStyle(0x2a2a2a);
-  g.fillRect(1480, 430, 60, 28);
-  g.fillStyle(0x1a1a1a);
-  g.fillRect(1502, 458, 4, 30);
-  // Sign text bars (placeholder — unreadable at this distance)
-  g.fillStyle(0x444444);
-  g.fillRect(1484, 436, 30, 4);
-  g.fillRect(1484, 444, 20, 4);
+  // Harbor-side sign — radioactive warning (Post Apocalyptic pack sprites)
+  scene.add.image(1490, 466, 'sign_base').setScale(2).setDepth(3);      // pole (16×32 → 32×64)
+  scene.add.image(1490, 438, 'sign_radioact').setScale(2).setDepth(3);  // sign face (16×16 → 32×32)
 
   // ── CHECKPOINT BARRIER — near right edge ────────────────────────────────────
-  // Orange/amber striped barrier (visible landmark to draw player)
+  // Post Apocalyptic pack barrier sprites (16×16, scale ×2 = 32×32)
   const barrierX = CHECKPOINT_X - 40;
-  // Barrier posts
-  for (let by = CHECKPOINT_Y_TOP; by < CHECKPOINT_Y_BOT; by += 40) {
-    g.fillStyle(0xcc6600);
-    g.fillRect(barrierX, by, 8, 36);
-    g.fillStyle(0x222200);
-    g.fillRect(barrierX + 2, by + 4, 4, 28);
+  let useRed = true;
+  for (let by = CHECKPOINT_Y_TOP; by < CHECKPOINT_Y_BOT; by += 32) {
+    scene.add.image(barrierX + 8, by + 16, useRed ? 'prop_barrier_red' : 'prop_barrier_yel')
+      .setScale(2).setDepth(3);
+    useRed = !useRed;
   }
-  // Horizontal crossbar
+  // Horizontal crossbar (kept as graphic)
   g.fillStyle(0xcc6600);
   g.fillRect(barrierX - 10, 540, 80, 8);
   g.fillStyle(0x222200);
   g.fillRect(barrierX - 8, 542, 76, 4);
+
+  // ── STREET PROP DRESSING ─────────────────────────────────────────────────────
+  // Trash cans along north sidewalk (scale ×2 = 32×32 or 32×64)
+  const northTrashXs = [200, 490, 760, 1050, 1400];
+  for (let i = 0; i < northTrashXs.length; i++) {
+    const tx = northTrashXs[i]!;
+    const trashKey = i % 3 === 1 ? 'prop_trash2' : i % 3 === 2 ? 'prop_trash3' : 'prop_trash1';
+    scene.add.image(tx, 390, trashKey).setScale(2).setDepth(3);
+  }
+  // Trash cans along south sidewalk
+  const southTrashXs = [350, 650, 950, 1250];
+  for (let i = 0; i < southTrashXs.length; i++) {
+    const tx = southTrashXs[i]!;
+    const trashKey = i % 2 === 0 ? 'prop_trash1' : 'prop_trash2';
+    scene.add.image(tx, 814, trashKey).setScale(2).setDepth(3);
+  }
+
+  // Barrels near checkpoint approach
+  scene.add.image(1340, 468, 'prop_barrel').setScale(2).setDepth(3);
+  scene.add.image(1340, 714, 'prop_barrel').setScale(2).setDepth(3);
+  scene.add.image(1370, 540, 'prop_crate').setScale(2).setDepth(3);
+  scene.add.image(1370, 640, 'prop_crate').setScale(2).setDepth(3);
+
+  // Traffic cones mid-street (abandoned road work)
+  scene.add.image(440, 458, 'prop_cone').setScale(2).setDepth(3);
+  scene.add.image(790, 705, 'prop_cone').setScale(2).setDepth(3);
+  scene.add.image(1130, 462, 'prop_cone').setScale(2).setDepth(3);
+
+  // Danger sign at scene entrance, stop sign near checkpoint
+  scene.add.image(200, 374, 'sign_base').setScale(2).setDepth(3);
+  scene.add.image(200, 346, 'sign_danger').setScale(2).setDepth(3);
+  scene.add.image(1200, 374, 'sign_base').setScale(2).setDepth(3);
+  scene.add.image(1200, 346, 'sign_stop').setScale(2).setDepth(3);
 
   // ── GROUND DETAILS — distant background blocks ───────────────────────────────
   // Upper map area (above north buildings) — featureless dark suggesting sky / rubble
