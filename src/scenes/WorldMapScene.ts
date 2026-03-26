@@ -1,11 +1,13 @@
 import Phaser from 'phaser';
 import { Player }          from '../entities/Player.js';
+import { MobileControls }  from '../utils/MobileControls.js';
 import { AudioManager }    from '../audio/AudioManager.js';
 import { DialogueManager } from '../dialogue/DialogueManager.js';
 import { TILE_SIZE, EVENTS } from '../utils/constants.js';
 import { bus }             from '../utils/EventBus.js';
 import type { WasdKeys }   from '../types.js';
 import D from '../data/dialogue/world_map.json';
+import { pauseMenu } from '../ui/PauseMenu.js';
 import { WorldMapManager, NODE_COLORS } from '../world/WorldMapManager.js';
 import nodeData from '../data/world/nodes.json';
 
@@ -15,9 +17,10 @@ import nodeData from '../data/world/nodes.json';
  * Node graph is managed by WorldMapManager and rendered as an overlay.
  */
 export class WorldMapScene extends Phaser.Scene {
-  cursors!:       Phaser.Types.Input.Keyboard.CursorKeys;
-  wasd!:          WasdKeys;
-  private player!:         Player;
+  cursors!:            Phaser.Types.Input.Keyboard.CursorKeys;
+  wasd!:               WasdKeys;
+  mobileControls!:     MobileControls;
+  private player!:     Player;
   private audioManager!:   AudioManager;
   private dialogueManager!: DialogueManager;
   private worldMap!:        WorldMapManager;
@@ -35,6 +38,8 @@ export class WorldMapScene extends Phaser.Scene {
     this._buildPlayer();
     this._buildCamera();
     this._setupInput();
+    this.mobileControls = new MobileControls();
+    this.events.once('shutdown', () => { this.mobileControls.destroy(); });
 
     this.audioManager    = new AudioManager(this);
     this.dialogueManager = new DialogueManager(this);
@@ -60,6 +65,7 @@ export class WorldMapScene extends Phaser.Scene {
   }
 
   update(): void {
+    if (pauseMenu.isOpen()) return;
     this.player.update();
     this._checkEncounter();
   }

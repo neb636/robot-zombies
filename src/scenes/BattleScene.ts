@@ -6,6 +6,7 @@ import { DialogueManager } from '../dialogue/DialogueManager.js';
 import { EVENTS }          from '../utils/constants.js';
 import { bus }             from '../utils/EventBus.js';
 import type { BattleInitData } from '../types.js';
+import { pauseMenu }           from '../ui/PauseMenu.js';
 
 /**
  * BattleScene — launched in parallel on top of another scene.
@@ -32,6 +33,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   create(): void {
+    pauseMenu.setBlocked(true);
     this._buildBackground();
 
     this.audioManager    = new AudioManager(this);
@@ -53,6 +55,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   endBattle(victory: boolean): void {
+    pauseMenu.setBlocked(false);
     this.audioManager.stopMusic();
     bus.emit(EVENTS.BATTLE_END, { victory });
     this.scene.stop();

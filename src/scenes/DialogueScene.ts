@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
-import { tts } from '../audio/TTSManager.js';
+import { tts }       from '../audio/TTSManager.js';
+import { pauseMenu } from '../ui/PauseMenu.js';
 
 /**
  * DialogueScene — always-active scene that forwards keyboard input
@@ -23,6 +24,13 @@ export class DialogueScene extends Phaser.Scene {
     });
     this.input.keyboard!.on('keydown-M', () => {
       tts.toggleMute();
+    });
+    this.input.keyboard!.on('keydown-ESC', () => {
+      if (pauseMenu.isOpen()) {
+        pauseMenu.close();
+      } else {
+        pauseMenu.open();
+      }
     });
   }
 }

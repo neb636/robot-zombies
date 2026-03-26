@@ -60,6 +60,14 @@ New scenes must be registered in `src/config.ts`.
 
 **Dialogue rule:** Never hardcode dialogue strings in scene files. All lines belong in `src/data/dialogue/<scene>.json`. Import the JSON and pass arrays directly to `dialogMgr.show(speaker, lines)`. This keeps narrative editable without touching TypeScript.
 
+**Mobile/touch rule:** Every interactive feature must work on both keyboard/mouse and touch screens (iPad, phone). The game targets browser on desktop and mobile equally.
+
+- **Movement** — scenes with a `Player` must instantiate `MobileControls` (from `src/utils/MobileControls.ts`) and expose it as `mobileControls` on the scene. `Player.update()` already checks it alongside keyboard. Destroy `mobileControls` on scene `shutdown`.
+- **Menus** — any action menu rendered by `BattleHUD.showMenu()` must pass an `onSelect` callback so items are tappable. Any Phaser menu item shown to the player must call `.setInteractive()` and handle `pointerdown`.
+- **Dialogue** — `DialogueBox` already advances on tap/click. Keep it that way.
+- **Interaction prompts** — scenes with an E-key interact must also call `mobileControls.showInteract(label)` / `hideInteract()` and listen for the `interact:tap` CustomEvent alongside `keydown-E`.
+- **Hint text** — never write keyboard-only hint strings (e.g. "press ENTER"). Always include the tap/click equivalent.
+
 ---
 
 ## Scene flow (current)

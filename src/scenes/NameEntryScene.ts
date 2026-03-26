@@ -87,6 +87,9 @@ export class NameEntryScene extends Phaser.Scene {
     this.time.delayedCall(150, () => { this._focusInput(); });
 
     this.cameras.main.fadeIn(600, 0, 0, 0);
+
+    this.events.once('shutdown', this._destroyHtmlInput, this);
+    this.events.once('destroy',  this._destroyHtmlInput, this);
   }
 
   /** Creates a hidden off-screen <input> and wires its events to Phaser state. */
@@ -142,13 +145,17 @@ export class NameEntryScene extends Phaser.Scene {
     this._input?.focus();
   }
 
-  /** Called by Phaser when this scene is stopped/replaced. */
-  shutdown(): void {
+  private _destroyHtmlInput(): void {
     if (this._input) {
       this._input.blur();
       this._input.remove();
       this._input = null;
     }
+  }
+
+  /** Called by Phaser when this scene is stopped/replaced. */
+  shutdown(): void {
+    this._destroyHtmlInput();
   }
 
   private _updateDisplay(): void {

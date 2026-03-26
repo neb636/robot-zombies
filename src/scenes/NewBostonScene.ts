@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { Player }          from '../entities/Player.js';
 import { DialogueManager } from '../dialogue/DialogueManager.js';
+import { MobileControls }  from '../utils/MobileControls.js';
 import { bus }             from '../utils/EventBus.js';
 import {
   EVENTS,
@@ -16,6 +17,7 @@ import {
   drawNewBoston,
 } from './NewBostonRenderer.js';
 import D from '../data/dialogue/boston.json';
+import { pauseMenu } from '../ui/PauseMenu.js';
 
 // ─── Phase keys ──────────────────────────────────────────────────────────────
 const PHASE = {
@@ -48,7 +50,8 @@ export class NewBostonScene extends Phaser.Scene {
   cursors!:  Phaser.Types.Input.Keyboard.CursorKeys;
   wasd!:     WasdKeys;
   player!:   Player;
-  dialogMgr!: DialogueManager;
+  dialogMgr!:       DialogueManager;
+  mobileControls!:  MobileControls;
 
   private _phase:           Phase   = PHASE.ARRIVING;
   private _inputEnabled:    boolean = false;
@@ -92,7 +95,9 @@ export class NewBostonScene extends Phaser.Scene {
     this._buildHUD();
     this._setupInput();
 
-    this.dialogMgr = new DialogueManager(this);
+    this.dialogMgr     = new DialogueManager(this);
+    this.mobileControls = new MobileControls();
+    this.events.once('shutdown', () => { this.mobileControls.destroy(); });
 
     this.cameras.main.fadeIn(800, 0, 0, 0);
     this.time.delayedCall(900, () => { this._startArriving(); });
@@ -101,7 +106,7 @@ export class NewBostonScene extends Phaser.Scene {
   update(): void {
     if (this._phase === PHASE.DONE) return;
 
-    if (this._inputEnabled) {
+    if (this._inputEnabled && !pauseMenu.isOpen()) {
       this.player.update();
       this._checkMarcusProximity();
       this._checkTutorialTriggers();

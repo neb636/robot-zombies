@@ -73,11 +73,64 @@
     }
     #tts-mute-btn:hover { border-color: #7aaeff; }
     #tts-mute-btn.muted { color: #445566; border-color: #223344; opacity: 0.55; }
+
+    /* Pause menu overlay */
+    #pause-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 10, 0.75);
+      z-index: 150;
+    }
+    #pause-panel {
+      background: rgba(10, 10, 30, 0.95);
+      border: 3px solid #7af;
+      border-radius: 8px;
+      padding: 32px 48px;
+      font-family: 'Courier New', monospace;
+      min-width: 280px;
+      text-align: center;
+    }
+    #pause-title {
+      color: #7aaeff;
+      font-size: 20px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    #pause-menu-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    #pause-menu-list li {
+      color: #e8f4ff;
+      font-size: 16px;
+      padding: 6px 0;
+      cursor: pointer;
+      letter-spacing: 1px;
+    }
+    #pause-menu-list li:hover { color: #7aaeff; }
+    #pause-hint {
+      color: #446688;
+      font-size: 11px;
+      margin-top: 20px;
+      letter-spacing: 1px;
+    }
   </style>
 </head>
 <body>
   <div id="game-container"></div>
   <button id="tts-mute-btn" title="Toggle voice narration [ M ]">🔊 VOICE</button>
+  <div id="pause-overlay">
+    <div id="pause-panel">
+      <div id="pause-title">PAUSED</div>
+      <ul id="pause-menu-list"></ul>
+      <div id="pause-hint">[ ENTER ] Select  ·  [ ESC ] Resume</div>
+    </div>
+  </div>
   <div id="dialogue-overlay">
     <div class="speaker" id="dialogue-speaker"></div>
     <div id="dialogue-text"></div>
