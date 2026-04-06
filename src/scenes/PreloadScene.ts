@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { jumpToScene } from '../utils/devJump.js';
 import { preloadPrologueV2 } from './prologue-v2/PrologueV2Assets.js';
+import { preloadPrologueV3 } from './prologue-v3/PrologueV3Assets.js';
 
 /**
  * PreloadScene — loads all game assets with a progress bar.
@@ -51,6 +52,9 @@ export class PreloadScene extends Phaser.Scene {
 
     // ── Prologue V2 (pixel-world-pack Interior sprites) ──────────────────
     preloadPrologueV2(this);
+
+    // ── Prologue V3 (separate bedroom + living room scenes) ──────────────
+    preloadPrologueV3(this);
   }
 
   create(): void {
