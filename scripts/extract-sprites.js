@@ -5,10 +5,15 @@
  * Scans sprite sheet PNGs, detects individual sprites via connected-component
  * analysis on non-transparent pixels, and saves each as a separate PNG.
  *
- * Usage:  node scripts/extract-sprites.js [--gap N] [--min-size N]
+ * Usage:  node scripts/extract-sprites.js --src <dir> --out <dir> [--gap N] [--min-size N]
  *
+ *   --src       source directory containing sprite sheet PNGs (required)
+ *   --out       output directory for extracted sprites (required)
  *   --gap       pixel gap to bridge between nearby opaque regions (default: 2)
  *   --min-size  ignore components smaller than NxN pixels (default: 6)
+ *
+ * Example:
+ *   node scripts/extract-sprites.js --src bought-packs/pixel-world-pack/Interior --out extracted-assets/Interior
  */
 
 import sharp from 'sharp';
@@ -17,18 +22,27 @@ import { join, basename, extname, relative } from 'node:path';
 
 // ── Config ──────────────────────────────────────────────────────────────────
 
-const SRC_DIR = 'bought-packs/pixel-world-pack/Interior';
-const OUT_DIR = 'extracted-assets/Interior';
 const ALPHA_THRESHOLD = 10;   // pixels with alpha <= this are "transparent"
 
 const args = process.argv.slice(2);
 function flag(name, def) {
   const i = args.indexOf(`--${name}`);
+  return i >= 0 ? args[i + 1] : def;
+}
+function flagNum(name, def) {
+  const i = args.indexOf(`--${name}`);
   return i >= 0 ? Number(args[i + 1]) : def;
 }
 
-const GAP      = flag('gap', 2);
-const MIN_SIZE = flag('min-size', 6);
+const SRC_DIR  = flag('src', null);
+const OUT_DIR  = flag('out', null);
+const GAP      = flagNum('gap', 2);
+const MIN_SIZE = flagNum('min-size', 6);
+
+if (!SRC_DIR || !OUT_DIR) {
+  console.error('Usage: node scripts/extract-sprites.js --src <dir> --out <dir> [--gap N] [--min-size N]');
+  process.exit(1);
+}
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 

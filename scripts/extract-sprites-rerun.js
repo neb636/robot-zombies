@@ -1,21 +1,50 @@
 #!/usr/bin/env node
 /**
- * Re-extract specific sheets that need gap=0 to separate tightly packed tiles.
+ * Re-extract specific sheets that need non-default gap values.
+ *
+ * Usage:
+ *   node scripts/extract-sprites-rerun.js --src <dir> --out <dir> --files <file:gap,...>
+ *
+ *   --src    source directory (required)
+ *   --out    output directory (required)
+ *   --files  comma-separated list of relative-path:gap pairs (required)
+ *            e.g. --files "other/floorswalls.png:0,tiles/ui.png:1"
+ *
+ * Example:
+ *   node scripts/extract-sprites-rerun.js \
+ *     --src bought-packs/pixel-world-pack/Interior \
+ *     --out extracted-assets/Interior \
+ *     --files "other/floorswalls.png:0"
  */
 
 import sharp from 'sharp';
 import { mkdir, writeFile, readFile } from 'node:fs/promises';
 import { join, basename, extname, relative } from 'node:path';
 
-const SRC_DIR = 'bought-packs/pixel-world-pack/Interior';
-const OUT_DIR = 'extracted-assets/Interior';
 const ALPHA_THRESHOLD = 10;
 const MIN_SIZE = 6;
 
-// Sheets that need gap=0 re-extraction
-const RERUN = [
-  { file: 'other/floorswalls.png', gap: 0 },
-];
+const args = process.argv.slice(2);
+function flag(name) {
+  const i = args.indexOf(`--${name}`);
+  return i >= 0 ? args[i + 1] : null;
+}
+
+const SRC_DIR   = flag('src');
+const OUT_DIR   = flag('out');
+const filesArg  = flag('files');
+
+if (!SRC_DIR || !OUT_DIR || !filesArg) {
+  console.error('Usage: node scripts/extract-sprites-rerun.js --src <dir> --out <dir> --files <file:gap,...>');
+  process.exit(1);
+}
+
+const RERUN = filesArg.split(',').map(entry => {
+  const lastColon = entry.lastIndexOf(':');
+  const file = entry.slice(0, lastColon);
+  const gap  = Number(entry.slice(lastColon + 1));
+  return { file, gap };
+});
 
 class UnionFind {
   constructor(n) { this.parent = Array.from({ length: n }, (_, i) => i); this.rank = new Uint8Array(n); }
