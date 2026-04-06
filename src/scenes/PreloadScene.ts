@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { jumpToScene } from '../utils/devJump.js';
+import { preloadPrologueV2 } from './prologue-v2/PrologueV2Assets.js';
 
 /**
  * PreloadScene — loads all game assets with a progress bar.
@@ -47,6 +48,9 @@ export class PreloadScene extends Phaser.Scene {
     this.load.image('sign_no_entry', 'assets/sprites/props/signs/Sign No Entry.png');
     this.load.image('sign_stop',     'assets/sprites/props/signs/Sign Stop.png');
     this.load.image('sign_radioact', 'assets/sprites/props/signs/Sign RadioActive.png');
+
+    // ── Prologue V2 (pixel-world-pack Interior sprites) ──────────────────
+    preloadPrologueV2(this);
   }
 
   create(): void {

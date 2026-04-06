@@ -10,6 +10,7 @@ import { WorldMapScene }   from './scenes/WorldMapScene.js';
 import { BattleScene }     from './scenes/BattleScene.js';
 import { DialogueScene }   from './scenes/DialogueScene.js';
 import { DevScene }        from './scenes/DevScene.js';
+import { PrologueV2Scene } from './scenes/prologue-v2/PrologueV2Scene.js';
 
 const scenes: Phaser.Types.Core.GameConfig['scene'] = [
   BootScene,
@@ -17,6 +18,7 @@ const scenes: Phaser.Types.Core.GameConfig['scene'] = [
   TitleScene,
   NameEntryScene,
   PrologueScene,
+  PrologueV2Scene,
   NewBostonScene,
   SubwayScene,
   WorldMapScene,
