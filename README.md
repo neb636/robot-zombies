@@ -103,6 +103,39 @@ BootScene → PreloadScene → TitleScene → NameEntryScene
 
 ---
 
+---
+
+## Level Builder
+
+A local AI-assisted tool for designing interior room layouts using the extracted asset library.
+
+```bash
+npm run level-builder   # starts at http://localhost:3456
+```
+
+**How it works:**
+
+1. Describe a room in the prompt field (e.g. *"a corporate office with cubicles, a cafeteria, and hallways"*)
+2. Click **Generate** — the server filters the asset catalog to relevant room types, calls the Claude CLI, and returns 3 distinct layout variations
+3. Switch between variations using the tabs; click objects on the canvas to select, reposition, or delete them
+4. Click **Export Active Layout** to download a game-ready JSON (`LevelLayout`) with depth-sorted layers
+
+**Output format** (`LevelLayout` v1):
+```json
+{
+  "layers": {
+    "floor":   [ { "assetPath": "...", "x": 0, "y": 0, "w": 48, "h": 48 } ],
+    "object":  [ ... ],
+    "overlay": [ ... ]
+  }
+}
+```
+Objects in the `object` and `overlay` layers are depth-sorted by `(y + h)` for correct isometric rendering.
+
+**Files:** `tools/level-builder/` — `server.ts` (Express + Claude CLI), `editor.js` (canvas UI), `renderer.js`, `types.ts`
+
+---
+
 ## Docs
 
 Story, characters, combat, and world design live in `planning/`. Build order in `tasks.md`.

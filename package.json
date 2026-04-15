@@ -8,14 +8,18 @@
     "build": "vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "analyze": "tsx scripts/analyze-assets.ts"
+    "analyze": "tsx scripts/analyze-assets.ts",
+    "level-builder": "tsx tools/level-builder/server.ts"
   },
   "dependencies": {
     "howler": "^2.2.4",
     "phaser": "^3.87.0"
   },
   "devDependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "@types/express": "^5.0.0",
     "@types/howler": "^2.2.12",
+    "express": "^4.21.0",
     "sharp": "^0.34.5",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
