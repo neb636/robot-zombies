@@ -121,7 +121,7 @@ export class PrologueScene extends Phaser.Scene {
         interact: () => { this.dialogMgr.show(n, D.interactable.bed); },
       },
       {
-        id: 'alarm', x: 242, y: 66, range: 54, label: 'Alarm Clock',
+        id: 'alarm', x: 172, y: 68, range: 54, label: 'Alarm Clock',
         interact: () => { this.dialogMgr.show('ALARM CLOCK', D.interactable.alarm_clock); },
       },
       {

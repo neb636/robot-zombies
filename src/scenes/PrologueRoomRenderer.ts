@@ -17,11 +17,41 @@ export const FDOOR_BOT  = 278;
 export function drawPrologueRoom(scene: Phaser.Scene): void {
   const g = scene.add.graphics();
 
-  g.fillStyle(0x2a1f16);
+  // ── BEDROOM FLOOR — warm wood planks ───────────────────────────────────────
+  g.fillStyle(0x8a6842);                                                // warm wood base
   g.fillRect(WALL_T, WALL_T, DIVIDER_X - WALL_T * 2, MAP_H - WALL_T * 2);
+  g.fillStyle(0x9e7a52);                                                // lighter highlight stripe
+  for (let y = WALL_T + 6; y < MAP_H - WALL_T; y += 40) {
+    g.fillRect(WALL_T, y, DIVIDER_X - WALL_T * 2, 2);
+  }
+  g.fillStyle(0x5c4020);                                                // plank seam shadow
+  for (let y = WALL_T + 40; y < MAP_H - WALL_T; y += 40) {
+    g.fillRect(WALL_T, y, DIVIDER_X - WALL_T * 2, 2);
+  }
+  g.fillStyle(0x6a4a28);                                                // subtle grain flecks
+  for (let y = WALL_T + 18; y < MAP_H - WALL_T; y += 40) {
+    g.fillRect(WALL_T + 22, y, 38, 1);
+    g.fillRect(WALL_T + 120, y, 54, 1);
+    g.fillRect(WALL_T + 210, y, 42, 1);
+  }
 
-  g.fillStyle(0x1a202e);
+  // ── LIVING ROOM FLOOR — slightly warmer wood planks ────────────────────────
+  g.fillStyle(0x94704a);
   g.fillRect(DIVIDER_X + WALL_T, WALL_T, MAP_W - DIVIDER_X - WALL_T * 2, MAP_H - WALL_T * 2);
+  g.fillStyle(0xaa8460);
+  for (let y = WALL_T + 6; y < MAP_H - WALL_T; y += 40) {
+    g.fillRect(DIVIDER_X + WALL_T, y, MAP_W - DIVIDER_X - WALL_T * 2, 2);
+  }
+  g.fillStyle(0x603e20);
+  for (let y = WALL_T + 40; y < MAP_H - WALL_T; y += 40) {
+    g.fillRect(DIVIDER_X + WALL_T, y, MAP_W - DIVIDER_X - WALL_T * 2, 2);
+  }
+  g.fillStyle(0x7c5632);
+  for (let y = WALL_T + 18; y < MAP_H - WALL_T; y += 40) {
+    g.fillRect(DIVIDER_X + 30, y, 60, 1);
+    g.fillRect(DIVIDER_X + 140, y, 80, 1);
+    g.fillRect(DIVIDER_X + 260, y, 50, 1);
+  }
 
   g.fillStyle(0x2a2438);
   g.fillRect(0, 0, MAP_W, WALL_T);
@@ -82,18 +112,19 @@ export function drawPrologueRoom(scene: Phaser.Scene): void {
   g.fillStyle(0xd8d0bc);
   g.fillRect(32, 86, 104, 6);
 
-  // Blanket / comforter
-  g.fillStyle(0x6858a2);              // main color
+  // Blanket / comforter — teal with cream stripe accents
+  g.fillStyle(0x3a6a78);              // teal main color
   g.fillRect(32, 92, 104, 38);
-  g.fillStyle(0x7a6ab4);              // highlight ridges
-  g.fillRect(32, 94, 104, 4);
-  g.fillRect(32, 106, 104, 4);
-  g.fillRect(32, 118, 104, 4);
-  g.fillStyle(0x584890);              // shadow valleys
-  g.fillRect(32, 100, 104, 3);
-  g.fillRect(32, 112, 104, 3);
-  g.fillRect(32, 124, 104, 3);
-  g.fillStyle(0x4a3880);              // bottom fold edge
+  g.fillStyle(0x4a8092);              // highlight ridges
+  g.fillRect(32, 94, 104, 3);
+  g.fillRect(32, 108, 104, 2);
+  g.fillRect(32, 120, 104, 2);
+  g.fillStyle(0x285462);              // shadow valleys
+  g.fillRect(32, 102, 104, 2);
+  g.fillRect(32, 114, 104, 2);
+  g.fillStyle(0xe4d6b0);              // cream accent stripe
+  g.fillRect(32, 112, 104, 1);
+  g.fillStyle(0x1c3e4a);              // bottom fold edge
   g.fillRect(32, 128, 104, 4);
 
   // Bed legs
@@ -101,36 +132,96 @@ export function drawPrologueRoom(scene: Phaser.Scene): void {
   g.fillRect(24, 132, 12, 8);
   g.fillRect(132, 132, 12, 8);
 
-  g.fillStyle(0x3a3020);
-  g.fillRect(224, 46, 36, 30);
-  g.fillStyle(0xcc3300);
-  g.fillRect(228, 50, 28, 20);
-  g.fillStyle(0x111100);
-  g.fillRect(231, 53, 22, 12);
-  g.fillStyle(0x22ee44);
-  g.fillRect(233, 55, 18, 8);
+  // Nightstand — beside the bed, holds the lamp
+  g.fillStyle(0x3a2412);                                                // body / front
+  g.fillRect(152, 78, 54, 62);
+  g.fillStyle(0x5c3c20);                                                // top surface
+  g.fillRect(152, 78, 54, 6);
+  g.fillStyle(0x6e4a28);                                                // top edge highlight
+  g.fillRect(152, 78, 54, 1);
+  g.fillStyle(0x2a1808);                                                // drawer seam
+  g.fillRect(152, 108, 54, 1);
+  g.fillStyle(0x8a6a40);                                                // drawer pulls
+  g.fillRect(174, 94, 10, 2);
+  g.fillRect(174, 122, 10, 2);
 
-  g.fillStyle(0x4a3020);
+  // Bedside lamp — peach shade with brass stem
+  g.fillStyle(0x281a10);                                                // base plate
+  g.fillRect(170, 70, 20, 4);
+  g.fillStyle(0x3a281a);                                                // base shadow
+  g.fillRect(170, 73, 20, 2);
+  g.fillStyle(0xb08a40);                                                // brass stem
+  g.fillRect(178, 46, 4, 26);
+  g.fillStyle(0xd4a858);                                                // stem highlight
+  g.fillRect(178, 46, 1, 26);
+  g.fillStyle(0xc47660);                                                // shade — lower/wider (shadow tone)
+  g.fillRect(160, 36, 40, 14);
+  g.fillStyle(0xe8977e);                                                // shade main face
+  g.fillRect(162, 22, 36, 14);
+  g.fillStyle(0xf4b094);                                                // shade highlight
+  g.fillRect(164, 22, 28, 3);
+  g.fillRect(164, 24, 6, 10);
+  g.fillStyle(0xa45840);                                                // shade bottom rim shadow
+  g.fillRect(160, 48, 40, 2);
+  g.fillStyle(0xffe8c0);                                                // warm light spill under shade
+  g.fillRect(170, 50, 20, 2);
+
+  // Alarm clock — sits on the nightstand, next to the lamp
+  g.fillStyle(0x2a1a0e);                                                // body
+  g.fillRect(156, 60, 30, 18);
+  g.fillStyle(0x3a2818);                                                // body top highlight
+  g.fillRect(156, 60, 30, 2);
+  g.fillStyle(0x080808);                                                // display bezel
+  g.fillRect(159, 64, 24, 12);
+  g.fillStyle(0x22ee44);                                                // LED display
+  g.fillRect(161, 66, 20, 8);
+
+  // Wooden desk
+  g.fillStyle(0x5c3c20);                                                // desk top
   g.fillRect(214, 150, 100, 62);
-  g.fillStyle(0x362815);
+  g.fillStyle(0x6e4a28);                                                // desk top highlight
+  g.fillRect(214, 150, 100, 4);
+  g.fillStyle(0x3a2412);                                                // desk legs
   g.fillRect(216, 210, 10, 14);
   g.fillRect(300, 210, 10, 14);
-  g.fillStyle(0x111122);
-  g.fillRect(224, 155, 64, 44);
-  g.fillStyle(0x001a44);
-  g.fillRect(228, 159, 56, 36);
-  g.fillStyle(0x0044cc, 0.7);
-  g.fillRect(232, 165, 48, 3);
-  g.fillRect(232, 172, 36, 3);
-  g.fillRect(232, 179, 44, 3);
-  g.fillStyle(0x222233);
-  g.fillRect(250, 199, 14, 8);
-  g.fillRect(244, 207, 26, 4);
+  g.fillStyle(0x2a1a0a);                                                // desk front shadow
+  g.fillRect(214, 208, 100, 2);
 
-  g.fillStyle(0x2e2840);
+  // Retro CRT monitor — beige/cream housing
+  g.fillStyle(0xcab896);                                                // outer housing
+  g.fillRect(224, 152, 64, 48);
+  g.fillStyle(0xe2d2aa);                                                // top highlight
+  g.fillRect(224, 152, 64, 3);
+  g.fillStyle(0xa08c68);                                                // lower shadow
+  g.fillRect(224, 197, 64, 3);
+  g.fillStyle(0x2a2218);                                                // screen bezel
+  g.fillRect(228, 156, 56, 38);
+  g.fillStyle(0x0c1a24);                                                // screen glass
+  g.fillRect(230, 158, 52, 34);
+  g.fillStyle(0x3e9ac8);                                                // scanline glow
+  g.fillRect(232, 162, 48, 2);
+  g.fillRect(232, 168, 32, 2);
+  g.fillRect(232, 174, 40, 2);
+  g.fillRect(232, 180, 24, 2);
+  g.fillStyle(0x1a3848);                                                // dim scanline
+  g.fillRect(232, 166, 48, 1);
+  g.fillRect(232, 172, 48, 1);
+  g.fillStyle(0x6a5838);                                                // power indicator
+  g.fillRect(280, 196, 4, 2);
+
+  // Keyboard on desk
+  g.fillStyle(0x1c140a);                                                // keyboard body
+  g.fillRect(240, 202, 48, 8);
+  g.fillStyle(0x302214);                                                // keyboard top
+  g.fillRect(240, 202, 48, 2);
+
+  // Desk chair — wood tone matching aesthetic
+  g.fillStyle(0x3a2616);                                                // chair back
   g.fillRect(226, 218, 50, 36);
-  g.fillStyle(0x3a3454);
+  g.fillStyle(0x5a3c22);                                                // chair seat cushion
   g.fillRect(228, 220, 46, 22);
+  g.fillStyle(0x6e4a2c);                                                // seat highlight
+  g.fillRect(228, 220, 46, 3);
 
   g.fillStyle(0x2c1a0e);
   g.fillRect(16, 196, 56, 130);
@@ -343,18 +434,4 @@ export function drawPrologueRoom(scene: Phaser.Scene): void {
   g.fillStyle(0xd4aa20);
   g.fillRect(MAP_W - 14, 222, 6, 6);
 
-  g.lineStyle(1, 0x000000, 0.06);
-  for (let x = WALL_T; x < DIVIDER_X; x += 32) {
-    g.moveTo(x, WALL_T);
-    g.lineTo(x, MAP_H - WALL_T);
-  }
-  for (let x = DIVIDER_X + WALL_T; x < MAP_W - WALL_T; x += 32) {
-    g.moveTo(x, WALL_T);
-    g.lineTo(x, MAP_H - WALL_T);
-  }
-  for (let y = WALL_T; y < MAP_H - WALL_T; y += 32) {
-    g.moveTo(WALL_T, y);
-    g.lineTo(MAP_W - WALL_T, y);
-  }
-  g.strokePath();
 }
