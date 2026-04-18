@@ -223,14 +223,24 @@ export function drawPrologueRoom(scene: Phaser.Scene): void {
   g.fillStyle(0x6e4a2c);                                                // seat highlight
   g.fillRect(228, 220, 46, 3);
 
-  g.fillStyle(0x2c1a0e);
+  // Bookshelf — against left wall, 3/4 top-down (top surface visible, shelf tops catch light)
+  g.fillStyle(0x2c1a0e);              // outer frame
   g.fillRect(16, 196, 56, 130);
-  g.fillStyle(0x1a0c06);
-  g.fillRect(20, 200, 48, 122);
+  g.fillStyle(0x4a2e18);              // top surface (light from above hits it)
+  g.fillRect(16, 196, 56, 4);
+  g.fillStyle(0x6a4426);              // top front edge highlight
+  g.fillRect(16, 196, 56, 1);
+  g.fillStyle(0x1a0c06);              // shelf interior (deep shadow)
+  g.fillRect(20, 202, 48, 120);
+  // Shelf dividers — top face (light) + front face (shadow)
+  g.fillStyle(0x5a3820);
+  g.fillRect(20, 238, 48, 2);         // shelf 1 top
+  g.fillRect(20, 276, 48, 2);         // shelf 2 top
+  g.fillRect(20, 314, 48, 2);         // shelf 3 top
   g.fillStyle(0x3c2414);
-  g.fillRect(18, 240, 52, 5);
-  g.fillRect(18, 278, 52, 5);
-  g.fillRect(18, 316, 52, 5);
+  g.fillRect(20, 240, 48, 3);         // shelf 1 front lip
+  g.fillRect(20, 278, 48, 3);         // shelf 2 front lip
+  g.fillRect(20, 316, 48, 3);         // shelf 3 front lip
 
   const books: Array<[number, number]> = [
     [0xaa3322, 0], [0x3366aa, 1], [0x33aa66, 2], [0xaa8822, 3], [0x884466, 4],
@@ -241,7 +251,13 @@ export function drawPrologueRoom(scene: Phaser.Scene): void {
     const bx = 22 + (shelf % 5) * 9;
     const by = 206 + shelf * 38 + Math.floor(shelf / 5) * 4;
     g.fillStyle(col);
-    g.fillRect(bx, by, 7, 32);
+    g.fillRect(bx, by, 7, 30);
+    // Book top — lighten each RGB channel independently, clamp at 0xff
+    const r = Math.min(0xff, ((col >> 16) & 0xff) + 0x30);
+    const gc = Math.min(0xff, ((col >> 8) & 0xff) + 0x30);
+    const b = Math.min(0xff, (col & 0xff) + 0x30);
+    g.fillStyle((r << 16) | (gc << 8) | b);
+    g.fillRect(bx, by, 7, 1);
   });
 
   g.fillStyle(0x4a6080);
@@ -255,28 +271,26 @@ export function drawPrologueRoom(scene: Phaser.Scene): void {
 
   // ── LIVING ROOM FURNITURE ──────────────────────────────────────────────────
 
-  // TV — flat-screen widescreen
-  g.fillStyle(0x111111);              // outer frame
-  g.fillRect(370, 20, 214, 92);
+  // TV — wall-mounted flat screen, flush against top wall (3/4 view)
+  g.fillStyle(0x0a0a0a);              // mount shadow (TV sits slightly proud of wall)
+  g.fillRect(372, 12, 214, 4);
+  g.fillStyle(0x161616);              // outer frame
+  g.fillRect(370, 12, 214, 64);
+  g.fillStyle(0x242424);              // bezel top face (catches "light from above")
+  g.fillRect(370, 12, 214, 4);
   g.fillStyle(0x1c1c1c);              // inner bezel
-  g.fillRect(374, 24, 206, 84);
+  g.fillRect(374, 20, 206, 52);
   g.fillStyle(0x050508);              // screen glass
-  g.fillRect(378, 28, 198, 72);
+  g.fillRect(378, 22, 198, 48);
   g.fillStyle(0x0a0a12);              // off-screen dark reflection patch
-  g.fillRect(380, 30, 64, 34);
+  g.fillRect(380, 24, 64, 22);
   g.fillStyle(0x2a2a2a);              // side speaker grills
-  g.fillRect(372, 34, 4, 60);
-  g.fillRect(580, 34, 4, 60);
-  g.fillStyle(0x2e2e2e);              // bezel top highlight
-  g.fillRect(374, 24, 206, 3);
+  g.fillRect(372, 28, 4, 36);
+  g.fillRect(580, 28, 4, 36);
   g.fillStyle(0x00cc44);              // power LED
-  g.fillRect(468, 100, 4, 4);
-  g.fillStyle(0x2a2a2a);              // stand neck
-  g.fillRect(456, 112, 52, 8);
-  g.fillStyle(0x333333);              // stand foot
-  g.fillRect(442, 120, 80, 6);
-  g.fillStyle(0x222222);              // foot underside shadow
-  g.fillRect(444, 126, 76, 3);
+  g.fillRect(476, 72, 3, 2);
+  g.fillStyle(0x050404);              // bottom shelf shadow cast on wall (depth cue)
+  g.fillRect(370, 76, 214, 2);
 
   // Living room window
   g.fillStyle(0x4a6080);
@@ -381,51 +395,46 @@ export function drawPrologueRoom(scene: Phaser.Scene): void {
   g.fillStyle(0xaa6622);             // mug handle
   g.fillRect(450, 156, 4, 10);
 
-  // LIVING ROOM PLANT — tall potted plant in corner
-  // Central stem
-  g.fillStyle(0x4a2c12);
-  g.fillRect(369, 314, 4, 28);
-  // Back leaves (darker, behind stem)
-  g.fillStyle(0x16782e);
-  g.fillRect(359, 322, 10, 10);
-  g.fillRect(373, 308, 10, 12);
-  // Front-left leaf
-  g.fillStyle(0x1a9038);
-  g.fillRect(354, 326, 16, 10);
-  // Upper-left leaf
-  g.fillStyle(0x22aa44);
-  g.fillRect(350, 314, 16, 11);
-  // Front-right leaf
-  g.fillStyle(0x1a9038);
-  g.fillRect(372, 326, 16, 10);
-  // Upper-right leaf
-  g.fillStyle(0x22aa44);
-  g.fillRect(374, 314, 16, 11);
-  // Top center leaf
-  g.fillStyle(0x28cc4c);
-  g.fillRect(365, 304, 12, 16);
-  // Leaf vein highlights
-  g.fillStyle(0x44dd66);
-  g.fillRect(366, 305, 4, 7);
-  g.fillRect(351, 315, 4, 5);
-  g.fillRect(376, 315, 4, 5);
-  g.fillRect(355, 327, 4, 4);
-  g.fillRect(374, 327, 4, 4);
-  // Soil
-  g.fillStyle(0x1a0c04);
-  g.fillRect(360, 340, 22, 6);
-  // Pot rim
-  g.fillStyle(0x7a3a18);
+  // LIVING ROOM PLANT — potted plant, 3/4 top-down view (leaves radiate outward)
+  // Pot (drawn first so leaves overhang it naturally)
+  g.fillStyle(0x1a0c04);              // soil (visible through leaves)
+  g.fillRect(360, 340, 22, 4);
+  g.fillStyle(0x7a3a18);              // pot rim (top ellipse)
   g.fillRect(358, 340, 26, 5);
-  // Pot body
-  g.fillStyle(0x8a4422);
+  g.fillStyle(0x8a4422);              // pot body front
   g.fillRect(360, 345, 22, 18);
-  // Pot highlight
-  g.fillStyle(0xaa5530);
-  g.fillRect(361, 346, 5, 14);
-  // Pot base taper
-  g.fillStyle(0x7a3a18);
-  g.fillRect(363, 363, 16, 5);
+  g.fillStyle(0xaa5530);               // pot left highlight (light from upper-left)
+  g.fillRect(361, 346, 4, 14);
+  g.fillStyle(0x5a2810);               // pot right shadow
+  g.fillRect(378, 346, 4, 14);
+  g.fillStyle(0x7a3a18);              // pot base taper
+  g.fillRect(363, 363, 16, 4);
+
+  // Foliage — radiates outward from center of pot (371, 332)
+  // Shadow layer (dark green, back / lower)
+  g.fillStyle(0x16782e);
+  g.fillRect(354, 326, 14, 10);       // back-left
+  g.fillRect(374, 326, 14, 10);       // back-right
+  g.fillRect(362, 318, 18, 10);       // back-center
+  g.fillRect(360, 336, 22, 6);        // front drooping leaves over pot rim
+
+  // Mid layer
+  g.fillStyle(0x1a9038);
+  g.fillRect(356, 322, 10, 8);        // left fan
+  g.fillRect(376, 322, 10, 8);        // right fan
+  g.fillRect(366, 314, 12, 8);        // top-center cluster
+
+  // Top highlights (brighter, as if light hits upper leaf faces)
+  g.fillStyle(0x28cc4c);
+  g.fillRect(358, 324, 6, 4);
+  g.fillRect(378, 324, 6, 4);
+  g.fillRect(368, 316, 8, 5);
+
+  // Vein / leaf-tip highlights
+  g.fillStyle(0x44dd66);
+  g.fillRect(359, 325, 3, 2);
+  g.fillRect(381, 325, 3, 2);
+  g.fillRect(370, 317, 3, 3);
 
   g.fillStyle(0x5c3a1e);
   g.fillRect(MAP_W - WALL_T - 2, FDOOR_TOP, WALL_T + 2, FDOOR_BOT - FDOOR_TOP);
