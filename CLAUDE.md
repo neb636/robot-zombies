@@ -68,6 +68,8 @@ New scenes must be registered in `src/config.ts`.
 - **Interaction prompts** — scenes with an E-key interact must also call `mobileControls.showInteract(label)` / `hideInteract()` and listen for the `interact:tap` CustomEvent alongside `keydown-E`.
 - **Hint text** — never write keyboard-only hint strings (e.g. "press ENTER"). Always include the tap/click equivalent.
 
+**Asset pipeline:** Pixel-art assets are generated via the PixelLab MCP server, polished in Aseprite when needed, and audited via `npm run viewer` (generates `asset-viewer.html`). The user-facing inventory, art-direction decisions, tool roles (PixelLab / Aseprite / viewer), and status tracker live in `planning/asset-generation-guide.md`. The AI workflow — submit jobs, wait via `ScheduleWakeup`, stage at `public/assets/_staging/<category>/<asset>/` for user review, then integrate into `PreloadScene.ts` on an explicit user approval — is in the `pixellab-assets` skill at `.claude/skills/pixellab-assets/SKILL.md`. That skill auto-triggers on asset-generation phrasing ("generate the Maya sprite", "make the Boston ruins tileset"). **Never write generated assets directly to `public/assets/sprites/` or `public/assets/tilesets/`** — always stage first so the user can review before they land in the asset tree that `PreloadScene.ts` loads from.
+
 ---
 
 ## Scene flow (current)

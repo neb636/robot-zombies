@@ -1,0 +1,8 @@
+Staging area for PixelLab-generated assets awaiting user review.
+
+Files here are NOT loaded by PreloadScene.ts — they live here until the user
+approves them, at which point the `pixellab-assets` skill moves them to their
+final location under `public/assets/sprites/` or `public/assets/tilesets/`.
+
+Preview staged assets in the browser while the dev server is running:
+  http://localhost:5173/assets/_staging/<category>/<asset>/
