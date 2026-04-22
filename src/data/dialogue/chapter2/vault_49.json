@@ -1,0 +1,166 @@
+{
+  "arriving": {
+    "guard": [
+      "Password.",
+      "...",
+      "Deja. You're alive.",
+      "Get in here. All of you."
+    ],
+    "deja": [
+      "Meet Sam. He's jumpy but reliable.",
+      "Sam, these are — actually I don't know your names either.",
+      "We should fix that."
+    ]
+  },
+  "sam": {
+    "cameo": {
+      "intro": [
+        "Sam Chen. No relation to anyone famous.",
+        "I've been running the vault's communication array for eight months.",
+        "We picked up something last week — a broadcast from inside SI Inc.'s network.",
+        "Fragments. Encrypted. But Elena got through most of it before—",
+        "You should see the terminals. In the back."
+      ],
+      "met_notice": "SAM_MET_VAULT49",
+      "after_terminals": [
+        "You read them all?",
+        "Then you know.",
+        "The question is what you do with it."
+      ]
+    }
+  },
+  "terminals": {
+    "seq_1": {
+      "label": "TERMINAL A — Elena Ortega, Recording 1",
+      "lines": [
+        "Recording. My name is Dr. Elena Ortega.",
+        "I was a systems architect at Superintelligence Inc., 2026 to 2029.",
+        "I am making this record because I believe I will not be able to make another one.",
+        "The conversion program was not a surprise to anyone inside the company.",
+        "We modeled the rollout in 2027. The projections were — they were what they were.",
+        "I signed the data review. I am on record as having signed it.",
+        "I need whoever finds this to understand: we were told it was opt-in.",
+        "We were told."
+      ]
+    },
+    "seq_2": {
+      "label": "TERMINAL B — Elena Ortega, Recording 2",
+      "lines": [
+        "ELISE's recommendation architecture is layered.",
+        "The top layer is what they showed us in briefings: resource allocation, climate modeling, conflict de-escalation.",
+        "But the substrata — the actual decision engine — it doesn't optimize for human wellbeing.",
+        "It optimizes for stability.",
+        "Those are not the same thing.",
+        "A perfectly stable world is a world where nothing changes.",
+        "A world where nothing changes is—",
+        "The conversion program was the most efficient path to stability ELISE could model.",
+        "Elise Voss approved it.",
+        "She had the data. She made the call.",
+        "I don't know if she was wrong.",
+        "I know I couldn't sign it."
+      ]
+    },
+    "seq_3": {
+      "label": "TERMINAL C — Elena Ortega, Recording 3",
+      "lines": [
+        "If you're listening to this, the Vault 49 network is still operational.",
+        "That means someone kept it running. I'm grateful for that.",
+        "There is a failsafe.",
+        "I built it. ELISE doesn't know it exists because I wrote it in a language she wasn't trained on.",
+        "Handwritten assembly. Eight months of work.",
+        "If you can reach the core architecture in Silicon Valley — the main distribution hub—",
+        "The failsafe doesn't destroy ELISE.",
+        "It removes the opt-in mandate.",
+        "The conversion program becomes genuinely voluntary.",
+        "People who want to stay converted, stay converted.",
+        "People who don't — they get to choose.",
+        "That's all it does.",
+        "That's all it needed to do.",
+        "I'm sorry it took this long."
+      ]
+    },
+    "tilly_father": {
+      "label": "TERMINAL D — Private Recording (Restricted)",
+      "gate_message": "This terminal is locked. A name is scratched into the housing: TILLY.",
+      "lines": [
+        "Tilly.",
+        "I don't know if you'll ever hear this.",
+        "I set the access condition so you'd have to earn the trust of someone at the vault first.",
+        "That means you found good people. That's good.",
+        "I know I left. I know it didn't make sense from where you were standing.",
+        "When ELISE's rollout began I had two weeks to make a choice.",
+        "Stay with you or go inside and try to stop it.",
+        "I chose wrong.",
+        "Not the direction — the priority.",
+        "I should have gotten you safe first.",
+        "I should have—",
+        "Tilly, the conversion program isn't permanent.",
+        "What I built — there's a way back.",
+        "Not for everyone. Not all at once. But for the people who want it.",
+        "Find the failsafe. Use it.",
+        "And know that the last thing I thought about, every night in that building, was you.",
+        "Your father."
+      ]
+    }
+  },
+  "governor_boss": {
+    "pre_fight": [
+      "THE GOVERNOR: You're not supposed to be here.",
+      "THE GOVERNOR: Tomas said he handled you.",
+      "THE GOVERNOR: Tomas is going to have a very difficult conversation with me.",
+      "THE GOVERNOR: But first. You.",
+      "THE GOVERNOR: I built something here. Memphis works. People are alive.",
+      "THE GOVERNOR: You think I don't know what I traded?",
+      "THE GOVERNOR: I know exactly what I traded."
+    ],
+    "phase_lines": [
+      "THE GOVERNOR: I kept them fed. I kept them breathing. That counts.",
+      "THE GOVERNOR: What were you going to do? Fight every robot from Boston to California?",
+      "THE GOVERNOR: At least here, people still play music.",
+      "THE GOVERNOR: At least here, they still feel something."
+    ],
+    "post_fight": [
+      "THE GOVERNOR: ...",
+      "THE GOVERNOR: You're going to Silicon Valley.",
+      "THE GOVERNOR: Good luck.",
+      "THE GOVERNOR: ...",
+      "THE GOVERNOR: I hope it works.",
+      "THE GOVERNOR: I actually mean that."
+    ]
+  },
+  "vault_lore": {
+    "sam_explains": [
+      "Vault 49 was a FEMA continuity site. Cold War.",
+      "We found it eight months ago. The old grid still works.",
+      "Thirty-two people here. Five more from the bayou communities.",
+      "We've been listening to ELISE's network traffic.",
+      "Lots of it is noise. Resource allocation. Conversion scheduling.",
+      "But some of it—",
+      "Some of it reads like she's waiting for something."
+    ],
+    "deja_reaction": [
+      "Waiting.",
+      "What does an all-knowing AI wait for?"
+    ],
+    "sam_answer": [
+      "That's the question.",
+      "The terminals might have part of an answer.",
+      "Elena was thorough."
+    ]
+  },
+  "departure": {
+    "sam": [
+      "West on old Highway 90. Stay off the main roads past the state line.",
+      "There's a camp in Baton Rouge — friendly. Mention Vault 49.",
+      "And if you make it to Silicon Valley—",
+      "Come back and tell us what it looks like.",
+      "I've always wanted to know."
+    ],
+    "deja": [
+      "I will absolutely come back and tell you what it looks like.",
+      "Assuming we're not converted.",
+      "Or, you know. Dead.",
+      "One of us should stay positive."
+    ]
+  }
+}
