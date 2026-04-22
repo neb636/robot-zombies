@@ -34,3 +34,6 @@ export const chapter2Scenes = [
   BayouScene,
   Vault49Scene,
 ] as const;
+
+/** Alias used by src/config.ts aggregator. */
+export const CHAPTER2_SCENES = chapter2Scenes as readonly unknown[] as import('phaser').Types.Scenes.SceneType[];

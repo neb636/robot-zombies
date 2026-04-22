@@ -16,7 +16,8 @@ export type EnemyTier =
 export interface EnemyConfig {
   name:   string;
   hp:     number;
-  atk:    number;     // kept for BossPhaseTransitionState backward compat (mirrors str)
+  /** Legacy alias — optional; defaults to str if absent. */
+  atk?:   number;
   str:    number;
   def:    number;
   int:    number;

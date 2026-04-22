@@ -1,27 +1,18 @@
-/**
- * Tomas Reyes — NPC. Mississippi Crossing gatekeeper.
- *
- * A fixer who controls access to the only safe Mississippi crossing.
- * Offers the party a choice (§7): carry a package to Vault 49 in exchange
- * for having their names cleared from the Governor's registry.
- *
- * Not a party member. No CharacterDef. Pure NPC data.
- */
-export interface TomasNPC {
-  id:          string;
-  name:        string;
-  /** TOMAS_DEBT_CLEARED — set if player accepts the deal. Deja morale +15. */
-  acceptFlag:  string;
-  /** TOMAS_REFUSED — set if player declines the deal. */
-  declineFlag: string;
-  /** Morale bonus applied to Deja when deal is accepted. Integer only. */
-  dejaAcceptMoralBonus: number;
-}
+import type { CharacterDef } from '../types.js';
+import { npcStub } from './_npcStub.js';
 
-export const TOMAS: TomasNPC = {
-  id:                   'tomas',
-  name:                 'TOMAS REYES',
+/**
+ * Tomas Reyes — New Memphis underground fixer / Deja's past. NPC (Ch.2).
+ * Not a party member. See planning/side_characters.md.
+ */
+export const TOMAS_DEF: CharacterDef = npcStub('tomas', 'TOMAS', 0x332255, 2);
+
+// Stream C2 scene-level constants (re-exported for chapter2 scripts).
+export const TOMAS_META = {
   acceptFlag:           'TOMAS_DEBT_CLEARED',
   declineFlag:          'TOMAS_REFUSED',
   dejaAcceptMoralBonus: 15,
-};
+} as const;
+
+/** Legacy alias used by MississippiCrossingScene. */
+export const TOMAS = TOMAS_META;
