@@ -22,7 +22,7 @@ import type { BattleManager } from './BattleManager.js';
 
 type EnemyAIPhase = 'IDLE' | 'CHARGING' | 'ACTING' | 'COOLDOWN';
 
-type EnemyTier = 'drone' | 'enforcer' | 'sentinel' | 'boss' | 'converted';
+type EnemyTier = 'drone' | 'enforcer' | 'sentinel' | 'boss' | 'converted' | 'human';
 
 const CHARGE_TICKS: Record<EnemyTier, number> = {
   drone:     1,
@@ -30,6 +30,7 @@ const CHARGE_TICKS: Record<EnemyTier, number> = {
   sentinel:  3,
   boss:      0,
   converted: 1,
+  human:     2,
 };
 
 const COOLDOWN_TICKS: Record<EnemyTier, number> = {
@@ -38,6 +39,7 @@ const COOLDOWN_TICKS: Record<EnemyTier, number> = {
   sentinel:  8,
   boss:      2,
   converted: 4,
+  human:     5,
 };
 
 export class EnemyAIStateMachine {
