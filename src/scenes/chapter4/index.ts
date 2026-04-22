@@ -18,7 +18,18 @@
  * the full scene list.
  */
 
-export { HighAltitudeCampScene } from './HighAltitudeCampScene.js';
-export { GhostTownScene }        from './GhostTownScene.js';
-export { HermitsPeakScene }      from './HermitsPeakScene.js';
-export { ThePassScene }          from './ThePassScene.js';
+import Phaser from 'phaser';
+import { HighAltitudeCampScene } from './HighAltitudeCampScene.js';
+import { GhostTownScene }        from './GhostTownScene.js';
+import { HermitsPeakScene }      from './HermitsPeakScene.js';
+import { ThePassScene }          from './ThePassScene.js';
+
+export { HighAltitudeCampScene, GhostTownScene, HermitsPeakScene, ThePassScene };
+
+/** Alias used by src/config.ts aggregator. */
+export const CHAPTER4_SCENES: Phaser.Types.Scenes.SceneType[] = [
+  HighAltitudeCampScene,
+  GhostTownScene,
+  HermitsPeakScene,
+  ThePassScene,
+];
