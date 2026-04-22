@@ -49,6 +49,9 @@ export class SubwayScene extends Phaser.Scene {
   // Maya sprite reference
   private _mayaSprite!: Phaser.GameObjects.Sprite;
 
+  // Persistent exit hint after Maya joins
+  private _exitHint: Phaser.GameObjects.Text | null = null;
+
   constructor() {
     super({ key: 'SubwayScene' });
   }
@@ -224,7 +227,7 @@ export class SubwayScene extends Phaser.Scene {
 
         if (!this._exitHintShown) {
           this._exitHintShown = true;
-          this._showHint('Head to the exit on the left.', 5000);
+          this._showExitHint();
         }
       },
     });
@@ -234,6 +237,7 @@ export class SubwayScene extends Phaser.Scene {
     this.dialogMgr.show(this._playerName, D.maya.followup_player, () => {
       this.dialogMgr.show('MAYA', D.maya.followup, () => {
         this._inputEnabled = true;
+        this._showExitHint();
       });
     });
   }
@@ -248,6 +252,7 @@ export class SubwayScene extends Phaser.Scene {
 
     this._phase = PHASE.DONE;
     this._inputEnabled = false;
+    this._hideExitHint();
 
     this.cameras.main.fadeOut(1000, 0, 0, 0, (_cam: Phaser.Cameras.Scene2D.Camera, p: number) => {
       if (p === 1) this.scene.start('WorldMapScene');
@@ -256,18 +261,34 @@ export class SubwayScene extends Phaser.Scene {
 
   // ─── Helpers ────────────────────────────────────────────────────────────
 
-  private _showHint(msg: string, autofade = 3000): void {
+  private _showExitHint(): void {
+    if (this._exitHint) return;
     const { width, height } = this.scale;
-    const hint = this.add.text(width / 2, height - 40, msg, {
-      fontFamily: 'monospace', fontSize: '11px', color: '#446688',
-    }).setScrollFactor(0).setDepth(25).setOrigin(0.5);
+    const hint = this.add.text(
+      width / 2, height - 40,
+      '← Head west to the tunnel EXIT',
+      {
+        fontFamily: 'monospace', fontSize: '13px', color: '#ffcc66',
+        stroke: '#000000', strokeThickness: 3,
+      },
+    ).setScrollFactor(0).setDepth(25).setOrigin(0.5);
 
     this.tweens.add({
       targets:  hint,
-      alpha:    0,
-      delay:    autofade,
-      duration: 800,
-      onComplete: () => { hint.destroy(); },
+      alpha:    { from: 0.55, to: 1 },
+      duration: 900,
+      yoyo:     true,
+      repeat:   -1,
     });
+
+    this._exitHint = hint;
   }
+
+  private _hideExitHint(): void {
+    if (!this._exitHint) return;
+    this.tweens.killTweensOf(this._exitHint);
+    this._exitHint.destroy();
+    this._exitHint = null;
+  }
+
 }
