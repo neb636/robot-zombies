@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "viewer": "node scripts/generate-viewer.js",
+    "viewer:watch": "node scripts/generate-viewer.js --watch"
   },
   "dependencies": {
     "howler": "^2.2.4",

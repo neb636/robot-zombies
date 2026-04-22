@@ -47,7 +47,7 @@ export class SubwayScene extends Phaser.Scene {
   private _exitHintShown: boolean = false;
 
   // Maya sprite reference
-  private _mayaRect!: Phaser.GameObjects.Rectangle;
+  private _mayaSprite!: Phaser.GameObjects.Sprite;
 
   constructor() {
     super({ key: 'SubwayScene' });
@@ -104,12 +104,15 @@ export class SubwayScene extends Phaser.Scene {
       this.add.rectangle(npc.x, npc.y, 14, 24, 0x888888).setDepth(5);
     });
 
-    // Maya (teal rectangle)
-    this._mayaRect = this.add.rectangle(MAYA_X, MAYA_Y, 16, 26, 0x44aaaa);
-    this._mayaRect.setDepth(5);
+    // Maya sprite
+    this._mayaSprite = this.add.sprite(MAYA_X, MAYA_Y, 'maya', 0);
+    this._mayaSprite.setOrigin(0.5, 1);
+    this._mayaSprite.setScale(1.4);
+    this._mayaSprite.setDepth(5);
+    if (this.anims.exists('maya-idle')) this._mayaSprite.play('maya-idle');
 
     // Label above Maya
-    this.add.text(MAYA_X, MAYA_Y - 22, 'MAYA', {
+    this.add.text(MAYA_X, MAYA_Y - 72, 'MAYA', {
       fontFamily: 'monospace', fontSize: '8px', color: '#44aaaa',
     }).setOrigin(0.5).setDepth(6);
   }
