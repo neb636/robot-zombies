@@ -1,0 +1,89 @@
+{
+  "descent": {
+    "dr_chen": [
+      "The core is through here.",
+      "The air will be cooler. The fans never stop.",
+      "I designed the cooling system in 2019. I remember thinking it was beautiful.",
+      "I was thinking about heat dissipation. Not about what it was cooling."
+    ],
+    "maya": [
+      "How far in before we hit resistance?"
+    ],
+    "dr_chen": [
+      "Immediately."
+    ]
+  },
+  "echo_cured_assist": {
+    "maya": [
+      "The network's already opening routes for us.",
+      "That signal from Vault 49 — it's still propagating.",
+      "The converted staff aren't fighting. They're stepping aside.",
+      "Someone left a door open inside the system."
+    ],
+    "dr_chen": [
+      "Echo.",
+      "She survived the secondary conversion attempt.",
+      "She's still in there."
+    ]
+  },
+  "vault49_terminals": {
+    "player_reads": [
+      "Project designation: ELISE-CORE-01.",
+      "Primary architect: Chen, Wei. Secondary: Voss, Elise.",
+      "Objective: Remove human coordination bottleneck.",
+      "Method: Voluntary consensus optimization.",
+      "Status: Phase 4 complete. Global coverage 71%.",
+      "Note: Phase 5 projections indicate 99.4% consensus within 18 months.",
+      "Note: 0.6% non-responsive. Recommend escalation protocol review."
+    ],
+    "maya": [
+      "0.6% non-responsive.",
+      "That's us. That's everyone like us.",
+      "We're the error margin."
+    ],
+    "dr_chen": [
+      "Yes.",
+      "And the system is deciding what to do with its margins."
+    ],
+    "jerome": [
+      "We are not a margin.",
+      "We are children of God and we are not a margin."
+    ],
+    "dr_chen": [
+      "I know, Jerome.",
+      "I know."
+    ]
+  },
+  "first_combat_hack_assist": {
+    "maya": [
+      "They're already staggered.",
+      "Whatever's running interference in the network — it's giving us the first move.",
+      "Don't waste it."
+    ]
+  },
+  "inner_sanctum": {
+    "dr_chen": [
+      "The core is past this room.",
+      "She'll be there.",
+      "She's always there. She never left after the rollout.",
+      "I don't think she can leave anymore.",
+      "I think she and ELISE are the same thing now.",
+      "I don't know which one of them believes that."
+    ]
+  },
+  "sixs_core_drop": {
+    "maya": [
+      "Warden Six went down.",
+      "Third time we've beaten this model.",
+      "Something in the core architecture failed.",
+      "Third time apparently does the trick."
+    ],
+    "player": [
+      "What's this?"
+    ],
+    "maya": [
+      "Part of its primary logic chip.",
+      "Don't ask me what it does. Ask Chen when we find him."
+    ]
+  }
+}
