@@ -19,3 +19,9 @@ export const CHAPTER1_ENEMY_KEYS = [
 ] as const;
 
 export type Chapter1EnemyKey = typeof CHAPTER1_ENEMY_KEYS[number];
+
+/** Aggregated registry map consumed by src/entities/enemies/index.ts.
+ *  Chapter 1 defs live in base.ts (excavator_prime) + this chapter's per-enemy
+ *  files. Keep map empty — the base enemy registry already exposes them. */
+import type { EnemyConfigMap } from '../types.js';
+export const CHAPTER1_ENEMIES: EnemyConfigMap = {};
