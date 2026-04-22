@@ -3,13 +3,17 @@ import { BootScene }       from './scenes/BootScene.js';
 import { PreloadScene }    from './scenes/PreloadScene.js';
 import { TitleScene }      from './scenes/TitleScene.js';
 import { NameEntryScene }  from './scenes/NameEntryScene.js';
-import { PrologueScene }    from './scenes/PrologueScene.js';
+import { PrologueScene }   from './scenes/PrologueScene.js';
 import { NewBostonScene }  from './scenes/NewBostonScene.js';
 import { SubwayScene }     from './scenes/SubwayScene.js';
 import { WorldMapScene }   from './scenes/WorldMapScene.js';
 import { BattleScene }     from './scenes/BattleScene.js';
 import { DialogueScene }   from './scenes/DialogueScene.js';
 import { DevScene }        from './scenes/DevScene.js';
+
+// ─── Stream G (Phase B) ───────────────────────────────────────────────────────
+import { SaveLoadScene }   from './scenes/SaveLoadScene.js';
+import { PauseMenuScene }  from './scenes/PauseMenuScene.js';
 
 const scenes: Phaser.Types.Core.GameConfig['scene'] = [
   BootScene,
@@ -22,6 +26,8 @@ const scenes: Phaser.Types.Core.GameConfig['scene'] = [
   WorldMapScene,
   BattleScene,
   DialogueScene,
+  SaveLoadScene,
+  PauseMenuScene,
   ...(import.meta.env.DEV ? [DevScene] : []),
 ];
 

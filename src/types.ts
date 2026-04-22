@@ -211,3 +211,77 @@ export interface Interactable {
   used?: boolean;
   interact: () => void;
 }
+
+// ─── Survival Layer ───────────────────────────────────────────────────────────
+
+export type Region =
+  | 'boston'
+  | 'appalachia'
+  | 'deep_south'
+  | 'great_plains'
+  | 'rockies'
+  | 'silicon_valley';
+
+export interface SurvivalState {
+  food: number;
+  fuel: number;
+  medicine: number;
+  ammo: number;
+  scrap: number;
+  morale: number;           // 0–100
+  vehicleCondition: number; // 0–100
+  partySize: number;
+  region: Region;
+  daysElapsed: number;
+}
+
+export type TravelEventKind =
+  | 'hunting_opportunity'
+  | 'abandoned_store'
+  | 'survivor_camp'
+  | 'lucky_find'
+  | 'vehicle_breakdown'
+  | 'illness'
+  | 'ambush'
+  | 'rain_spoils'
+  | 'campfire_night'
+  | 'jerome_preaches'
+  | 'record_player'
+  | 'none';
+
+export interface TravelEvent {
+  kind: TravelEventKind;
+  text: string;
+  effect?: Partial<Pick<SurvivalState, 'food' | 'fuel' | 'medicine' | 'ammo' | 'scrap' | 'morale'>>;
+  triggersBattle?: boolean;
+  enemyKey?: string;
+}
+
+// ─── Dialogue Choices (Stream G) ─────────────────────────────────────────────
+
+export interface DialogueChoice {
+  label: string;
+  nextId: string;
+  setFlags?: readonly string[];
+  requireFlags?: readonly string[];
+  requireItems?: ReadonlyArray<{ item: keyof SurvivalState; count: number }>;
+  consumeItems?: ReadonlyArray<{ item: keyof SurvivalState; count: number }>;
+}
+
+export interface DialogueLine {
+  speaker: string;
+  text: string;
+  choices?: readonly DialogueChoice[];
+}
+
+// ─── Save Slots (Stream G) ───────────────────────────────────────────────────
+
+export interface SaveSlotInfo {
+  slot: number;
+  occupied: boolean;
+  playerName?: string;
+  chapter?: number;
+  savedAt?: number;
+  playTimeMs?: number;
+  sceneKey?: string;
+}
