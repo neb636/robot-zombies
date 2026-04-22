@@ -285,3 +285,48 @@ export interface SaveSlotInfo {
   playTimeMs?: number;
   sceneKey?: string;
 }
+
+// ─── Survival Trade ───────────────────────────────────────────────────────────
+
+export interface TradeEntry {
+  item: 'food' | 'fuel' | 'medicine' | 'ammo' | 'morale_item';
+  buyPrice: number;
+  sellPrice: number;
+}
+
+export interface TradePrices {
+  region: Region;
+  entries: TradeEntry[];
+}
+
+export type HuntingResult = 'perfect' | 'good' | 'miss';
+
+// ─── World Map / Node Entry ──────────────────────────────────────────────────
+
+export interface NodeEntryData {
+  sceneKey: string;
+  /** Optional payload forwarded to the launched scene's init(). */
+  data?: Record<string, unknown>;
+}
+
+// ─── Battle extensions (Stream D) ────────────────────────────────────────────
+
+export interface PassiveEffect {
+  characterId: string;
+  description: string;
+  onBattleStart?: (ctx: unknown) => void;
+  onTick?: (ctx: unknown) => boolean;
+  onBeforeAction?: (ctx: unknown) => void;
+  onBattleEnd?: (ctx: unknown, victory: boolean) => void;
+}
+
+export interface ReinforcementSpec {
+  enemyKey: string;
+  row?: 'front' | 'back';
+}
+
+export interface ComboBonusEffect {
+  comboId: string;
+  description: string;
+  resolve: (ctx: unknown) => void;
+}
