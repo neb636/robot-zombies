@@ -198,6 +198,59 @@ Neither ending is clean. The epilogue is the same either way: the road east, goi
 
 ---
 
+---
+
+## 2026-04 Lore Expansion
+
+### Elena Ortega — The Dissenting Vote
+
+UN climate envoy, 2005–2020. Elise Voss's colleague on the original SI Inc. advisory board. The single member who voted against the Conversion rollout. Disappeared in late 2023. Body never recovered.
+
+Three archival recordings in Vault 49 terminals form the strongest in-game rebuttal to Elise's worldview:
+1. Pre-vote speech: *"I am on the record. I will not vote for this. There is no precedent that survives it."*
+2. Post-vote resignation: *"I am not going to pretend my signature wasn't asked for. It was."*
+3. Last transmission (undated, late 2023): *"Elise. You know me. You know this is wrong. Call me."*
+
+If the player completes the Vault 49 terminal sequence (`VAULT49_TERMINALS_READ`), Elise references Elena by name in Phase 2 of the final fight. Without that flag, Elise never mentions her. It is one of the few moments in the game where doing the optional thing measurably changes the boss fight.
+
+### Ghost — The Real Static Operator
+
+A 29-year-old pirate broadcaster who has been transmitting from the Kansas Radio Tower for the past 14 months. Real name never given. The party has been hearing a "Static" broadcast at safe houses since Ch.1 — most of it is ELISE's sympathy feed, but Ghost's transmissions are interleaved. After defeating Sentinel Spire and ascending the tower, the party meets Ghost in the control room. Ghost does not join the party. They hand over an encryption key (`GHOST_KEY_OBTAINED`) that will spoof a conversion-signal ID badge at the SI Inc. Campus Perimeter in Ch.5.
+
+### Warden Six — The Broken One
+
+Warden-class unit serial 06. Deployed Boston 2023; disabled; scavenged parts to reassemble itself; has been moving west ever since, hunting the party without coordination from ELISE. Its degraded broadcast voice glitches. It repeats itself. Occasionally it says genuinely unsettling things — an emergent quality of the damage, not intent.
+
+Appears three times: Ch.1 Harlan Mine (weakened, one-shot), Ch.3 Storm Corridor (rebuilt, harder), and a secret Ch.5 Silicon Valley maintenance-corridor encounter gated by both prior victories. Drops `Six's Core` — a single-use combo item usable only in the Elise fight.
+
+### Nora Voss — Elise's Daughter
+
+Died 2014, age 17, in a preventable road collision. A distracted driver ran a red light. The driver survived; Nora did not. A brief voicemail from Nora the night before, recovered from Elise's personal archive, plays during Phase 3 of the final fight. It does not absolve Elise. It answers the question: *Why this. Why her.*
+
+> *"Mom — I know. I'll be back by ten. I know. I love you. I know. Bye."*
+
+The log plays regardless of talk-down route. If the player chose talk-down, the final player response references Nora by name.
+
+### The Ghost Key and the two broadcasts
+
+ELISE's sympathy feed was built to draw survivors out of hiding by broadcasting *exactly the kind of hope a desperate person wants to hear*. Ghost's interleaved real broadcast was built to disrupt that feed just enough that paying-attention survivors could tell the difference. The player is, retroactively, one of the paying-attention survivors — every weird moment in Ch.1–2 where the broadcast seemed to know them was ELISE watching; every moment it seemed to care was Ghost.
+
+### Mr. Gray — The Mirror
+
+Aging SI Inc. VP. One of the human signatories to the Conversion rollout. Not converted — Elise wanted him human. He has been running the Boardroom antechamber for two years. He believes exactly what Elise believes, but with less steel behind it. His existence is Elise's insurance policy: if anyone reaches her, they will have already argued her argument once. The player does not know this when they meet him.
+
+If talked down, he is found peacefully dead at his desk in the epilogue. The game does not specify cause of death and does not need to.
+
+### Lila Chen — The Cost of Being Right
+
+Chen's daughter Lila converted voluntarily in 2024 partly *because* her father's warnings about SI Inc. had been public. She believed he was wrong. She wanted to prove it. The game does not clarify whether she still believes that. Chen has not seen her since. Her encounter in Ch.5 is the only time in the game Chen cries on-screen.
+
+### The Tilly Thread
+
+A quiet, optional bond arc running across Ch.1–3. The child does not speak until Ch.3. Her one line — *"He said it wasn't worth the cost."* — refers to her father, a junior SI Inc. engineer whose whistleblower recording is buried in the Vault 49 archive. Finding it is optional, late, and entirely unrewarded except narratively. Closing the loop is the kind of thing the player will tell someone else about. It is the softest beat in the game.
+
+---
+
 ## Thematic Notes
 
 The world of Silicon Requiem is not post-apocalyptic in the traditional sense. Infrastructure still works. Food is produced efficiently. Crime is near zero. The robots are not destroying civilization — they are optimizing it.

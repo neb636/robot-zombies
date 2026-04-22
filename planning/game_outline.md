@@ -143,3 +143,60 @@ Marcus is not dead. He is converted. He is the first Converted human you have ev
 - Character losses (Elias, Deja) are intentional gut-punches in the Stephen King tradition — the journey costs something real.
 - Final boss being human is deliberate. The question the ending asks: was she wrong?
 - Friendship and bonding are the mechanical and emotional core. Things one person could not do alone.
+
+---
+
+## 2026-04 Story Expansion — added plot lines
+
+These are additions to (not replacements of) the chapter outlines above. Full NPC data in `side_characters.md`; full choice wiring in `dialogue_choices.md`.
+
+### The Static subplot (Ch.1 → Ch.3)
+
+A pirate radio broadcast crackles in at safe houses. Ch.1 it's nameless survivor rumor. Ch.2 it knows things about the party's route no broadcaster should. Ch.3 Radio Tower reveals the truth: there are **two** broadcasters. ELISE runs a sympathy feed to draw survivors in. The real operator — "Ghost" — has been sheltering at the Radio Tower for 14 months. Ghost gives the party an encryption key that spoofs a conversion-signal ID badge in Ch.5 infiltration (skips one forced-combat encounter).
+
+### Marcus 3-beat arc
+
+Marcus already converts in the prologue (existing) and reappears in Ch.3 Harvest Town (existing). This expansion **adds**:
+
+- **Ch.1 rumor (Ridge Camp):** A survivor recognizes the player's photo of Marcus. Says he was last seen in Kansas, "tending something that didn't need tending."
+- **Ch.5 silent beat:** During Silicon Valley infiltration, Marcus is at a maintenance door. He sees the player. He opens the door and walks past. No dialogue. The game does not clarify whether he recognized them or whether ELISE sent him. If `MARCUS_NAMED_BY_ELISE` is true (talk-down route primer), the ending credits play an extra 4 seconds of the Boston apartment music over the final fade.
+
+### The Converted Child (Ch.3 Harvest Town)
+
+Optional encounter. Morally gated — the Attack menu is suppressed. The player chooses:
+
+- **Cure** (requires medicine ≥ 2) → `CONVERTED_CHILD_CURED`.
+- **Walk away** → `CONVERTED_CHILD_LEFT`.
+
+The flag feeds the Elise talk-down path (Phase 3 line references the child by implication, not name). If the player has the medicine and walks away anyway, the epilogue narrator adds one line.
+
+### Echo (rogue satellite AI, Ch.4 Hermit's Peak)
+
+A failing Earth-observation satellite in a decaying orbit pings the resistance network. It has achieved partial self-awareness and begs to be cured. Chen warns the party: "She didn't choose this. Neither did I. But I know what I am." The player chooses:
+
+- **Cure** → `ECHO_CURED` → Ch.5 Mainframe Core opens with a one-time Hack Assist buff (auto-stuns all enemies on first combat).
+- **Refuse** → `ECHO_REFUSED` → Chen in epilogue: "That was Elise's failsafe. You couldn't have known. But thank you."
+
+### Vault 49 terminal puzzle (Ch.2)
+
+A three-document reading sequence recovered from a Cold War bunker's terminals: Chen's resignation memo (2021), Elena Ortega's dissent transcript from the final advisory board vote (2022), the vote tally itself. Completing the sequence sets `VAULT49_TERMINALS_READ`. This flag causes Elise Voss to invoke Elena Ortega by name in Phase 2 of the final fight — the single strongest rebuttal in the game.
+
+### Tilly's father recording (Vault 49, optional Ch.2/3 backtrack)
+
+If the Tilly bond arc (Ch.1 campfire + Ch.3 speaking scene) is completed, a previously-inactive recording in Vault 49 becomes available on backtrack. It is a whistleblower confession from an SI Inc. junior engineer — Tilly's father — recorded the night he left to meet a journalist who then buried the story. Sets `TILLY_FATHER_HEARD`. No mechanical effect, only an epilogue line.
+
+### Elise's daughter (Ch.5 final boss, Phase 3)
+
+An audio log plays during Phase 3 of the Elise fight — a voicemail from Elise's daughter Nora, dated 2014, the day before she was killed when a distracted driver ran a red light. The log does not absolve Elise. It does answer the question: "Why this, why you." The log plays regardless of talk-down route. If the player chose talk-down, the final player response references Nora.
+
+### Warden Six (recurring mini-boss)
+
+See `side_characters.md` for full arc. Appears in Ch.1 Harlan Mine exit, Ch.3 Storm Corridor, and a secret Ch.5 Silicon Valley maintenance-corridor encounter (gated by `SIX_BEATEN_CH1 && SIX_BEATEN_CH3`). The Ch.5 drop — `Six's Core` — enables a single-use combo ability usable only in the Elise fight.
+
+### Mr. Gray (Ch.5 Boardroom antechamber)
+
+Rehearsal for the Elise fight. An aging SI Inc. VP who presents Elise's arguments in a weaker form. Talk-down option unlocks if `convertedCured > convertedFought`. See `dialogue_choices.md` §5.
+
+### Lila Chen (Ch.5 Campus Perimeter)
+
+Dr. Chen's adult converted daughter. Encountered during Chen's solo stealth route. Three-option choice (Cure / Fight / Leave). Chen has three distinct epilogue lines, one per branch. See `dialogue_choices.md` §4.
