@@ -212,7 +212,7 @@ export interface Interactable {
   interact: () => void;
 }
 
-// ─── Survival Layer (Stream A) ───────────────────────────────────────────────
+// ─── Survival Layer ───────────────────────────────────────────────────────────
 
 export type Region =
   | 'boston'
@@ -228,8 +228,8 @@ export interface SurvivalState {
   medicine: number;
   ammo: number;
   scrap: number;
-  morale: number;          // 0–100
-  vehicleCondition: number;// 0–100
+  morale: number;           // 0–100
+  vehicleCondition: number; // 0–100
   partySize: number;
   region: Region;
   daysElapsed: number;
@@ -252,26 +252,10 @@ export type TravelEventKind =
 export interface TravelEvent {
   kind: TravelEventKind;
   text: string;
-  /** Resource deltas applied when the event resolves. Integers only. */
   effect?: Partial<Pick<SurvivalState, 'food' | 'fuel' | 'medicine' | 'ammo' | 'scrap' | 'morale'>>;
-  /** Forces a battle on resolution if true. */
   triggersBattle?: boolean;
-  /** Optional enemy key for the triggered battle. */
   enemyKey?: string;
 }
-
-export interface TradeEntry {
-  item: 'food' | 'fuel' | 'medicine' | 'ammo' | 'morale_item';
-  buyPrice: number;
-  sellPrice: number;
-}
-
-export interface TradePrices {
-  region: Region;
-  entries: TradeEntry[];
-}
-
-export type HuntingResult = 'perfect' | 'good' | 'miss';
 
 // ─── Dialogue Choices (Stream G) ─────────────────────────────────────────────
 
@@ -300,43 +284,4 @@ export interface SaveSlotInfo {
   savedAt?: number;
   playTimeMs?: number;
   sceneKey?: string;
-}
-
-// ─── World Map / Node Entry (Stream B) ───────────────────────────────────────
-
-export interface NodeEntryData {
-  sceneKey: string;
-  /** Optional payload forwarded to the launched scene's init(). */
-  data?: Record<string, unknown>;
-}
-
-// ─── Battle — extensions for Stream D ────────────────────────────────────────
-
-export interface PassiveEffect {
-  /** Character id the passive belongs to. */
-  characterId: string;
-  /** Description shown in UI. */
-  description: string;
-  /** Called once when the owning character is added to battle. */
-  onBattleStart?: (ctx: unknown) => void;
-  /** Called every ATB tick. Returns true if the effect produced a visible change. */
-  onTick?: (ctx: unknown) => boolean;
-  /** Called before the owning character's action resolves. */
-  onBeforeAction?: (ctx: unknown) => void;
-  /** Called on battle end. */
-  onBattleEnd?: (ctx: unknown, victory: boolean) => void;
-}
-
-export interface ReinforcementSpec {
-  enemyKey: string;
-  /** Row to spawn in. */
-  row?: 'front' | 'back';
-}
-
-export interface ComboBonusEffect {
-  comboId: string;
-  /** Free-form description — shown under the combo flash. */
-  description: string;
-  /** Called immediately after the combo is detected. */
-  resolve: (ctx: unknown) => void;
 }
