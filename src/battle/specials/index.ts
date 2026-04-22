@@ -1,21 +1,10 @@
-import { executeRally }       from './Rally.js';
-import { onLastStandCheck }   from './LastStand.js';
-import { executeOverclock }   from './Overclock.js';
-import { executeSystemCrash } from './SystemCrash.js';
-import { executeControl }     from './Control.js';
-
 /**
- * Dispatch map keyed by tech id. TechExecutor.execute() looks up special-
- * kind techs here and calls the registered function with the battle context.
- *
- * Stream D wires full context-aware implementations; Phase B gives callers
- * a non-crashing import target.
+ * specials/index.ts — re-exports all special tech executors.
+ * Import from here, not from individual files.
  */
-export const SPECIAL_DISPATCH: Readonly<Record<string, (ctx: unknown) => void>> = {
-  rally:        executeRally,
-  last_stand:   onLastStandCheck,
-  overclock:    executeOverclock,
-  system_crash: executeSystemCrash,
-  rewire:       executeControl,
-  control:      executeControl,
-};
+
+export { executeRally }                                from './Rally.js';
+export { tryLastStand }                                from './LastStand.js';
+export { applyOverclock, getOverclockMultiplier, tickOverclock } from './Overclock.js';
+export { executeSystemCrash }                          from './SystemCrash.js';
+export { applyControl, tickControl, isControlled }     from './Control.js';

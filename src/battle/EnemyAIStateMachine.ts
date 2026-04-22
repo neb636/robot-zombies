@@ -152,8 +152,6 @@ export class EnemyAIStateMachine {
   }
 
   private _spawnReinforcement(manager: BattleManager): void {
-    // TODO in a future milestone: add a second Enemy to the manager.enemies array.
-    // For now, show a warning dialogue only.
-    manager.dialogueManager.show('SYSTEM', ['A Compliance Drone has been dispatched!']);
+    manager.spawnReinforcement('compliance_drone');
   }
 }

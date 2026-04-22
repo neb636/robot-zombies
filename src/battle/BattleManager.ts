@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
 import { Enemy }             from '../entities/Enemy.js';
+import { spawnReinforcement as _spawnReinforcement } from './EnemyReinforcement.js';
+import { checkCombo, dispatchComboBonus }            from './ComboSystem.js';
 import { BattleStateMachine } from './BattleStateMachine.js';
 import { ATBTickingState }   from './states/ATBTickingState.js';
 import { PlayerTurnState }   from './states/PlayerTurnState.js';
@@ -40,6 +42,8 @@ export class BattleManager {
   readonly fsm:             BattleStateMachine;
 
   readonly allies: ATBCombatant[] = [];
+  /** Reinforcement enemies spawned mid-battle (tracked; not yet ticked by ATB). */
+  readonly reinforcements: Enemy[] = [];
   readonly scripted: boolean;
   readonly bossConfig: BossConfig | null;
   currentBossPhase = 0;
@@ -52,6 +56,9 @@ export class BattleManager {
 
   /** Set of discovered combo IDs (populated in 2G). */
   discoveredCombos: Set<string> = new Set();
+
+  /** Tracks whether Last Stand passive has already fired this battle. */
+  lastStandActive: boolean = false;
 
   /** Set before entering ANIMATING state; called with a done() callback. */
   animationCallback: ((done: () => void) => void) | null = null;
@@ -145,6 +152,37 @@ export class BattleManager {
     }
 
     return null;
+  }
+
+  /**
+   * Spawn a reinforcement enemy by key.
+   * Delegates to EnemyReinforcement.spawnReinforcement.
+   */
+  spawnReinforcement(enemyKey: string): void {
+    _spawnReinforcement(enemyKey, this);
+  }
+
+  /**
+   * Record a party action for combo detection and dispatch any bonus effect.
+   * Use this in place of the inline _recordAndCheckCombo in PlayerTurnState
+   * once the orchestrator wires the call sites.
+   *
+   * @param actorName  Lowercase name fragment of the acting combatant
+   * @returns          The combo label if one fired, or null
+   */
+  recordAndDispatchCombo(actorName: string): string | null {
+    const now  = performance.now();
+    const prev = this.lastPartyAction;
+
+    const combo = checkCombo(actorName, now, prev?.name ?? null, prev?.ts ?? null);
+    if (combo) {
+      this.hud.flashComboName(combo.label);
+      this.discoveredCombos.add(combo.id);
+      dispatchComboBonus(combo, this, this.enemy);
+    }
+
+    this.lastPartyAction = { name: actorName, ts: now };
+    return combo?.label ?? null;
   }
 
   /** Legacy helper kept for states that haven't migrated to ATB yet. */
