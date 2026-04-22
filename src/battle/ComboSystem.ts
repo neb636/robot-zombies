@@ -5,11 +5,23 @@
  * a combo table entry, the combo fires (triggering a HUD flash and optional
  * enhanced effects).
  *
- * Combo table (first three implemented):
- *   BLACKOUT        — Maya + Player   (EMP stun → Player gets 2× crit on stunned target)
- *   RIGHTEOUS FIRE  — Jerome + Elias
- *   DEAD WEIGHT     — Deja + Player
+ * Combo table:
+ *   BLACKOUT        — Maya + Player   (EMP stun → Player gets guaranteed crit)
+ *   RIGHTEOUS FIRE  — Jerome + Elias  (heal mid-swing for full HP output)
+ *   DEAD WEIGHT     — Deja + Player   (Player strikes uncountered)
+ *   GHOST & SHELL   — Deja + Dr.Chen  (enemy stunned + hacked simultaneously)
+ *   THE SERMON      — Jerome + Maya   (full debuff clear + enemy tags revealed)
  */
+import {
+  executeBlackout,
+  executeRighteousFire,
+  executeDeadWeight,
+  executeGhostAndShell,
+  executeTheSermon,
+}                           from './combo/bonuses/index.js';
+import type { ATBCombatant } from '../types.js';
+import type { Enemy }        from '../entities/Enemy.js';
+import type { BattleManager } from './BattleManager.js';
 
 export interface ComboDefinition {
   readonly id:    string;
@@ -56,4 +68,67 @@ export function checkCombo(
   }
 
   return null;
+}
+
+/**
+ * Dispatch the bonus effect for a detected combo.
+ *
+ * Finds the two combatants from manager by name fragment,
+ * then calls the appropriate bonus executor.
+ *
+ * @param combo    The detected combo definition
+ * @param manager  The active BattleManager
+ * @param enemy    The current enemy target
+ */
+export function dispatchComboBonus(
+  combo:   ComboDefinition,
+  manager: BattleManager,
+  enemy:   Enemy,
+): void {
+  switch (combo.id) {
+    case 'blackout': {
+      const player = manager.player as ATBCombatant;
+      executeBlackout(player, enemy, manager);
+      break;
+    }
+    case 'righteous_fire': {
+      const jerome = _findAlly('jerome', manager);
+      const elias  = _findAlly('elias',  manager);
+      if (jerome && elias) {
+        executeRighteousFire(jerome, elias, enemy, manager);
+      }
+      break;
+    }
+    case 'dead_weight': {
+      const player = manager.player as ATBCombatant;
+      executeDeadWeight(player, enemy, manager);
+      break;
+    }
+    case 'ghost_shell': {
+      const deja = _findAlly('deja', manager);
+      const chen = _findAlly('chen', manager);
+      if (deja && chen) {
+        executeGhostAndShell(deja, chen, enemy, manager);
+      }
+      break;
+    }
+    case 'the_sermon': {
+      const jerome = _findAlly('jerome', manager);
+      const maya   = _findAlly('maya',   manager);
+      if (jerome && maya) {
+        executeTheSermon(jerome, maya, enemy, manager);
+      }
+      break;
+    }
+    default:
+      break;
+  }
+}
+
+/** Find an ally by lowercase name fragment; returns null if not found. */
+function _findAlly(fragment: string, manager: BattleManager): ATBCombatant | null {
+  const found = manager.allies.find(a =>
+    a.name.toLowerCase().includes(fragment),
+  );
+  return found ?? null;
 }
