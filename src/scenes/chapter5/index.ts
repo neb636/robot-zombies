@@ -11,8 +11,26 @@
  *   MainframeCoreScene       → BoardroomAntechamberScene
  *   BoardroomAntechamberScene → BoardroomScene
  */
-export { ValleyApproachScene }       from './ValleyApproachScene.js';
-export { CampusPerimeterScene }      from './CampusPerimeterScene.js';
-export { MainframeCoreScene }        from './MainframeCoreScene.js';
-export { BoardroomAntechamberScene } from './BoardroomAntechamberScene.js';
-export { BoardroomScene }            from './BoardroomScene.js';
+import Phaser from 'phaser';
+import { ValleyApproachScene }       from './ValleyApproachScene.js';
+import { CampusPerimeterScene }      from './CampusPerimeterScene.js';
+import { MainframeCoreScene }        from './MainframeCoreScene.js';
+import { BoardroomAntechamberScene } from './BoardroomAntechamberScene.js';
+import { BoardroomScene }            from './BoardroomScene.js';
+
+export {
+  ValleyApproachScene,
+  CampusPerimeterScene,
+  MainframeCoreScene,
+  BoardroomAntechamberScene,
+  BoardroomScene,
+};
+
+/** Alias used by src/config.ts aggregator. */
+export const CHAPTER5_SCENES: Phaser.Types.Scenes.SceneType[] = [
+  ValleyApproachScene,
+  CampusPerimeterScene,
+  MainframeCoreScene,
+  BoardroomAntechamberScene,
+  BoardroomScene,
+];

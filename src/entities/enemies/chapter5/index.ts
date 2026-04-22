@@ -18,3 +18,7 @@ export {
   ELISE_LOW_MORALE_THRESHOLD,
   ELISE_LOW_MORALE_ATK_BONUS,
 } from './eliseVossCh5.js';
+
+/** Aggregated registry map. Ch.5 canonical elise_voss is already in base.ts. */
+import type { EnemyConfigMap } from '../types.js';
+export const CHAPTER5_ENEMIES: EnemyConfigMap = {};
