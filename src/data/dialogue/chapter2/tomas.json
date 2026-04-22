@@ -1,0 +1,42 @@
+{
+  "deep_south": {
+    "tomas": {
+      "offer": {
+        "intro": [
+          "Tomas Reyes. You want to cross the Mississippi.",
+          "I control the only crossing that won't get you killed.",
+          "The bridge enforcers report to the Governor. The ferry costs fuel we don't have.",
+          "But I have a third option.",
+          "I clear your name from the Governor's log. Completely.",
+          "In return: you carry a package to Vault 49. Don't open it. Don't ask what it is.",
+          "Simple."
+        ],
+        "choice_prompt": "What do you say?",
+        "choice_accept": "We'll do it.",
+        "choice_decline": "No deal.",
+        "accept_response": [
+          "Smart.",
+          "Package is under the bar. Third bottle from the left.",
+          "Vault 49 is three days south through the bayou.",
+          "Watch the water at night.",
+          "I mean that."
+        ],
+        "decline_response": [
+          "Suit yourself.",
+          "The bridge is northeast.",
+          "Good luck with the enforcers.",
+          "They're thorough."
+        ]
+      },
+      "accepted_followup": [
+        "You're still here.",
+        "The package doesn't get lighter the longer you look at it.",
+        "Go."
+      ],
+      "after_cross": [
+        "The debt is cleared.",
+        "We never met."
+      ]
+    }
+  }
+}
