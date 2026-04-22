@@ -1,0 +1,202 @@
+{
+  "arriving": {
+    "player": [
+      "The tower's been broadcasting on a dead frequency.",
+      "Someone's been up there a long time."
+    ],
+    "maya": [
+      "Sentinel Spire is docked at the top.",
+      "It's what's jamming the signal.",
+      "We take it out, the broadcast goes live."
+    ]
+  },
+
+  "radio_tower.jerome.recruitment": {
+    "jerome": [
+      "I heard you coming from the second floor.",
+      "Big footsteps. Tired footsteps.",
+      "Come in. I'll put something on."
+    ],
+    "player": [
+      "You're Jerome."
+    ],
+    "jerome": [
+      "That's what they tell me.",
+      "NFL, class of '09. Before all that stopped mattering.",
+      "Now I broadcast.",
+      "The signal doesn't go far. Maybe fifty miles on a good night.",
+      "But it goes.",
+      "\"This is WKFR, Kansas. Human beings still here. Still choosing.\"",
+      "Every night at nine."
+    ],
+    "maya": [
+      "The Spire is blocking you.",
+      "We're going up to kill it.",
+      "You're big. We could use big."
+    ],
+    "jerome": [
+      "Corinthians 13:7.",
+      "\"Beareth all things, believeth all things, hopeth all things, endureth all things.\"",
+      "I've been waiting for someone to come up that road for eight months.",
+      "I'll get my coat."
+    ],
+    "system": [
+      "JEROME joined the party."
+    ]
+  },
+
+  "radio_tower.ghost.reveal": {
+    "system": [
+      "The static crackles.",
+      "A voice, flat and distant and not from the speaker:",
+      "\"You're being watched.\"",
+      "\"Have been since Appalachia.\"",
+      "\"The Spire already knows you're here.\""
+    ],
+    "player": [
+      "Who's there?"
+    ],
+    "ghost": [
+      "Someone who was watching before you knew there was something to watch.",
+      "The Spire will try to lock you out on floor three.",
+      "There's a panel on the east wall. Blue wire. Not red.",
+      "Trust the blue wire."
+    ],
+    "maya": [
+      "How do you know that?"
+    ],
+    "ghost": [
+      "Because I put it there."
+    ],
+    "system_post": [
+      "Static. Then nothing."
+    ],
+    "jerome": [
+      "...Interesting.",
+      "Lord works in mysterious ways.",
+      "Though I'll admit that was unusually mysterious."
+    ]
+  },
+
+  "pre_spire": {
+    "system": [
+      "The top of the tower.",
+      "The Spire fills the platform.",
+      "It's been broadcasting silence for three months.",
+      "It turns to face you."
+    ],
+    "spire": [
+      "BROADCAST SIGNAL: SUBMIT. FREQUENCY: ALL BANDS.",
+      "YOU ARE STATIC. I AM THE SIGNAL.",
+      "JAMMING RESISTANCE FREQUENCIES. COMPLIANCE IMMINENT."
+    ],
+    "jerome": [
+      "Then let's make some noise."
+    ]
+  },
+
+  "spire_defeated": {
+    "system": [
+      "The Spire collapses.",
+      "The jamming frequency goes dead.",
+      "Jerome walks to the transmitter."
+    ],
+    "jerome": [
+      "This is WKFR, Kansas.",
+      "Human beings still here.",
+      "Still choosing.",
+      "..."
+    ],
+    "system_post": [
+      "He doesn't say anything else for a long moment.",
+      "Maya puts a hand on his shoulder.",
+      "The signal goes out to everything that can hear it.",
+      "Fifty miles. Maybe more."
+    ]
+  },
+
+  "radio_tower.sam.cameo": {
+    "system": [
+      "The radio crackles once more while Jerome works the transmitter.",
+      "A different voice. Younger. Male."
+    ],
+    "sam": [
+      "WKFR — Kansas, right?",
+      "We're picking you up clear in Flagstaff.",
+      "We didn't know anyone was still out there."
+    ],
+    "jerome": [
+      "Son, there are more of us than they want you to think.",
+      "Where are you?"
+    ],
+    "sam": [
+      "Arizona. Desert.",
+      "We've been here two years.",
+      "We thought we were alone."
+    ],
+    "jerome": [
+      "You're not.",
+      "Not anymore."
+    ],
+    "system_post": [
+      "The signal holds for four more minutes.",
+      "Then interference. Then quiet.",
+      "Jerome doesn't turn the transmitter off."
+    ]
+  },
+
+  "radio_tower.tilly.speaks": {
+    "system": [
+      "The frequency shifts.",
+      "A woman's voice. Old. Clear."
+    ],
+    "tilly": [
+      "Jerome.",
+      "You told me once there was a cost to everything worth doing.",
+      "I didn't believe you then.",
+      "I believe you now.",
+      "He said it wasn't worth the cost.",
+      "He was wrong.",
+      "We're still saying so."
+    ],
+    "jerome": [
+      "Tilly.",
+      "I thought you —"
+    ],
+    "tilly": [
+      "Keep broadcasting.",
+      "Don't stop."
+    ],
+    "system_post": [
+      "The frequency goes to static.",
+      "Jerome stands at the transmitter for a long time.",
+      "Nobody asks who Tilly is.",
+      "Some things you don't need to know to understand."
+    ]
+  },
+
+  "gideon_hint_echo": {
+    "gideon_radio": [
+      "Gideon. Fuel depot in Harvest Town.",
+      "You're still alive. Good.",
+      "Echo is a Ch.4 signal. Western corridor.",
+      "If you find the Hermit — you'll understand when you do — tell him the back frequency still works.",
+      "He built it. He'll know what to do with it."
+    ]
+  },
+
+  "departure": {
+    "player": [
+      "East or west from here?"
+    ],
+    "maya": [
+      "West.",
+      "Always west.",
+      "Rockies next."
+    ],
+    "jerome": [
+      "\"Endureth all things.\"",
+      "Let's go."
+    ]
+  }
+}
