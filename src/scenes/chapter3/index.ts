@@ -11,7 +11,19 @@
  * (Per constraint: this file does NOT edit config.ts — caller must do so.)
  */
 
-export { OpenHighwayScene }  from './OpenHighwayScene.js';
-export { HarvestTownScene, CH3_FLAGS } from './HarvestTownScene.js';
-export { StormCorridorScene } from './StormCorridorScene.js';
-export { RadioTowerScene }    from './RadioTowerScene.js';
+import Phaser from 'phaser';
+import { OpenHighwayScene }   from './OpenHighwayScene.js';
+import { HarvestTownScene }   from './HarvestTownScene.js';
+import { StormCorridorScene } from './StormCorridorScene.js';
+import { RadioTowerScene }    from './RadioTowerScene.js';
+
+export { OpenHighwayScene, HarvestTownScene, StormCorridorScene, RadioTowerScene };
+export { CH3_FLAGS } from './HarvestTownScene.js';
+
+/** Alias used by src/config.ts aggregator. */
+export const CHAPTER3_SCENES: Phaser.Types.Scenes.SceneType[] = [
+  OpenHighwayScene,
+  HarvestTownScene,
+  StormCorridorScene,
+  RadioTowerScene,
+];
