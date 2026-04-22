@@ -1,0 +1,13 @@
+{
+  "region": "rockies",
+  "description": "High altitude safe houses. Medicine is desperately scarce up here.",
+  "entries": [
+    { "item": "food",        "buyPrice": 5,  "sellPrice": 3 },
+    { "item": "fuel",        "buyPrice": 12, "sellPrice": 6 },
+    { "item": "medicine",    "buyPrice": 15, "sellPrice": 6 },
+    { "item": "ammo",        "buyPrice": 6,  "sellPrice": 3 },
+    { "item": "morale_item", "buyPrice": 13, "sellPrice": 0 }
+  ],
+  "moraleItemName": "Wool blanket",
+  "moraleItemFlavor": "Heavy. Properly warm. Dr. Chen wraps it around his shoulders and looks younger for a moment."
+}

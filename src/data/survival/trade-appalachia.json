@@ -1,0 +1,13 @@
+{
+  "region": "appalachia",
+  "description": "Ridge folk trade. Food is easy to come by; fuel is scarce up here.",
+  "entries": [
+    { "item": "food",        "buyPrice": 3,  "sellPrice": 4 },
+    { "item": "fuel",        "buyPrice": 18, "sellPrice": 8 },
+    { "item": "medicine",    "buyPrice": 8,  "sellPrice": 4 },
+    { "item": "ammo",        "buyPrice": 6,  "sellPrice": 3 },
+    { "item": "morale_item", "buyPrice": 12, "sellPrice": 0 }
+  ],
+  "moraleItemName": "Pipe tobacco",
+  "moraleItemFlavor": "Elias identifies the blend without being asked. He doesn't explain how he knows."
+}
