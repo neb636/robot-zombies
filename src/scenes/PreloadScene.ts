@@ -1,5 +1,40 @@
 import Phaser from 'phaser';
 import { jumpToScene } from '../utils/devJump.js';
+import {
+  // regions
+  generateBostonTiles,
+  generateAppalachiaTiles,
+  generateDeepSouthTiles,
+  generateGreatPlainsTiles,
+  generateRockiesTiles,
+  generateSiliconValleyTiles,
+  // npcs
+  generateMarcusSprite,
+  generateMayaSprite,
+  generateEliasSprite,
+  generateDejaSprite,
+  generateJeromeSprite,
+  generateDrChenSprite,
+  generateSurvivorSprite,
+  generateMerchantSprite,
+  generateConvertedSprite,
+  generateChildSprite,
+  generateFarmhandSprite,
+  // enemies
+  generateComplianceDroneSprite,
+  generateEnforcerUnitSprite,
+  generatePatrolBotSprite,
+  generateEnforcerHeavySprite,
+  generateSentinelDroneSprite,
+  generateSentinelAerialSprite,
+  generateMiningCrawlerSprite,
+  generateBayouStalkerSprite,
+  generateAerialSentinelSprite,
+  generateStormWalkerSprite,
+  generateSIEliteSprite,
+  generateConvertedFighterSprite,
+  generateComplianceWardenBetaSprite,
+} from '../art/generators/index.js';
 
 /**
  * PreloadScene — loads all game assets with a progress bar.
@@ -58,6 +93,56 @@ export class PreloadScene extends Phaser.Scene {
     if (!this.textures.exists('sentinel_spire'))  this._generateSentinelSpireTexture();
     if (!this.textures.exists('gate_colossus'))   this._generateGateColossusTexture();
     if (!this.textures.exists('elise_voss'))      this._generateEliseVossTexture();
+
+    // ── Region tileset generators ──────────────────────────────────────────
+    if (!this.textures.exists('tileset_boston'))         generateBostonTiles(this);
+    if (!this.textures.exists('tileset_appalachia'))     generateAppalachiaTiles(this);
+    if (!this.textures.exists('tileset_deep_south'))     generateDeepSouthTiles(this);
+    if (!this.textures.exists('tileset_great_plains'))   generateGreatPlainsTiles(this);
+    if (!this.textures.exists('tileset_rockies'))        generateRockiesTiles(this);
+    if (!this.textures.exists('tileset_silicon_valley')) generateSiliconValleyTiles(this);
+
+    // ── NPC sprite generators ──────────────────────────────────────────────
+    if (!this.textures.exists('npc_marcus'))    generateMarcusSprite(this);
+    if (!this.textures.exists('npc_maya'))      generateMayaSprite(this);
+    if (!this.textures.exists('npc_elias'))     generateEliasSprite(this);
+    if (!this.textures.exists('npc_deja'))      generateDejaSprite(this);
+    if (!this.textures.exists('npc_jerome'))    generateJeromeSprite(this);
+    if (!this.textures.exists('npc_dr_chen'))   generateDrChenSprite(this);
+    if (!this.textures.exists('npc_survivor'))  generateSurvivorSprite(this);
+    if (!this.textures.exists('npc_merchant'))  generateMerchantSprite(this);
+    if (!this.textures.exists('npc_converted')) generateConvertedSprite(this);
+    if (!this.textures.exists('npc_child'))     generateChildSprite(this);
+    if (!this.textures.exists('npc_farmhand'))  generateFarmhandSprite(this);
+
+    // ── Enemy sprite generators ────────────────────────────────────────────
+    if (!this.textures.exists('enemy_compliance_drone'))
+      generateComplianceDroneSprite(this);
+    if (!this.textures.exists('enemy_enforcer_unit'))
+      generateEnforcerUnitSprite(this);
+    if (!this.textures.exists('enemy_patrol_bot'))
+      generatePatrolBotSprite(this);
+    if (!this.textures.exists('enemy_enforcer_heavy'))
+      generateEnforcerHeavySprite(this);
+    if (!this.textures.exists('enemy_sentinel_drone'))
+      generateSentinelDroneSprite(this);
+    if (!this.textures.exists('enemy_sentinel_aerial'))
+      generateSentinelAerialSprite(this);
+    if (!this.textures.exists('enemy_mining_crawler'))
+      generateMiningCrawlerSprite(this);
+    if (!this.textures.exists('enemy_bayou_stalker'))
+      generateBayouStalkerSprite(this);
+    if (!this.textures.exists('enemy_aerial_sentinel'))
+      generateAerialSentinelSprite(this);
+    if (!this.textures.exists('enemy_storm_walker'))
+      generateStormWalkerSprite(this);
+    if (!this.textures.exists('enemy_si_elite'))
+      generateSIEliteSprite(this);
+    if (!this.textures.exists('enemy_converted_fighter'))
+      generateConvertedFighterSprite(this);
+    if (!this.textures.exists('enemy_compliance_warden_beta'))
+      generateComplianceWardenBetaSprite(this);
+
     this._registerAnimations();
 
     if (import.meta.env.DEV) {
