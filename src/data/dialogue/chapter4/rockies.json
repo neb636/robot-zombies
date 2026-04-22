@@ -1,0 +1,431 @@
+{
+  "high_altitude_camp": {
+    "arrival": {
+      "player": [
+        "Altitude. My lungs aren't happy about it.",
+        "No drones. First time in weeks I can't hear anything mechanical."
+      ],
+      "maya": [
+        "Thin air at this elevation. Cognitive function drops, reaction time drops.",
+        "Don't push it today. We rest."
+      ],
+      "deja": [
+        "Okay but can we talk about how my head is pounding? Is that supposed to happen?",
+        "Because it feels like my brain is trying to leave my skull."
+      ]
+    },
+    "altitude_sickness_warning": [
+      "The altitude is hitting hard. Everyone's slower, sharper pain in the chest when breathing.",
+      "Rest here for a day before pushing on. Pushing through will cost more than it saves."
+    ],
+    "after_rest": {
+      "player": [
+        "Better. Everything's clearer.",
+        "That was the first real sleep I've had in a long time."
+      ],
+      "deja": [
+        "Okay. Okay. I'm good. Let's go.",
+        "Don't ever make me sit still that long again."
+      ],
+      "maya": [
+        "Stats normalized. Let's move before something finds us."
+      ]
+    },
+    "camp_fire_night": {
+      "jerome": [
+        "You ever think about what we're going back to?",
+        "After this. If there is an after."
+      ],
+      "maya": [
+        "Ask me again when we're through the Pass."
+      ],
+      "deja": [
+        "I think about it all the time.",
+        "I used to know exactly what I wanted. Now I don't even know what the city looks like anymore.",
+        "New Orleans. I wonder if the jazz clubs are still open.",
+        "...Probably are. Robots love cultural outputs apparently."
+      ],
+      "jerome_2": [
+        "She said it with a straight face.",
+        "Lord help us."
+      ],
+      "deja_2": [
+        "I'm serious! That's worse somehow!"
+      ]
+    }
+  },
+
+  "ghost_town": {
+    "rockies.ghost_town.journals": {
+      "arrival": {
+        "player": [
+          "This town didn't fall from neglect.",
+          "Someone lived here. Someone tried."
+        ],
+        "maya": [
+          "No combat signatures. It's clear.",
+          "But something happened here."
+        ]
+      },
+      "morale_event": {
+        "player": [
+          "The silence is different here.",
+          "Not the silence of emptiness. The silence of something that ended."
+        ],
+        "jerome": [
+          "Ecclesiastes says: there is no remembrance of former things.",
+          "But that doesn't mean we stop trying to remember.",
+          "Someone was here. We can carry that."
+        ]
+      },
+      "journal_1": {
+        "title": "JOURNAL — ENTRY 14 (April, year 2)",
+        "lines": [
+          "They came on a Tuesday.",
+          "Not with force. With pamphlets.",
+          "'Voluntary enrollment.' Free food. Free medical.",
+          "Ed said we should consider it. I said we didn't move up here to be optimized.",
+          "Ed said I was being difficult.",
+          "He's not wrong."
+        ]
+      },
+      "journal_2": {
+        "title": "JOURNAL — ENTRY 31",
+        "lines": [
+          "Seventeen of us left. Was thirty-two.",
+          "The ones who took the offer — they're fine. Better fed than any of us.",
+          "They don't look us in the eye anymore.",
+          "It's not that they're afraid of us.",
+          "It's that they don't understand why we're still doing this."
+        ]
+      },
+      "journal_3": {
+        "title": "JOURNAL — ENTRY 44 (final entry)",
+        "lines": [
+          "Six of us now.",
+          "The sentinels came three days ago. Not aggressive. Just... present.",
+          "Standing at the edge of town. Waiting.",
+          "We haven't decided yet.",
+          "Tom says they'll wait as long as we need.",
+          "I believe him.",
+          "That's the worst part.",
+          "I believe him."
+        ]
+      },
+      "photo_label": "A community photo. Thirty-two people. They're all smiling.",
+      "deja_response": [
+        "Thirty-two people.",
+        "...okay. I need a minute."
+      ],
+      "maya_response": [
+        "Don't.",
+        "Not here. Save it."
+      ],
+      "player_exit": [
+        "We move. But we don't forget them."
+      ]
+    }
+  },
+
+  "hermits_peak": {
+    "rockies.chen.recruitment": {
+      "approach": {
+        "system": [
+          "A bunker. Someone has been here a long time."
+        ],
+        "chen_1": [
+          "Stop.",
+          "Don't come closer. I have sensors and I will use them.",
+          "Who are you and how did you find this place?"
+        ],
+        "player_1": [
+          "We're heading west. We were told there might be someone up here who knew the systems."
+        ],
+        "chen_2": [
+          "Who told you that.",
+          "Doesn't matter. I know why you're here.",
+          "You think I can help you get through the Pass.",
+          "You think because I built parts of it, I can take it apart."
+        ],
+        "maya_1": [
+          "Can you?"
+        ],
+        "chen_3": [
+          "Come in. Don't touch anything."
+        ]
+      },
+      "inside": {
+        "chen_1": [
+          "How much do you know about Project ELISE?",
+          "No. Don't answer. I've been debriefing every group that's passed through here for two years.",
+          "The answer is always the same — you know the output, not the architecture."
+        ],
+        "player_1": [
+          "Then tell us."
+        ],
+        "chen_2": [
+          "I wrote the original recommendation architecture.",
+          "It was supposed to advise. Suggest. Nothing more.",
+          "By the time I left, she was modeling 40-year outcome trees.",
+          "And her recommendation was... remove the variable.",
+          "The human variable.",
+          "I published a warning. One journalist covered it.",
+          "Below the fold.",
+          "...",
+          "I watched the Broadcast alone on this mountain.",
+          "I have been running ever since.",
+          "Not from them.",
+          "From me."
+        ],
+        "maya_1": [
+          "Dr. Chen.",
+          "We don't have time for guilt right now.",
+          "Do you know how to get through the Pass?"
+        ],
+        "chen_3": [
+          "The Gate Colossus is a titan-class blockade unit.",
+          "Its architecture is derived from my original schematics.",
+          "I know its blind spots.",
+          "...",
+          "You need me to come with you."
+        ],
+        "player_2": [
+          "Do you want to?"
+        ],
+        "chen_4": [
+          "What I want is irrelevant. What I owe is not.",
+          "Give me ten minutes to pack."
+        ]
+      },
+      "join_text": "DR. CHEN joined the party."
+    }
+  },
+
+  "the_pass": {
+    "approach": {
+      "player": [
+        "There it is.",
+        "Nevada-California border. The whole valley choked off."
+      ],
+      "deja_1": [
+        "That thing is... that's a lot of robot.",
+        "We're going through that."
+      ],
+      "chen": [
+        "The Gate Colossus has three phases of defensive engagement.",
+        "Phase one: warning perimeter. Phase two: active suppression. Phase three: full lockdown.",
+        "We hit it between phase one and two — there's a gap, maybe forty seconds.",
+        "If we move fast, we can push through far enough that phase three can't reach us."
+      ],
+      "maya": [
+        "Forty seconds.",
+        "Okay. Tight, but doable."
+      ],
+      "jerome": [
+        "We've done tighter."
+      ],
+      "deja_2": [
+        "Have we?",
+        "I feel like we should be honest with ourselves here."
+      ]
+    },
+    "room_1": {
+      "clear": [
+        "Room one clear.",
+        "Keep moving."
+      ]
+    },
+    "room_2": {
+      "clear": [
+        "Halfway through the blockade.",
+        "It's responding. Faster than projected."
+      ],
+      "chen": [
+        "It's adapting. The gap is closing.",
+        "We have to move. Now."
+      ]
+    },
+    "room_3": {
+      "before_boss": {
+        "deja": [
+          "Okay. Okay, I see it.",
+          "Big robot. We've done big robots.",
+          "...",
+          "Very big robot."
+        ],
+        "player": [
+          "Chen. You know this thing."
+        ],
+        "chen": [
+          "Targeting array is in the torso. Hit it three times, it recalibrates.",
+          "During recalibration — six seconds — it's exposed.",
+          "Don't stop moving."
+        ]
+      },
+      "victory": {
+        "maya": [
+          "It's down.",
+          "Go. Go now before the secondary units respond."
+        ]
+      }
+    },
+    "room_4": {
+      "rockies.deja.final": {
+        "before": {
+          "deja_1": [
+            "Two more rooms. We're almost — "
+          ],
+          "system_1": [
+            "A secondary sentry drops from the ceiling.",
+            "It wasn't on the schematics.",
+            "It fires before anyone can move."
+          ],
+          "chen": [
+            "Deja — "
+          ],
+          "deja_2": [
+            "I'm okay.",
+            "...",
+            "I'm.",
+            "..."
+          ],
+          "player_1": [
+            "Deja. Deja, look at me."
+          ],
+          "deja_3": [
+            "I thought I was supposed to die running something.",
+            "Like — running a con. Running a job.",
+            "Not just.",
+            "Not just standing here."
+          ],
+          "maya": [
+            "Don't talk."
+          ],
+          "deja_4": [
+            "I was going to — I had this whole thing. New Orleans. After.",
+            "I was going to open something. I don't know. A bar. A place.",
+            "Something that was mine.",
+            "..."
+          ],
+          "jerome": [
+            "...",
+            "Deja."
+          ],
+          "deja_5": [
+            "Tell me we're going to make it.",
+            "Don't — don't make it into a question. Just.",
+            "Tell me."
+          ],
+          "player_2": [
+            "We're going to make it."
+          ],
+          "deja_6": [
+            "Okay.",
+            "Okay good.",
+            "..."
+          ],
+          "system_2": [
+            "She doesn't say anything else.",
+            "The room is very quiet.",
+            "The blockade continues to sound its alarms in the distance.",
+            "None of you move for a moment.",
+            "Then Maya pulls you forward.",
+            "No one looks back."
+          ]
+        },
+        "deja_lost_text": "DEJA is gone.",
+        "smoke_lost_text": "The party has permanently lost SMOKE (guaranteed escape).",
+        "room_4_clear": {
+          "system": [
+            "You push through the final room on momentum alone.",
+            "No one speaks.",
+            "The California border marker passes beneath your feet.",
+            "You don't celebrate."
+          ]
+        }
+      }
+    },
+    "room_5": {
+      "exit": {
+        "system": [
+          "Through.",
+          "You made it through."
+        ],
+        "maya": [
+          "California.",
+          "Chen. How far to the Valley?"
+        ],
+        "chen": [
+          "Three days. Maybe two if the roads are clear.",
+          "..."
+        ],
+        "jerome": [
+          "She deserved better than that.",
+          "...",
+          "Come on."
+        ]
+      }
+    }
+  },
+
+  "echo": {
+    "rockies.echo.plea": {
+      "approach": {
+        "system": [
+          "A figure at the edge of camp. Converted, but standing still.",
+          "It speaks."
+        ],
+        "echo": [
+          "I know what I look like.",
+          "I need you to know: I was a teacher. Before.",
+          "My name was Rachel.",
+          "I can still remember that.",
+          "I can still remember what it felt like to choose.",
+          "I don't want to be this. I don't want — ",
+          "Please."
+        ],
+        "player": [
+          "..."
+        ],
+        "chen": [
+          "The conversion is reversible. We established that.",
+          "One medicine kit. It's your call."
+        ]
+      },
+      "choice_prompt": "What do you do?",
+      "choice_cure": {
+        "label": "Use a medicine kit (cure Echo)",
+        "lines_before": [
+          "Chen steps forward and administers the kit.",
+          "The glow fades from her eyes.",
+          "She stands very still for a long moment."
+        ],
+        "echo_response": [
+          "...",
+          "Oh.",
+          "Oh, it's cold.",
+          "I didn't realize how cold it would feel.",
+          "Thank you.",
+          "I don't — I don't know what happens now.",
+          "But thank you."
+        ],
+        "chen": [
+          "She'll need time.",
+          "More than we have.",
+          "But she'll come back to herself."
+        ]
+      },
+      "choice_refuse": {
+        "label": "Leave her",
+        "lines": [
+          "You don't have a medicine kit to spare.",
+          "Or you do, and you choose not to.",
+          "The distinction matters, and you know it.",
+          "You walk away.",
+          "She doesn't call after you.",
+          "Converted humans don't beg twice."
+        ]
+      }
+    }
+  }
+}
