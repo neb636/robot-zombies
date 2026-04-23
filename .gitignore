@@ -1,4 +1,3 @@
-.claude/
 asset-viewer.html
 *.jpg
 !planning/bought-packs/**/*.jpg

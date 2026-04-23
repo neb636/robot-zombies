@@ -67,7 +67,6 @@ New scenes must be registered in `src/config.ts`.
 - **Dialogue** — `DialogueBox` already advances on tap/click. Keep it that way.
 - **Interaction prompts** — scenes with an E-key interact must also call `mobileControls.showInteract(label)` / `hideInteract()` and listen for the `interact:tap` CustomEvent alongside `keydown-E`.
 - **Hint text** — never write keyboard-only hint strings (e.g. "press ENTER"). Always include the tap/click equivalent.
-
 ---
 
 ## Scene flow (current)
