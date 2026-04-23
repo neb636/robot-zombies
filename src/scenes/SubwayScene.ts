@@ -110,7 +110,7 @@ export class SubwayScene extends Phaser.Scene {
     // Maya sprite
     this._mayaSprite = this.add.sprite(MAYA_X, MAYA_Y, 'maya', 0);
     this._mayaSprite.setOrigin(0.5, 1);
-    this._mayaSprite.setScale(1.4);
+    this._mayaSprite.setScale(1.55);
     this._mayaSprite.setDepth(5);
     if (this.anims.exists('maya-idle')) this._mayaSprite.play('maya-idle');
 

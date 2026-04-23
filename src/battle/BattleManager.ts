@@ -214,7 +214,7 @@ export class BattleManager {
     let sprite: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
     if (this.scene.textures.exists('hero')) {
       const sp = this.scene.add.sprite(width * 0.25, height * 0.55, 'hero');
-      sp.setScale(2);
+      sp.setScale(2.25);
       sp.play('hero-idle');
       sprite = sp;
     } else {

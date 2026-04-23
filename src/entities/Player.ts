@@ -30,7 +30,7 @@ export class Player extends AnimatedSprite {
     this.isMoving = false;
 
     this.sprite.setCollideWorldBounds(true);
-    this.sprite.setScale(1.4);
+    this.sprite.setScale(1.55);
 
     if (this.scene.textures.exists('hero')) {
       this.playAnim('hero-idle');

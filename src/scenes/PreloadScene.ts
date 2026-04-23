@@ -36,6 +36,13 @@ import {
   generateComplianceWardenBetaSprite,
 } from '../art/generators/index.js';
 
+const ROTATION_DIRS = [
+  'south', 'south-east', 'east', 'north-east',
+  'north', 'north-west', 'west', 'south-west',
+] as const;
+
+const CHARACTER_FRAME_SIZE = 108;
+
 /**
  * PreloadScene — loads all game assets with a progress bar.
  */
@@ -50,9 +57,13 @@ export class PreloadScene extends Phaser.Scene {
     this.load.tilemapTiledJSON('world-map', 'assets/tilemaps/world.json');
     this.load.image('world-tiles', 'assets/tilesets/world_tiles.png');
 
-    this.load.spritesheet('hero', 'assets/sprites/hero.png', {
-      frameWidth: 48, frameHeight: 48,
-    });
+    // ── Character rotation sprites (8-directional, 108×108 each) ──────────
+    for (const c of ['hero', 'maya'] as const) {
+      for (const dir of ROTATION_DIRS) {
+        this.load.image(`${c}_${dir}`, `assets/sprites/characters/${c}/rotations/${dir}.png`);
+      }
+    }
+
     this.load.spritesheet('robot_zombie', 'assets/sprites/robot_zombie.png', {
       frameWidth: 64, frameHeight: 64,
     });
@@ -85,8 +96,8 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   create(): void {
-    if (!this.textures.exists('hero'))            this._generateHeroTexture();
-    if (!this.textures.exists('maya'))            this._generateMayaTexture();
+    if (!this.textures.exists('hero'))            this._buildCharacterSpritesheet('hero');
+    if (!this.textures.exists('maya'))            this._buildCharacterSpritesheet('maya');
     if (!this.textures.exists('warden_alpha'))    this._generateWardenAlphaTexture();
     if (!this.textures.exists('excavator_prime')) this._generateExcavatorPrimeTexture();
     if (!this.textures.exists('the_governor'))    this._generateTheGovernorTexture();
@@ -160,410 +171,24 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   /**
-   * Hero — bearded survivor in navy sweater, jean shorts, black shoes.
-   * 48×48 per frame, 8 frames: [down×2, left×2, right×2, up×2].
+   * Build an 8-frame directional spritesheet (108×108 per frame) from individual
+   * rotation PNGs loaded in preload(). Frame order matches ROTATION_DIRS:
+   * 0:south 1:south-east 2:east 3:north-east 4:north 5:north-west 6:west 7:south-west.
    */
-  private _generateHeroTexture(): void {
-    const FW = 48, FH = 48;
-    const g = this.make.graphics({}, false);
+  private _buildCharacterSpritesheet(key: 'hero' | 'maya'): void {
+    const size = CHARACTER_FRAME_SIZE;
+    const canvas = this.textures.createCanvas(key, size * ROTATION_DIRS.length, size);
+    if (!canvas) return;
 
-    const SKIN     = 0xe6b890;
-    const SKIN_DK  = 0xb08460;
-    const HAIR     = 0x4a2e14;
-    const HAIR_HL  = 0x6a4220;
-    const BEARD    = 0x2a1608;
-    const SWEATER  = 0x1a2442;
-    const SWEATER_D= 0x10182e;
-    const DENIM    = 0x5478b0;
-    const DENIM_D  = 0x3a568a;
-    const SHOE     = 0x0e0e0e;
-    const EYE      = 0x1a1a1a;
-    const MOUTH    = 0x7a3a22;
-
-    const frames: Array<['down' | 'left' | 'right' | 'up', 0 | 1]> = [
-      ['down', 0], ['down', 1],
-      ['left', 0], ['left', 1],
-      ['right', 0], ['right', 1],
-      ['up',   0], ['up',   1],
-    ];
-
-    const drawHeroFront = (cx: number): void => {
-      // hair (back halo + top)
-      g.fillStyle(HAIR);
-      g.fillRect(cx - 7, 3, 14, 4);
-      g.fillRect(cx - 8, 5, 16, 3);
-      g.fillRect(cx - 8, 7, 3, 6);
-      g.fillRect(cx + 5, 7, 3, 6);
-      // face
-      g.fillStyle(SKIN);
-      g.fillRect(cx - 5, 6, 10, 9);
-      g.fillRect(cx - 6, 8, 1, 5);
-      g.fillRect(cx + 5, 8, 1, 5);
-      // hair tousle highlights
-      g.fillStyle(HAIR_HL);
-      g.fillRect(cx - 4, 4, 3, 1);
-      g.fillRect(cx + 1, 4, 3, 1);
-      // eyes
-      g.fillStyle(EYE);
-      g.fillRect(cx - 4, 9, 2, 2);
-      g.fillRect(cx + 2, 9, 2, 2);
-      // beard
-      g.fillStyle(BEARD);
-      g.fillRect(cx - 6, 12, 12, 3);
-      g.fillRect(cx - 5, 14, 10, 2);
-      g.fillRect(cx - 7, 11, 2, 3);
-      g.fillRect(cx + 5, 11, 2, 3);
-      // mouth inside beard
-      g.fillStyle(MOUTH);
-      g.fillRect(cx - 1, 13, 3, 1);
-    };
-
-    const drawHeroBack = (cx: number): void => {
-      // full head of hair
-      g.fillStyle(HAIR);
-      g.fillRect(cx - 7, 3, 14, 11);
-      g.fillRect(cx - 8, 6, 16, 7);
-      // hair highlights
-      g.fillStyle(HAIR_HL);
-      g.fillRect(cx - 5, 4, 3, 1);
-      g.fillRect(cx + 1, 4, 3, 1);
-      g.fillRect(cx - 2, 7, 4, 1);
-      // neck
-      g.fillStyle(SKIN);
-      g.fillRect(cx - 2, 14, 4, 2);
-    };
-
-    const drawHeroProfile = (cx: number, facingLeft: boolean): void => {
-      const s = facingLeft ? -1 : 1;
-      // hair
-      g.fillStyle(HAIR);
-      g.fillRect(cx - 6, 3, 12, 4);
-      g.fillRect(cx - 6, 5, 12, 3);
-      g.fillRect(cx - 6 + (facingLeft ? 0 : 10), 5, 2, 7);
-      // face profile
-      g.fillStyle(SKIN);
-      g.fillRect(cx - 5, 6, 10, 9);
-      // nose bump
-      g.fillStyle(SKIN_DK);
-      g.fillRect(cx + 5 * s, 9, 1, 2);
-      // hair highlight
-      g.fillStyle(HAIR_HL);
-      g.fillRect(cx - 3, 4, 3, 1);
-      g.fillRect(cx + 1, 4, 3, 1);
-      // eye (single, facing direction)
-      g.fillStyle(EYE);
-      g.fillRect(cx + 2 * s, 9, 2, 2);
-      // beard
-      g.fillStyle(BEARD);
-      g.fillRect(cx - 5, 12, 10, 3);
-      g.fillRect(cx - 5, 14, 9, 2);
-      g.fillRect(cx - 6 + (facingLeft ? 0 : 10), 11, 2, 3);
-    };
-
-    frames.forEach(([dir, leg], i) => {
-      const ox = i * FW;
-      const cx = ox + FW / 2;
-
-      // shadow
-      g.fillStyle(0x000000, 0.22);
-      g.fillEllipse(cx, 46, 20, 6);
-
-      const la = leg === 0 ? 1 : -1;
-      const ra = -la;
-
-      if (dir === 'down' || dir === 'up') {
-        // shoes (with leg-alternation offset)
-        g.fillStyle(SHOE);
-        g.fillRect(cx - 7, 43 + la, 6, 3);
-        g.fillRect(cx + 1, 43 + ra, 6, 3);
-        // shins (skin between shorts hem and shoes)
-        g.fillStyle(SKIN);
-        g.fillRect(cx - 6, 38 + la, 4, 5);
-        g.fillRect(cx + 2, 38 + ra, 4, 5);
-        // denim shorts
-        g.fillStyle(DENIM);
-        g.fillRect(cx - 8, 28, 16, 11);
-        g.fillStyle(DENIM_D);
-        g.fillRect(cx - 8, 37, 16, 2); // rolled cuff shadow
-        g.fillRect(cx - 1, 28, 2, 11); // inseam
-        // sweater torso
-        g.fillStyle(SWEATER);
-        g.fillRect(cx - 9, 16, 18, 13);
-        g.fillStyle(SWEATER_D);
-        g.fillRect(cx - 9, 27, 18, 2); // hem
-        // arms
-        g.fillStyle(SWEATER);
-        g.fillRect(cx - 13, 17, 4, 11);
-        g.fillRect(cx + 9,  17, 4, 11);
-        // hands
-        g.fillStyle(SKIN);
-        g.fillRect(cx - 13, 27, 4, 3);
-        g.fillRect(cx + 9,  27, 4, 3);
-        // neck
-        g.fillStyle(SKIN);
-        g.fillRect(cx - 2, 15, 4, 2);
-
-        if (dir === 'down') {
-          drawHeroFront(cx);
-        } else {
-          drawHeroBack(cx);
-        }
-
-      } else {
-        const facingLeft = dir === 'left';
-        const s = facingLeft ? -1 : 1;
-
-        // shoes (side-on, one foot ahead)
-        g.fillStyle(SHOE);
-        g.fillRect(cx - 5 + (leg === 0 ? -1 * s : 2 * s), 43, 8, 3);
-        // shins
-        g.fillStyle(SKIN);
-        g.fillRect(cx - 4, 38, 3, 5);
-        g.fillRect(cx + 1, 38, 3, 5);
-        // shorts (narrower silhouette)
-        g.fillStyle(DENIM);
-        g.fillRect(cx - 5, 28, 10, 11);
-        g.fillStyle(DENIM_D);
-        g.fillRect(cx - 5, 37, 10, 2);
-        // sweater torso (profile — narrower)
-        g.fillStyle(SWEATER);
-        g.fillRect(cx - 6, 16, 12, 13);
-        g.fillStyle(SWEATER_D);
-        g.fillRect(cx - 6, 27, 12, 2);
-        // near-side arm swings
-        const armX = facingLeft ? cx - 7 : cx + 3;
-        const armSwing = leg === 0 ? 1 : -1;
-        g.fillStyle(SWEATER);
-        g.fillRect(armX, 17 + armSwing, 4, 11);
-        g.fillStyle(SKIN);
-        g.fillRect(armX, 27 + armSwing, 4, 3);
-        // neck
-        g.fillStyle(SKIN);
-        g.fillRect(cx - 2, 15, 4, 2);
-
-        drawHeroProfile(cx, facingLeft);
-      }
+    ROTATION_DIRS.forEach((dir, i) => {
+      const srcKey = `${key}_${dir}`;
+      if (!this.textures.exists(srcKey)) return;
+      canvas.drawFrame(srcKey, undefined, i * size, 0);
     });
+    canvas.refresh();
 
-    g.generateTexture('hero', FW * frames.length, FH);
-    g.destroy();
-
-    const texture = this.textures.get('hero');
-    for (let i = 0; i < frames.length; i++) {
-      texture.add(i, 0, i * FW, 0, FW, FH);
-    }
-  }
-
-  /**
-   * Maya — tech specialist, long brown hair, blue hoodie over light tee, dark jeans, sneakers.
-   * 48×48 per frame, 8 frames: [down×2, left×2, right×2, up×2].
-   */
-  private _generateMayaTexture(): void {
-    const FW = 48, FH = 48;
-    const g = this.make.graphics({}, false);
-
-    const SKIN     = 0xe8c4a0;
-    const SKIN_DK  = 0xb0866a;
-    const HAIR     = 0x3a2010;
-    const HAIR_HL  = 0x5a3420;
-    const HOODIE   = 0x1e2a4a;
-    const HOODIE_D = 0x131c33;
-    const TEE      = 0x77bbdd;
-    const TEE_D    = 0x5593b0;
-    const JEANS    = 0x1a2040;
-    const JEANS_D  = 0x10142a;
-    const SNEAKER  = 0x6a4a2a;
-    const SOLE     = 0xeeeeee;
-    const EYE      = 0x1a1a1a;
-    const MOUTH    = 0x993344;
-
-    const frames: Array<['down' | 'left' | 'right' | 'up', 0 | 1]> = [
-      ['down', 0], ['down', 1],
-      ['left', 0], ['left', 1],
-      ['right', 0], ['right', 1],
-      ['up',   0], ['up',   1],
-    ];
-
-    const drawMayaFront = (cx: number): void => {
-      // back hair flows past shoulders
-      g.fillStyle(HAIR);
-      g.fillRect(cx - 9, 4, 18, 5);
-      g.fillRect(cx - 10, 7, 4, 18); // left flow
-      g.fillRect(cx + 6,  7, 4, 18); // right flow
-      // face
-      g.fillStyle(SKIN);
-      g.fillRect(cx - 5, 6, 10, 9);
-      g.fillRect(cx - 6, 8, 1, 5);
-      g.fillRect(cx + 5, 8, 1, 5);
-      // hair top / fringe
-      g.fillStyle(HAIR);
-      g.fillRect(cx - 6, 4, 12, 4);
-      g.fillRect(cx - 6, 7, 3, 2);
-      g.fillRect(cx + 3, 7, 3, 2);
-      // hair highlights
-      g.fillStyle(HAIR_HL);
-      g.fillRect(cx - 4, 5, 3, 1);
-      g.fillRect(cx + 1, 5, 3, 1);
-      g.fillRect(cx - 10, 10, 1, 10);
-      g.fillRect(cx + 9,  10, 1, 10);
-      // eyes
-      g.fillStyle(EYE);
-      g.fillRect(cx - 4, 10, 2, 2);
-      g.fillRect(cx + 2, 10, 2, 2);
-      // cheeks
-      g.fillStyle(SKIN_DK);
-      g.fillRect(cx - 4, 13, 1, 1);
-      g.fillRect(cx + 3, 13, 1, 1);
-      // mouth — small smile
-      g.fillStyle(MOUTH);
-      g.fillRect(cx - 1, 13, 3, 1);
-    };
-
-    const drawMayaBack = (cx: number): void => {
-      // hair covers entire head + past shoulders
-      g.fillStyle(HAIR);
-      g.fillRect(cx - 7, 3, 14, 12);
-      g.fillRect(cx - 9, 6, 18, 10);
-      g.fillRect(cx - 10, 10, 4, 15);
-      g.fillRect(cx + 6,  10, 4, 15);
-      // hair highlight streaks
-      g.fillStyle(HAIR_HL);
-      g.fillRect(cx - 5, 5, 3, 1);
-      g.fillRect(cx + 1, 5, 3, 1);
-      g.fillRect(cx - 2, 9, 4, 1);
-      g.fillRect(cx - 9, 14, 1, 10);
-      g.fillRect(cx + 8, 14, 1, 10);
-    };
-
-    const drawMayaProfile = (cx: number, facingLeft: boolean): void => {
-      const s = facingLeft ? -1 : 1;
-      // long hair flowing behind
-      g.fillStyle(HAIR);
-      g.fillRect(cx - 6, 3, 12, 5);
-      g.fillRect(cx - 6, 7, 12, 3);
-      g.fillRect(cx - 6 + (facingLeft ? -1 : 10), 7, 3, 18);
-      // face
-      g.fillStyle(SKIN);
-      g.fillRect(cx - 5, 6, 10, 9);
-      // fringe over brow
-      g.fillStyle(HAIR);
-      g.fillRect(cx - 5, 7, 10, 2);
-      g.fillStyle(HAIR_HL);
-      g.fillRect(cx - 3, 5, 3, 1);
-      g.fillRect(cx + 1, 5, 3, 1);
-      // nose
-      g.fillStyle(SKIN_DK);
-      g.fillRect(cx + 5 * s, 10, 1, 2);
-      // eye (single, facing direction)
-      g.fillStyle(EYE);
-      g.fillRect(cx + 2 * s, 10, 2, 2);
-      // mouth
-      g.fillStyle(MOUTH);
-      g.fillRect(cx + 0, 13, 2, 1);
-    };
-
-    frames.forEach(([dir, leg], i) => {
-      const ox = i * FW;
-      const cx = ox + FW / 2;
-
-      // shadow
-      g.fillStyle(0x000000, 0.22);
-      g.fillEllipse(cx, 46, 18, 6);
-
-      const la = leg === 0 ? 1 : -1;
-      const ra = -la;
-
-      if (dir === 'down' || dir === 'up') {
-        // sneakers with white soles
-        g.fillStyle(SNEAKER);
-        g.fillRect(cx - 6, 41 + la, 5, 4);
-        g.fillRect(cx + 1, 41 + ra, 5, 4);
-        g.fillStyle(SOLE);
-        g.fillRect(cx - 6, 44 + la, 5, 1);
-        g.fillRect(cx + 1, 44 + ra, 5, 1);
-        // jeans (full length)
-        g.fillStyle(JEANS);
-        g.fillRect(cx - 7, 28, 14, 14);
-        g.fillStyle(JEANS_D);
-        g.fillRect(cx - 1, 28, 2, 14); // inseam
-        g.fillRect(cx - 7, 40, 14, 2); // cuff
-        // hoodie (unzipped, showing tee)
-        g.fillStyle(HOODIE);
-        g.fillRect(cx - 8, 16, 16, 13);
-        // tee showing in center
-        g.fillStyle(TEE);
-        g.fillRect(cx - 2, 16, 4, 12);
-        g.fillStyle(TEE_D);
-        g.fillRect(cx - 2, 27, 4, 1);
-        // zipper edges
-        g.fillStyle(HOODIE_D);
-        g.fillRect(cx - 3, 16, 1, 12);
-        g.fillRect(cx + 2, 16, 1, 12);
-        g.fillRect(cx - 8, 28, 16, 1);
-        // hood lump at back of neck (small)
-        g.fillStyle(HOODIE_D);
-        g.fillRect(cx - 5, 15, 10, 2);
-        // sleeves
-        g.fillStyle(HOODIE);
-        g.fillRect(cx - 12, 17, 4, 11);
-        g.fillRect(cx + 8,  17, 4, 11);
-        g.fillStyle(HOODIE_D);
-        g.fillRect(cx - 12, 26, 4, 2);
-        g.fillRect(cx + 8,  26, 4, 2);
-        // hands
-        g.fillStyle(SKIN);
-        g.fillRect(cx - 12, 28, 4, 3);
-        g.fillRect(cx + 8,  28, 4, 3);
-        // neck
-        g.fillStyle(SKIN);
-        g.fillRect(cx - 2, 14, 4, 2);
-
-        if (dir === 'down') {
-          drawMayaFront(cx);
-        } else {
-          drawMayaBack(cx);
-        }
-
-      } else {
-        const facingLeft = dir === 'left';
-        const s = facingLeft ? -1 : 1;
-
-        // sneakers (side, one foot ahead)
-        g.fillStyle(SNEAKER);
-        g.fillRect(cx - 4 + (leg === 0 ? -1 * s : 2 * s), 41, 7, 3);
-        g.fillStyle(SOLE);
-        g.fillRect(cx - 4 + (leg === 0 ? -1 * s : 2 * s), 43, 7, 1);
-        // jeans
-        g.fillStyle(JEANS);
-        g.fillRect(cx - 5, 28, 10, 13);
-        g.fillStyle(JEANS_D);
-        g.fillRect(cx - 5, 39, 10, 2);
-        // hoodie
-        g.fillStyle(HOODIE);
-        g.fillRect(cx - 6, 16, 12, 13);
-        g.fillStyle(HOODIE_D);
-        g.fillRect(cx - 6, 27, 12, 2);
-        // near-side sleeve swings with leg
-        const armX = facingLeft ? cx - 7 : cx + 3;
-        const armSwing = leg === 0 ? 1 : -1;
-        g.fillStyle(HOODIE);
-        g.fillRect(armX, 17 + armSwing, 4, 11);
-        g.fillStyle(SKIN);
-        g.fillRect(armX, 27 + armSwing, 4, 3);
-        // neck
-        g.fillStyle(SKIN);
-        g.fillRect(cx - 2, 14, 4, 2);
-
-        drawMayaProfile(cx, facingLeft);
-      }
-    });
-
-    g.generateTexture('maya', FW * frames.length, FH);
-    g.destroy();
-
-    const texture = this.textures.get('maya');
-    for (let i = 0; i < frames.length; i++) {
-      texture.add(i, 0, i * FW, 0, FW, FH);
+    for (let i = 0; i < ROTATION_DIRS.length; i++) {
+      canvas.add(i, 0, i * size, 0, size, size);
     }
   }
 
@@ -595,50 +220,26 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   private _registerAnimations(): void {
-    if (this.textures.exists('hero')) {
-      const heroAnims: Array<{ key: string; frames: number[] }> = [
-        { key: 'hero-walk-down',  frames: [0, 1] },
-        { key: 'hero-walk-left',  frames: [2, 3] },
-        { key: 'hero-walk-right', frames: [4, 5] },
-        { key: 'hero-walk-up',    frames: [6, 7] },
-      ];
-      heroAnims.forEach(({ key, frames }) => {
-        this.anims.create({
-          key,
-          frames:    this.anims.generateFrameNumbers('hero', { frames }),
-          frameRate: 6,
-          repeat:    -1,
-        });
-      });
-      this.anims.create({
-        key:       'hero-idle',
-        frames:    this.anims.generateFrameNumbers('hero', { frames: [0] }),
-        frameRate: 1,
-        repeat:    -1,
-      });
-    }
+    // Directional spritesheet frame indexes (see _buildCharacterSpritesheet):
+    // 0:S 1:SE 2:E 3:NE 4:N 5:NW 6:W 7:SW
+    const directionalAnims = (key: 'hero' | 'maya'): Array<{ key: string; frames: number[] }> => [
+      { key: `${key}-walk-down`,  frames: [0] },
+      { key: `${key}-walk-right`, frames: [2] },
+      { key: `${key}-walk-up`,    frames: [4] },
+      { key: `${key}-walk-left`,  frames: [6] },
+      { key: `${key}-idle`,       frames: [0] },
+    ];
 
-    if (this.textures.exists('maya')) {
-      const mayaAnims: Array<{ key: string; frames: number[] }> = [
-        { key: 'maya-walk-down',  frames: [0, 1] },
-        { key: 'maya-walk-left',  frames: [2, 3] },
-        { key: 'maya-walk-right', frames: [4, 5] },
-        { key: 'maya-walk-up',    frames: [6, 7] },
-      ];
-      mayaAnims.forEach(({ key, frames }) => {
+    for (const textureKey of ['hero', 'maya'] as const) {
+      if (!this.textures.exists(textureKey)) continue;
+      for (const { key, frames } of directionalAnims(textureKey)) {
         this.anims.create({
           key,
-          frames:    this.anims.generateFrameNumbers('maya', { frames }),
-          frameRate: 6,
+          frames:    this.anims.generateFrameNumbers(textureKey, { frames }),
+          frameRate: 1,
           repeat:    -1,
         });
-      });
-      this.anims.create({
-        key:       'maya-idle',
-        frames:    this.anims.generateFrameNumbers('maya', { frames: [0] }),
-        frameRate: 1,
-        repeat:    -1,
-      });
+      }
     }
 
     if (this.textures.exists('robot_zombie')) {
