@@ -1,0 +1,30 @@
+{
+  "character": {
+    "id": "0e979464-54ae-4dac-939e-1153ce85de97",
+    "name": "Silicon Requiem Player",
+    "prompt": "Young man in his late 20s, short messy dark brown hair, dark brown beard, wearing a navy blue long-sleeve crewneck sweater with a small cartoon cat print on the chest, light blue denim shorts with rolled cuffs, black sneakers. Casual modern survivor. Warm natural skin tone.",
+    "size": {
+      "width": 108,
+      "height": 108
+    },
+    "template_id": "mannequin",
+    "directions": 8,
+    "view": "low top-down",
+    "created_at": "2026-04-22T01:18:31.224348+00:00"
+  },
+  "frames": {
+    "rotations": {
+      "south": "rotations/south.png",
+      "south-east": "rotations/south-east.png",
+      "east": "rotations/east.png",
+      "north-east": "rotations/north-east.png",
+      "north": "rotations/north.png",
+      "north-west": "rotations/north-west.png",
+      "west": "rotations/west.png",
+      "south-west": "rotations/south-west.png"
+    },
+    "animations": {}
+  },
+  "export_version": "2.0",
+  "export_date": "2026-04-23T03:40:26.635828"
+}
