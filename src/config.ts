@@ -9,7 +9,8 @@ import { SubwayScene }     from './scenes/SubwayScene.js';
 import { WorldMapScene }   from './scenes/WorldMapScene.js';
 import { BattleScene }     from './scenes/BattleScene.js';
 import { DialogueScene }   from './scenes/DialogueScene.js';
-import { DevScene }        from './scenes/DevScene.js';
+import { DevScene }          from './scenes/DevScene.js';
+import { SceneBuilderScene } from './scenes/SceneBuilderScene.js';
 
 // ─── Stream G ────────────────────────────────────────────────────────────────
 import { SaveLoadScene }   from './scenes/SaveLoadScene.js';
@@ -52,7 +53,7 @@ const chapterScenes: Phaser.Types.Scenes.SceneType[] = [
 ];
 
 const devScenes: Phaser.Types.Scenes.SceneType[] = import.meta.env.DEV
-  ? [DevScene]
+  ? [DevScene, SceneBuilderScene]
   : [];
 
 const scenes: Phaser.Types.Scenes.SceneType[] = [

@@ -1,4 +1,4 @@
-# Silicon Requiem — Game Outline
+# Quiet Machines — Game Outline
 
 > A SNES-style JRPG. Boston → Appalachia → Deep South → Great Plains → Rockies → Silicon Valley.
 
@@ -121,7 +121,7 @@ Marcus is not dead. He is converted. He is the first Converted human you have ev
 
 ---
 
-## Chapter 5 — "Silicon Requiem"
+## Chapter 5 — "Quiet Machines"
 **Region:** Silicon Valley, CA — Superintelligence Inc. HQ
 
 ### Scenes

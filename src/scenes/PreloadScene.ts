@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { jumpToScene } from '../utils/devJump.js';
+import { preloadApartmentAssets } from './PrologueRoomRenderer.js';
 import {
   // regions
   generateBostonTiles,
@@ -93,6 +94,9 @@ export class PreloadScene extends Phaser.Scene {
     this.load.image('sign_no_entry', 'assets/sprites/props/signs/Sign No Entry.png');
     this.load.image('sign_stop',     'assets/sprites/props/signs/Sign Stop.png');
     this.load.image('sign_radioact', 'assets/sprites/props/signs/Sign RadioActive.png');
+
+    // ── Prologue apartment (tilesets + interior props) ────────────────────
+    preloadApartmentAssets(this);
   }
 
   create(): void {
@@ -159,6 +163,11 @@ export class PreloadScene extends Phaser.Scene {
     if (import.meta.env.DEV) {
       this.scene.launch('DevScene');
       const params = new URLSearchParams(window.location.search);
+      const build = params.get('build');
+      if (build) {
+        this.scene.start('SceneBuilderScene', { layout: build });
+        return;
+      }
       const devTarget = params.get('dev');
       if (devTarget) {
         const enemy = params.get('enemy');

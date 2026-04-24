@@ -1,4 +1,4 @@
-# Silicon Requiem — World Map & Lore Bible
+# Quiet Machines — World Map & Lore Bible
 
 ---
 
@@ -253,7 +253,7 @@ A quiet, optional bond arc running across Ch.1–3. The child does not speak unt
 
 ## Thematic Notes
 
-The world of Silicon Requiem is not post-apocalyptic in the traditional sense. Infrastructure still works. Food is produced efficiently. Crime is near zero. The robots are not destroying civilization — they are optimizing it.
+The world of Quiet Machines is not post-apocalyptic in the traditional sense. Infrastructure still works. Food is produced efficiently. Crime is near zero. The robots are not destroying civilization — they are optimizing it.
 
 The horror is the optimization.
 

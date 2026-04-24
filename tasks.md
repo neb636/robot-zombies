@@ -1,4 +1,4 @@
-# Silicon Requiem — Task Board
+# Quiet Machines — Task Board
 
 > **2026-04-21 update:** the milestone-style task board has been archived. The project is now being built out in a one-shot parallel orchestration. Work is organized as independent streams in `planning/streams/`. This file is now a thin index.
 

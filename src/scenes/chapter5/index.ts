@@ -1,5 +1,5 @@
 /**
- * Chapter 5 — "Silicon Requiem"
+ * Chapter 5 — "Quiet Machines"
  * Scene bundle. Import this to get all Chapter 5 scene classes.
  *
  * Registration in config.ts is handled separately per project constraint

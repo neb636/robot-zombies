@@ -1,4 +1,4 @@
-# Silicon Requiem — Side Characters
+# Quiet Machines — Side Characters
 
 > Canonical data for recurring and notable NPCs added during the 2026-04 story beef-up. These characters are **not** playable party members; they are merchants, quest-givers, lore sources, and moral mirrors. For party members, see `character_stats.md`.
 

@@ -1,4 +1,4 @@
-# Silicon Requiem — Dialogue Choices
+# Quiet Machines — Dialogue Choices
 
 > Every branching point in the game. Each entry specifies: where the choice fires, what the options do, the flags they set, which later scenes read those flags, and the minimal JSON shape the `ChoiceEngine` (Stream G) must support.
 

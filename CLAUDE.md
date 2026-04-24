@@ -1,10 +1,10 @@
-# Silicon Requiem — Project Context for Claude
+# Quiet Machines — Project Context for Claude
 
 ## What this is
 
 A browser-based SNES-style JRPG. Chrono Trigger and Final Fantasy VI are the direct references — top-down 2D, ATB combat, strong story. Built with Phaser 3 + TypeScript, bundled with Vite.
 
-The game is called **Silicon Requiem**. A superintelligent AI called ELISE quietly took over two years ago. Not through war — through optimization. The robots aren't destroying civilization. They're running it perfectly. The horror is the optimization.
+The game is called **Quiet Machines**. A superintelligent AI called ELISE quietly took over two years ago. Not through war — through optimization. The robots aren't destroying civilization. They're running it perfectly. The horror is the optimization.
 
 The player travels from **Boston → Appalachia → Deep South → Great Plains → Rockies → Silicon Valley** to reach the source.
 

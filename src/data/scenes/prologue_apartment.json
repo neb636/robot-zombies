@@ -1,0 +1,67 @@
+{
+  "title": "Prologue Apartment",
+  "mapWidth": 704,
+  "mapHeight": 480,
+  "cellSize": 16,
+  "tilesets": {
+    "apartment_floor": "assets/tilesets/apartment_floor",
+    "apartment_wall":  "assets/tilesets/apartment_wall"
+  },
+  "mapObjects": {
+    "bed_queen":         "assets/sprites/props/interior/bed_queen.png",
+    "nightstand_alarm":  "assets/sprites/props/interior/nightstand_alarm.png",
+    "desk_computer":     "assets/sprites/props/interior/desk_computer.png",
+    "bookshelf_tall":    "assets/sprites/props/interior/bookshelf_tall.png",
+    "wall_poster":       "assets/sprites/props/interior/wall_poster.png",
+    "window_day":        "assets/sprites/props/interior/window_day.png",
+    "flatscreen_tv":     "assets/sprites/props/interior/flatscreen_tv.png",
+    "coffee_table":      "assets/sprites/props/interior/coffee_table.png",
+    "couch_3seat":       "assets/sprites/props/interior/couch_3seat.png",
+    "potted_plant":      "assets/sprites/props/interior/potted_plant.png",
+    "front_door_closed": "assets/sprites/props/interior/front_door_closed.png",
+    "interior_doorway":  "assets/sprites/props/interior/interior_doorway.png",
+    "hero_preview":      "assets/sprites/characters/hero/rotations/south.png"
+  },
+
+  "regions": [
+    { "tileset": "apartment_floor", "variant": "lower", "x": 16,  "y": 48,  "w": 320, "h": 416 },
+    { "tileset": "apartment_floor", "variant": "upper", "x": 352, "y": 48,  "w": 336, "h": 416 },
+
+    { "tileset": "apartment_wall",  "variant": "lower", "x": 0,   "y": 0,   "w": 704, "h": 16 },
+    { "tileset": "apartment_wall",  "variant": "lower", "x": 0,   "y": 16,  "w": 704, "h": 16 },
+    { "tileset": "apartment_wall",  "variant": "upper", "x": 0,   "y": 32,  "w": 704, "h": 16 },
+
+    { "tileset": "apartment_wall",  "variant": "upper", "x": 0,   "y": 464, "w": 704, "h": 16 },
+
+    { "tileset": "apartment_wall",  "variant": "upper", "x": 0,   "y": 48,  "w": 16,  "h": 416 },
+
+    { "tileset": "apartment_wall",  "variant": "upper", "x": 688, "y": 48,  "w": 16,  "h": 200 },
+    { "tileset": "apartment_wall",  "variant": "upper", "x": 688, "y": 280, "w": 16,  "h": 184 },
+
+    { "tileset": "apartment_wall",  "variant": "upper", "x": 336, "y": 48,  "w": 16,  "h": 200 },
+    { "tileset": "apartment_wall",  "variant": "upper", "x": 336, "y": 280, "w": 16,  "h": 184 }
+  ],
+
+  "objects": [
+    { "asset": "window_day",        "x": 112, "y": 24,  "origin": [0.5, 0.5] },
+    { "asset": "wall_poster",       "x": 240, "y": 24,  "origin": [0.5, 0.5] },
+
+    { "asset": "bed_queen",         "x": 88,  "y": 128, "origin": [0.5, 0.5] },
+    { "asset": "nightstand_alarm",  "x": 240, "y": 96,  "origin": [0.5, 0.5] },
+    { "asset": "desk_computer",     "x": 260, "y": 220, "origin": [0.5, 0.5] },
+    { "asset": "bookshelf_tall",    "x": 48,  "y": 300, "origin": [0.5, 0.5] },
+
+    { "asset": "window_day",        "x": 560, "y": 24,  "origin": [0.5, 0.5] },
+
+    { "asset": "flatscreen_tv",     "x": 480, "y": 96,  "origin": [0.5, 0.5] },
+    { "asset": "coffee_table",      "x": 472, "y": 196, "origin": [0.5, 0.5] },
+    { "asset": "couch_3seat",       "x": 472, "y": 300, "origin": [0.5, 0.5] },
+    { "asset": "potted_plant",      "x": 372, "y": 388, "origin": [0.5, 0.5] },
+
+    { "asset": "interior_doorway",  "x": 344, "y": 264, "origin": [0.5, 0.5] },
+    { "asset": "front_door_closed", "x": 688, "y": 264, "origin": [0.5, 0.5] }
+  ],
+
+  "playerStart": { "x": 200, "y": 370 },
+  "camera": { "zoom": 1, "followPlayer": false }
+}

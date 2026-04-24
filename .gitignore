@@ -2,3 +2,5 @@ asset-viewer.html
 *.jpg
 !planning/bought-packs/**/*.jpg
 !public/assets/**/*.jpg
+node_modules/
+*.DS_Store
