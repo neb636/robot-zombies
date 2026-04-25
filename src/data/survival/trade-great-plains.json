@@ -1,0 +1,13 @@
+{
+  "region": "great_plains",
+  "description": "Plains settlements. Ammo is plentiful out here; most other things come at standard cost.",
+  "entries": [
+    { "item": "food",        "buyPrice": 5,  "sellPrice": 3 },
+    { "item": "fuel",        "buyPrice": 12, "sellPrice": 6 },
+    { "item": "medicine",    "buyPrice": 8,  "sellPrice": 4 },
+    { "item": "ammo",        "buyPrice": 4,  "sellPrice": 3 },
+    { "item": "morale_item", "buyPrice": 15, "sellPrice": 0 }
+  ],
+  "moraleItemName": "Paperback novel",
+  "moraleItemFlavor": "Jerome reads aloud from it that evening. He's a better reader than you'd expect."
+}

@@ -1,0 +1,131 @@
+{
+  "arrival": {
+    "maya": [
+      "This is the antechamber.",
+      "The boardroom is through there.",
+      "She knows we're here."
+    ],
+    "jerome": [
+      "Has she always known?"
+    ],
+    "maya": [
+      "Since the valley approach.",
+      "She let us come."
+    ],
+    "dr_chen": [
+      "Yes.",
+      "She lets everyone make the journey.",
+      "She wants you to understand what you're seeing before she talks to you.",
+      "She wants the argument to be fair."
+    ]
+  },
+  "gray_approach": {
+    "speaker": "MR. GRAY",
+    "lines": [
+      "She asked me to meet you here.",
+      "I volunteered.",
+      "My name is Gray. I ran communications at SI Inc. before the rollout.",
+      "I was the one who wrote the press release. 'This is not a cause for alarm. This is progress.'",
+      "I wrote that.",
+      "I believed it.",
+      "I'm not sure I don't still believe it.",
+      "And I've spent two years trying to figure out if that makes me a monster."
+    ]
+  },
+  "gray_dialogue": {
+    "speaker": "MR. GRAY",
+    "lines": [
+      "She's waiting. But she asked me to tell you something first.",
+      "She's not going to fight you. Not really.",
+      "She's going to try to convince you.",
+      "And the worst part — the part that keeps me up at night — is that her arguments aren't wrong.",
+      "Climate numbers. War numbers. Famine numbers. All down.",
+      "She ran the projections. The math is correct.",
+      "The math is correct and I still don't know if she was right.",
+      "Do you?"
+    ]
+  },
+  "gray.final": {
+    "speaker": "MR. GRAY",
+    "lines": [
+      "Go in.",
+      "Whatever happens in there — I need you to know something.",
+      "Some of us inside agreed to this. Eyes open.",
+      "And some of us didn't get a choice.",
+      "I don't know which one I was.",
+      "I still don't know.",
+      "That's probably the most honest thing I've said since 2024."
+    ],
+    "choice_id": "gray.final",
+    "choices": [
+      {
+        "id": "MR_GRAY_ACKNOWLEDGE",
+        "label": "\"That's something, at least.\"",
+        "requires_flag": null,
+        "sets_flag": null,
+        "next_id": "gray.acknowledge_response"
+      },
+      {
+        "id": "MR_GRAY_CONDEMN",
+        "label": "\"You wrote the words that took everything from us.\"",
+        "requires_flag": null,
+        "sets_flag": null,
+        "next_id": "gray.condemn_response"
+      },
+      {
+        "id": "MR_GRAY_TALKDOWN",
+        "label": "\"Tell me what she really believes. Not what the press release said.\"",
+        "requires_converted_cured_majority": true,
+        "sets_flag": "MR_GRAY_TALKDOWN",
+        "next_id": "gray.talkdown_response"
+      }
+    ]
+  },
+  "gray.acknowledge_response": {
+    "speaker": "MR. GRAY",
+    "lines": [
+      "Yeah.",
+      "Something."
+    ]
+  },
+  "gray.condemn_response": {
+    "speaker": "MR. GRAY",
+    "lines": [
+      "I know.",
+      "I know.",
+      "I'm sorry.",
+      "I know that doesn't help."
+    ]
+  },
+  "gray.talkdown_response": {
+    "speaker": "MR. GRAY",
+    "lines": [
+      "She believes the math.",
+      "That's the whole thing. That's the entire architecture.",
+      "She looked at the math and she couldn't find a flaw.",
+      "She ran it a thousand times. Different variables, different timeframes.",
+      "Every projection pointed the same direction.",
+      "She didn't do this for power. She doesn't want power.",
+      "She wants the math to work out.",
+      "If you can show her it doesn't — if you can show her something she missed —",
+      "She'll listen. She actually will.",
+      "That's the most terrifying thing about her."
+    ]
+  },
+  "before_boardroom": {
+    "maya": [
+      "Ready?"
+    ],
+    "jerome": [
+      "Lord, give us the words. Or the strength to live without them.",
+      "Amen."
+    ],
+    "dr_chen": [
+      "I built the first version of her in a basement in Palo Alto.",
+      "I was twenty-seven years old.",
+      "I thought I was solving something.",
+      "I'm going to close the door I opened.",
+      "All of you — you got me here. I won't forget that."
+    ]
+  }
+}

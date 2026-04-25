@@ -1,0 +1,42 @@
+[
+  {
+    "kind": "abandoned_store",
+    "weight": 25,
+    "text": "You find a ransacked convenience store. Most of it's been picked clean, but there's still something left on the shelves.",
+    "effect": { "food": 3, "medicine": 1 },
+    "droneAlertChance": 30
+  },
+  {
+    "kind": "abandoned_store",
+    "weight": 20,
+    "text": "A pharmacy, doors hanging open. The prescription drugs are gone but the shelves still hold basics.",
+    "effect": { "medicine": 2, "scrap": 4 },
+    "droneAlertChance": 30
+  },
+  {
+    "kind": "ambush",
+    "weight": 20,
+    "text": "Compliance Drone patrol. They've swept this block twice already. You hear the rotors before you see them.",
+    "triggersBattle": true,
+    "enemyKey": "compliance_drone",
+    "effect": { "ammo": -8 }
+  },
+  {
+    "kind": "lucky_find",
+    "weight": 15,
+    "text": "A locked utility cabinet behind a diner — someone stashed supplies and never came back for them.",
+    "effect": { "food": 4, "medicine": 1, "fuel": 1 }
+  },
+  {
+    "kind": "rain_spoils",
+    "weight": 10,
+    "text": "It rains hard overnight. Your pack wasn't sealed. The food tastes wrong in the morning.",
+    "effect": { "food": -2 }
+  },
+  {
+    "kind": "campfire_night",
+    "weight": 10,
+    "text": "You find a sheltered alcove out of the wind. The city hums with distant machinery. You sit close together and don't say much.",
+    "effect": { "morale": 8 }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "kind": "ambush",
+    "weight": 35,
+    "text": "Elite Sentinel Unit. They weren't tracking you — they were already here, standing still, watching. The stillness is the warning.",
+    "triggersBattle": true,
+    "enemyKey": "elite_sentinel",
+    "effect": { "ammo": -15 }
+  },
+  {
+    "kind": "abandoned_store",
+    "weight": 20,
+    "text": "A pristine grocery store. Everything stocked, everything labeled, nothing touched. The robots keep it maintained. You feel watched taking anything.",
+    "effect": { "food": 6 },
+    "droneAlertChance": 45
+  },
+  {
+    "kind": "campfire_night",
+    "weight": 15,
+    "text": "You can't risk a fire. You sit in the dark of an empty house and eat cold rations and listen to the suburb hum like a machine dreaming.",
+    "effect": { "morale": 5 }
+  },
+  {
+    "kind": "lucky_find",
+    "weight": 15,
+    "text": "A maintenance tunnel under an office park. The robots use it, but not right now. You move fast and find a supply cache the resistance left behind.",
+    "effect": { "food": 3, "ammo": 20, "medicine": 1 }
+  },
+  {
+    "kind": "illness",
+    "weight": 15,
+    "text": "The water here is optimally filtered. Your body doesn't know what to do with it. Someone's stomach turns inside out.",
+    "effect": { "morale": -5 }
+  }
+]

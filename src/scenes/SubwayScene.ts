@@ -38,7 +38,7 @@ export class SubwayScene extends Phaser.Scene {
 
   private _phase:        Phase   = PHASE.ARRIVING;
   private _inputEnabled: boolean = false;
-  private _playerName:   string  = 'YOU';
+  private _playerName:   string  = 'Arlo';
 
   // NPC interaction tracking
   private _survivorTalked: Set<number> = new Set();
@@ -47,7 +47,10 @@ export class SubwayScene extends Phaser.Scene {
   private _exitHintShown: boolean = false;
 
   // Maya sprite reference
-  private _mayaRect!: Phaser.GameObjects.Rectangle;
+  private _mayaSprite!: Phaser.GameObjects.Sprite;
+
+  // Persistent exit hint after Maya joins
+  private _exitHint: Phaser.GameObjects.Text | null = null;
 
   constructor() {
     super({ key: 'SubwayScene' });
@@ -60,7 +63,7 @@ export class SubwayScene extends Phaser.Scene {
     this._mayaFollowUp  = false;
     this._exitHintShown = false;
     this._survivorTalked = new Set();
-    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'YOU';
+    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'Arlo';
 
     drawSubway(this);
     this._buildPlayer();
@@ -104,12 +107,15 @@ export class SubwayScene extends Phaser.Scene {
       this.add.rectangle(npc.x, npc.y, 14, 24, 0x888888).setDepth(5);
     });
 
-    // Maya (teal rectangle)
-    this._mayaRect = this.add.rectangle(MAYA_X, MAYA_Y, 16, 26, 0x44aaaa);
-    this._mayaRect.setDepth(5);
+    // Maya sprite
+    this._mayaSprite = this.add.sprite(MAYA_X, MAYA_Y, 'maya', 0);
+    this._mayaSprite.setOrigin(0.5, 1);
+    this._mayaSprite.setScale(1.55);
+    this._mayaSprite.setDepth(5);
+    if (this.anims.exists('maya-idle')) this._mayaSprite.play('maya-idle');
 
     // Label above Maya
-    this.add.text(MAYA_X, MAYA_Y - 22, 'MAYA', {
+    this.add.text(MAYA_X, MAYA_Y - 72, 'MAYA', {
       fontFamily: 'monospace', fontSize: '8px', color: '#44aaaa',
     }).setOrigin(0.5).setDepth(6);
   }
@@ -221,7 +227,7 @@ export class SubwayScene extends Phaser.Scene {
 
         if (!this._exitHintShown) {
           this._exitHintShown = true;
-          this._showHint('Head to the exit on the left.', 5000);
+          this._showExitHint();
         }
       },
     });
@@ -231,6 +237,7 @@ export class SubwayScene extends Phaser.Scene {
     this.dialogMgr.show(this._playerName, D.maya.followup_player, () => {
       this.dialogMgr.show('MAYA', D.maya.followup, () => {
         this._inputEnabled = true;
+        this._showExitHint();
       });
     });
   }
@@ -245,6 +252,7 @@ export class SubwayScene extends Phaser.Scene {
 
     this._phase = PHASE.DONE;
     this._inputEnabled = false;
+    this._hideExitHint();
 
     this.cameras.main.fadeOut(1000, 0, 0, 0, (_cam: Phaser.Cameras.Scene2D.Camera, p: number) => {
       if (p === 1) this.scene.start('WorldMapScene');
@@ -253,18 +261,34 @@ export class SubwayScene extends Phaser.Scene {
 
   // ─── Helpers ────────────────────────────────────────────────────────────
 
-  private _showHint(msg: string, autofade = 3000): void {
+  private _showExitHint(): void {
+    if (this._exitHint) return;
     const { width, height } = this.scale;
-    const hint = this.add.text(width / 2, height - 40, msg, {
-      fontFamily: 'monospace', fontSize: '11px', color: '#446688',
-    }).setScrollFactor(0).setDepth(25).setOrigin(0.5);
+    const hint = this.add.text(
+      width / 2, height - 40,
+      '← Head west to the tunnel EXIT',
+      {
+        fontFamily: 'monospace', fontSize: '13px', color: '#ffcc66',
+        stroke: '#000000', strokeThickness: 3,
+      },
+    ).setScrollFactor(0).setDepth(25).setOrigin(0.5);
 
     this.tweens.add({
       targets:  hint,
-      alpha:    0,
-      delay:    autofade,
-      duration: 800,
-      onComplete: () => { hint.destroy(); },
+      alpha:    { from: 0.55, to: 1 },
+      duration: 900,
+      yoyo:     true,
+      repeat:   -1,
     });
+
+    this._exitHint = hint;
   }
+
+  private _hideExitHint(): void {
+    if (!this._exitHint) return;
+    this.tweens.killTweensOf(this._exitHint);
+    this._exitHint.destroy();
+    this._exitHint = null;
+  }
+
 }

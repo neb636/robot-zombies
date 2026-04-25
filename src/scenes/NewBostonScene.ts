@@ -55,7 +55,7 @@ export class NewBostonScene extends Phaser.Scene {
 
   private _phase:           Phase   = PHASE.ARRIVING;
   private _inputEnabled:    boolean = false;
-  private _playerName:      string  = 'YOU';
+  private _playerName:      string  = 'Arlo';
 
   // Marcus companion
   private _marcus!:         Phaser.Physics.Arcade.Sprite;
@@ -84,7 +84,7 @@ export class NewBostonScene extends Phaser.Scene {
     this._movedOnce       = false;
     this._halfMapHintShown  = false;
     this._citizenHintShown  = false;
-    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'YOU';
+    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'Arlo';
 
     drawNewBoston(this);
     this._buildPhysicsBounds();

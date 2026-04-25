@@ -1,0 +1,210 @@
+{
+  "arriving": {
+    "player": [
+      "The fields are perfect.",
+      "Not good. Perfect. Every row even. Not one weed."
+    ],
+    "maya": [
+      "Conversion settlement. They voted two-to-one.",
+      "The robots tend the crops. The humans eat.",
+      "ELISE calls it a cooperative model."
+    ]
+  },
+
+  "harvest_town.cora.offer": {
+    "cora": [
+      "You look like you've been on the road a while.",
+      "We have more than we need. We always do now.",
+      "Are you hungry?"
+    ],
+    "player": [
+      "...Yes."
+    ],
+    "cora_observe": [
+      "She fills two bowls without checking if you want them.",
+      "Not unkind. Certain.",
+      "Like she already knew the answer."
+    ],
+    "cora": [
+      "Jerome used to preach at the church on Fifth.",
+      "Before.",
+      "He left when we voted. He said he couldn't watch.",
+      "He's at the radio tower, last I heard. Sending signals nobody answers."
+    ],
+    "choice_prompt": "Cora's medicine kit is within reach. She's converted.",
+    "choices": [
+      {
+        "id": "cure",
+        "label": "Use medicine kit (cure Cora)",
+        "requires": { "medicine": 2 },
+        "flag": "CORA_CURED",
+        "next": "harvest_town.cora.offer.cure"
+      },
+      {
+        "id": "leave",
+        "label": "Take the food and go",
+        "flag": "CORA_LEFT",
+        "next": "harvest_town.cora.offer.leave"
+      }
+    ]
+  },
+
+  "harvest_town.cora.offer.cure": {
+    "system": [
+      "You administer the reversal. It takes a moment.",
+      "She blinks. Looks at her hands.",
+      "The bowl is still in her hand."
+    ],
+    "cora_post_cure": [
+      "I — what —",
+      "How long has it been.",
+      "Oh god. How long has it been."
+    ],
+    "maya": [
+      "Eighteen months. Give or take.",
+      "You're okay. You're going to be okay."
+    ],
+    "cora_post_cure_2": [
+      "My kids. They're in Topeka. Are they —",
+      "Jerome. You said you're going to the tower?",
+      "Tell him Cora says he was right.",
+      "He'll know what that means."
+    ]
+  },
+
+  "harvest_town.cora.offer.leave": {
+    "player_thought": [
+      "You take the food.",
+      "She smiles.",
+      "The same smile she gave the bowl."
+    ]
+  },
+
+  "harvest_town.child.approach": {
+    "system": [
+      "A child steps out from between the stalks.",
+      "Eight, maybe nine. Eyes pale blue.",
+      "She looks at you the way adults do now."
+    ],
+    "child": [
+      "Hello.",
+      "Are you lost?",
+      "Most people who come through are lost."
+    ],
+    "player": [
+      "We're just passing through."
+    ],
+    "child": [
+      "That's what they say.",
+      "They always leave too.",
+      "It's very quiet after."
+    ],
+    "choice_prompt": "The child is converted. The attack option is not available.",
+    "choices": [
+      {
+        "id": "cure",
+        "label": "Use medicine kit (cure her)",
+        "requires": { "medicine": 2 },
+        "flag": "CHILD_CURED",
+        "next": "harvest_town.child.cure"
+      },
+      {
+        "id": "cure_disabled",
+        "label": "Insufficient supplies",
+        "disabled": true,
+        "requires_fail": { "medicine": 2 },
+        "next": "harvest_town.child.leave"
+      },
+      {
+        "id": "leave",
+        "label": "Walk away",
+        "next": "harvest_town.child.leave"
+      }
+    ]
+  },
+
+  "harvest_town.child.cure": {
+    "system": [
+      "She sits down in the dirt.",
+      "You stay with her until it passes."
+    ],
+    "child_post": [
+      "..."
+    ],
+    "maya": [
+      "She's okay.",
+      "She'll be confused for a while. That's normal.",
+      "We should go."
+    ]
+  },
+
+  "harvest_town.child.leave": {
+    "system": [
+      "You walk away.",
+      "She watches you go.",
+      "From twenty yards back, she says:",
+      "\"It's very quiet after.\""
+    ]
+  },
+
+  "harvest_town.marcus.encounter": {
+    "system": [
+      "He's in the community garden near the town center.",
+      "Weeding.",
+      "He looks healthy. Better fed than anyone in your party."
+    ],
+    "marcus": [
+      "This is a good place.",
+      "You should consider the program."
+    ],
+    "system_post": [
+      "He goes back to weeding."
+    ],
+    "maya_walkaway": [
+      "Come on."
+    ],
+    "system_final": [
+      "She doesn't ask. You don't say anything.",
+      "Neither of you brings it up at camp that night."
+    ]
+  },
+
+  "harvest_town.gideon.intro": {
+    "gideon": [
+      "Don't look around like that. You're making people nervous.",
+      "I'm Gideon. I run the fuel depot.",
+      "Before you ask — no, I'm not one of them.",
+      "I'm what you call a collaborator.",
+      "Keeps the lights on. Keeps them from looking too hard at the depot.",
+      "You're going to the tower."
+    ],
+    "player": [
+      "How do you know?"
+    ],
+    "gideon": [
+      "Because you didn't take a bowl from Cora.",
+      "Only two kinds of people don't take a bowl.",
+      "Dead, or going somewhere.",
+      "Jerome's up there. Big man. Hard to miss.",
+      "Tell him Gideon says the back frequency still works.",
+      "He'll know what that means."
+    ],
+    "player_optional": [
+      "What do you know about the Echo signal?"
+    ],
+    "gideon_echo": [
+      "Echo.",
+      "That's a Ch.4 question.",
+      "If you make it back through here — and some do — ask me again.",
+      "I'll have a better answer by then."
+    ]
+  },
+
+  "town_exit": {
+    "player": [
+      "The town disappears in the corn.",
+      "Like it was never there.",
+      "Maybe that's the point."
+    ]
+  }
+}

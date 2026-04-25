@@ -1,23 +1,121 @@
 import Phaser from 'phaser';
 import { jumpToScene } from '../utils/devJump.js';
+import { preloadApartmentAssets } from './PrologueRoomRenderer.js';
+import { SaveManager } from '../save/SaveManager.js';
+import { ProceduralMusic } from '../audio/ProceduralMusic.js';
+import {
+  // regions
+  generateBostonTiles,
+  generateAppalachiaTiles,
+  generateDeepSouthTiles,
+  generateGreatPlainsTiles,
+  generateRockiesTiles,
+  generateSiliconValleyTiles,
+  // npcs
+  generateMarcusSprite,
+  generateMayaSprite,
+  generateEliasSprite,
+  generateDejaSprite,
+  generateJeromeSprite,
+  generateDrChenSprite,
+  generateSurvivorSprite,
+  generateMerchantSprite,
+  generateConvertedSprite,
+  generateChildSprite,
+  generateFarmhandSprite,
+  // enemies
+  generateComplianceDroneSprite,
+  generateEnforcerUnitSprite,
+  generatePatrolBotSprite,
+  generateEnforcerHeavySprite,
+  generateSentinelDroneSprite,
+  generateSentinelAerialSprite,
+  generateMiningCrawlerSprite,
+  generateBayouStalkerSprite,
+  generateAerialSentinelSprite,
+  generateStormWalkerSprite,
+  generateSIEliteSprite,
+  generateConvertedFighterSprite,
+  generateComplianceWardenBetaSprite,
+} from '../art/generators/index.js';
+
+const ROTATION_DIRS = [
+  'south', 'south-east', 'east', 'north-east',
+  'north', 'north-west', 'west', 'south-west',
+] as const;
+
+const DIRS_8 = ROTATION_DIRS;
+const DIRS_4 = ['south', 'east', 'north', 'west'] as const;
+
+type HeroAnimKey = 'walking' | 'running' | 'jumping' | 'crouching' | 'poking';
+
+interface HeroAnimDef {
+  folder:    string;
+  frames:    number;
+  dirs:      readonly string[];
+  frameRate: number;
+  repeat:    number;
+}
+
+const HERO_ANIMS: Record<HeroAnimKey, HeroAnimDef> = {
+  walking:   { folder: 'Walking-b5ada3a1',                                              frames: 6, dirs: DIRS_8, frameRate: 10, repeat: -1 },
+  running:   { folder: 'Running-4263a14a',                                              frames: 6, dirs: DIRS_8, frameRate: 14, repeat: -1 },
+  jumping:   { folder: 'Jumping-3b85dd59',                                              frames: 9, dirs: DIRS_8, frameRate: 12, repeat:  0 },
+  crouching: { folder: 'Crouching-b9994c7c',                                            frames: 5, dirs: DIRS_4, frameRate:  8, repeat: -1 },
+  poking:    { folder: 'poke_someone._similar_to_punching_but_less_violent-ebf05df7',   frames: 4, dirs: DIRS_4, frameRate: 10, repeat:  0 },
+};
+
+const CHARACTER_FRAME_SIZE = 108;
+
+function clamp(val: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, val));
+}
 
 /**
- * PreloadScene — loads all game assets with a progress bar.
+ * PreloadScene — loads all game assets behind the cinematic Quiet Machines splash,
+ * then gates entry with a "PRESS ANY KEY TO START" prompt (also acts as title screen).
  */
 export class PreloadScene extends Phaser.Scene {
+  private _progressBar!:  Phaser.GameObjects.Graphics;
+  private _loadingText!:  Phaser.GameObjects.Text;
+  private _bgImage:       Phaser.GameObjects.Image | null     = null;
+  private _bgBackdrop:    Phaser.GameObjects.Rectangle | null = null;
+  private _startPrompt:   Phaser.GameObjects.Text | null      = null;
+  private _continueText:  Phaser.GameObjects.Text | null      = null;
+  private _music:         ProceduralMusic | null = null;
+  private _started:       boolean                = false;
+
   constructor() {
     super({ key: 'PreloadScene' });
   }
 
   preload(): void {
-    this._buildProgressBar();
+    // The splash image is loaded by BootScene so it's already a texture by now.
+    this._buildLoadScreen();
 
     this.load.tilemapTiledJSON('world-map', 'assets/tilemaps/world.json');
     this.load.image('world-tiles', 'assets/tilesets/world_tiles.png');
 
-    this.load.spritesheet('hero', 'assets/sprites/hero.png', {
-      frameWidth: 48, frameHeight: 48,
-    });
+    // ── Character rotation sprites (8-directional, 108×108 each) ──────────
+    for (const c of ['hero', 'maya'] as const) {
+      for (const dir of ROTATION_DIRS) {
+        this.load.image(`${c}_${dir}`, `assets/sprites/characters/${c}/rotations/${dir}.png`);
+      }
+    }
+
+    // ── Hero action animation frames (Walking/Running/Jumping/Crouching/Poking) ──
+    for (const [action, def] of Object.entries(HERO_ANIMS)) {
+      for (const dir of def.dirs) {
+        for (let i = 0; i < def.frames; i++) {
+          const f = i.toString().padStart(3, '0');
+          this.load.image(
+            `hero_${action}_${dir}_${i}`,
+            `assets/sprites/characters/hero/animations/${def.folder}/${dir}/frame_${f}.png`,
+          );
+        }
+      }
+    }
+
     this.load.spritesheet('robot_zombie', 'assets/sprites/robot_zombie.png', {
       frameWidth: 64, frameHeight: 64,
     });
@@ -47,21 +145,81 @@ export class PreloadScene extends Phaser.Scene {
     this.load.image('sign_no_entry', 'assets/sprites/props/signs/Sign No Entry.png');
     this.load.image('sign_stop',     'assets/sprites/props/signs/Sign Stop.png');
     this.load.image('sign_radioact', 'assets/sprites/props/signs/Sign RadioActive.png');
+
+    // ── Prologue apartment (tilesets + interior props) ────────────────────
+    preloadApartmentAssets(this);
   }
 
   create(): void {
-    if (!this.textures.exists('hero'))            this._generateHeroTexture();
+    if (!this.textures.exists('hero'))            this._buildCharacterSpritesheet('hero');
+    if (!this.textures.exists('maya'))            this._buildCharacterSpritesheet('maya');
+    this._buildHeroAnimationTextures();
     if (!this.textures.exists('warden_alpha'))    this._generateWardenAlphaTexture();
     if (!this.textures.exists('excavator_prime')) this._generateExcavatorPrimeTexture();
     if (!this.textures.exists('the_governor'))    this._generateTheGovernorTexture();
     if (!this.textures.exists('sentinel_spire'))  this._generateSentinelSpireTexture();
     if (!this.textures.exists('gate_colossus'))   this._generateGateColossusTexture();
     if (!this.textures.exists('elise_voss'))      this._generateEliseVossTexture();
+
+    // ── Region tileset generators ──────────────────────────────────────────
+    if (!this.textures.exists('tileset_boston'))         generateBostonTiles(this);
+    if (!this.textures.exists('tileset_appalachia'))     generateAppalachiaTiles(this);
+    if (!this.textures.exists('tileset_deep_south'))     generateDeepSouthTiles(this);
+    if (!this.textures.exists('tileset_great_plains'))   generateGreatPlainsTiles(this);
+    if (!this.textures.exists('tileset_rockies'))        generateRockiesTiles(this);
+    if (!this.textures.exists('tileset_silicon_valley')) generateSiliconValleyTiles(this);
+
+    // ── NPC sprite generators ──────────────────────────────────────────────
+    if (!this.textures.exists('npc_marcus'))    generateMarcusSprite(this);
+    if (!this.textures.exists('npc_maya'))      generateMayaSprite(this);
+    if (!this.textures.exists('npc_elias'))     generateEliasSprite(this);
+    if (!this.textures.exists('npc_deja'))      generateDejaSprite(this);
+    if (!this.textures.exists('npc_jerome'))    generateJeromeSprite(this);
+    if (!this.textures.exists('npc_dr_chen'))   generateDrChenSprite(this);
+    if (!this.textures.exists('npc_survivor'))  generateSurvivorSprite(this);
+    if (!this.textures.exists('npc_merchant'))  generateMerchantSprite(this);
+    if (!this.textures.exists('npc_converted')) generateConvertedSprite(this);
+    if (!this.textures.exists('npc_child'))     generateChildSprite(this);
+    if (!this.textures.exists('npc_farmhand'))  generateFarmhandSprite(this);
+
+    // ── Enemy sprite generators ────────────────────────────────────────────
+    if (!this.textures.exists('enemy_compliance_drone'))
+      generateComplianceDroneSprite(this);
+    if (!this.textures.exists('enemy_enforcer_unit'))
+      generateEnforcerUnitSprite(this);
+    if (!this.textures.exists('enemy_patrol_bot'))
+      generatePatrolBotSprite(this);
+    if (!this.textures.exists('enemy_enforcer_heavy'))
+      generateEnforcerHeavySprite(this);
+    if (!this.textures.exists('enemy_sentinel_drone'))
+      generateSentinelDroneSprite(this);
+    if (!this.textures.exists('enemy_sentinel_aerial'))
+      generateSentinelAerialSprite(this);
+    if (!this.textures.exists('enemy_mining_crawler'))
+      generateMiningCrawlerSprite(this);
+    if (!this.textures.exists('enemy_bayou_stalker'))
+      generateBayouStalkerSprite(this);
+    if (!this.textures.exists('enemy_aerial_sentinel'))
+      generateAerialSentinelSprite(this);
+    if (!this.textures.exists('enemy_storm_walker'))
+      generateStormWalkerSprite(this);
+    if (!this.textures.exists('enemy_si_elite'))
+      generateSIEliteSprite(this);
+    if (!this.textures.exists('enemy_converted_fighter'))
+      generateConvertedFighterSprite(this);
+    if (!this.textures.exists('enemy_compliance_warden_beta'))
+      generateComplianceWardenBetaSprite(this);
+
     this._registerAnimations();
 
     if (import.meta.env.DEV) {
       this.scene.launch('DevScene');
       const params = new URLSearchParams(window.location.search);
+      const build = params.get('build');
+      if (build) {
+        this.scene.start('SceneBuilderScene', { layout: build });
+        return;
+      }
       const devTarget = params.get('dev');
       if (devTarget) {
         const enemy = params.get('enemy');
@@ -70,185 +228,346 @@ export class PreloadScene extends Phaser.Scene {
       }
     }
 
-    this.scene.start('TitleScene');
+    this._showStartPrompt();
   }
 
   /**
-   * Draws a simple top-down humanoid character into an 8-frame spritesheet
-   * (48×48 per frame) and registers it as the 'hero' texture.
-   * Frame layout: [down×2, left×2, right×2, up×2]
+   * Build an 8-frame directional spritesheet (108×108 per frame) from individual
+   * rotation PNGs loaded in preload(). Frame order matches ROTATION_DIRS:
+   * 0:south 1:south-east 2:east 3:north-east 4:north 5:north-west 6:west 7:south-west.
    */
-  private _generateHeroTexture(): void {
-    const FW = 48, FH = 48;
-    const g = this.make.graphics({}, false);
+  private _buildCharacterSpritesheet(key: 'hero' | 'maya'): void {
+    const size = CHARACTER_FRAME_SIZE;
+    const canvas = this.textures.createCanvas(key, size * ROTATION_DIRS.length, size);
+    if (!canvas) return;
 
-    const SKIN   = 0xe8c090;
-    const HAIR   = 0x3a2008;
-    const SHIRT  = 0x3355cc;
-    const SHIRT2 = 0x2244aa;
-    const PANTS  = 0x1e2a4a;
-    const SHOES  = 0x2a1a0a;
-    const EYE    = 0x111122;
-    const MOUTH  = 0xc07050;
-
-    const frames: Array<['down' | 'left' | 'right' | 'up', 0 | 1]> = [
-      ['down', 0], ['down', 1],
-      ['left', 0], ['left', 1],
-      ['right', 0], ['right', 1],
-      ['up',   0], ['up',   1],
-    ];
-
-    frames.forEach(([dir, leg], i) => {
-      const ox = i * FW;
-      const cx = ox + FW / 2;
-
-      g.fillStyle(0x000000, 0.18);
-      g.fillEllipse(cx, 44, 18, 7);
-
-      const la = leg === 0 ? 2 : 0;
-      const ra = 2 - la;
-
-      if (dir === 'down') {
-        g.fillStyle(PANTS);
-        g.fillRect(cx - 7, 30 + la, 5, 12);
-        g.fillRect(cx + 2,  30 + ra, 5, 12);
-        g.fillStyle(SHOES);
-        g.fillRect(cx - 8, 41, 7, 5);
-        g.fillRect(cx + 1,  41, 7, 5);
-        g.fillStyle(SHIRT);
-        g.fillRect(cx - 8, 20, 16, 12);
-        g.fillStyle(SKIN);
-        g.fillRect(cx - 13, 21 + la, 5, 9);
-        g.fillRect(cx + 8,  21 + ra, 5, 9);
-        g.fillStyle(SKIN);
-        g.fillCircle(cx, 13, 9);
-        g.fillStyle(HAIR);
-        g.fillRect(cx - 9, 5, 18, 7);
-        g.fillRect(cx - 9, 7, 4, 8);
-        g.fillRect(cx + 5, 7, 4, 8);
-        g.fillStyle(EYE);
-        g.fillCircle(cx - 3, 14, 1.5);
-        g.fillCircle(cx + 3, 14, 1.5);
-        g.fillStyle(MOUTH);
-        g.fillRect(cx - 2, 18, 5, 2);
-
-      } else if (dir === 'up') {
-        g.fillStyle(PANTS);
-        g.fillRect(cx - 7, 30 + la, 5, 12);
-        g.fillRect(cx + 2,  30 + ra, 5, 12);
-        g.fillStyle(SHOES);
-        g.fillRect(cx - 8, 41, 7, 5);
-        g.fillRect(cx + 1,  41, 7, 5);
-        g.fillStyle(SHIRT2);
-        g.fillRect(cx - 8, 20, 16, 12);
-        g.fillStyle(SKIN);
-        g.fillRect(cx - 13, 21 + la, 5, 9);
-        g.fillRect(cx + 8,  21 + ra, 5, 9);
-        g.fillStyle(SKIN);
-        g.fillCircle(cx, 13, 9);
-        g.fillStyle(HAIR);
-        g.fillCircle(cx, 12, 9);
-        g.fillRect(cx - 9, 12, 18, 7);
-
-      } else if (dir === 'left') {
-        g.fillStyle(PANTS);
-        g.fillRect(cx - 4, 30 + la, 5, 12);
-        g.fillRect(cx - 2, 30 + ra, 4, 10);
-        g.fillStyle(SHOES);
-        g.fillRect(cx - 10, 41, 10, 4);
-        g.fillStyle(SHIRT);
-        g.fillRect(cx - 6, 20, 11, 12);
-        g.fillStyle(SKIN);
-        g.fillRect(cx - 11, 21 + la, 6, 9);
-        g.fillStyle(SKIN);
-        g.fillCircle(cx - 1, 13, 8);
-        g.fillStyle(HAIR);
-        g.fillRect(cx - 9, 6, 13, 6);
-        g.fillRect(cx + 3, 7, 4, 9);
-        g.fillStyle(EYE);
-        g.fillCircle(cx - 6, 13, 1.5);
-        g.fillStyle(MOUTH);
-        g.fillRect(cx - 10, 17, 3, 2);
-
-      } else {
-        g.fillStyle(PANTS);
-        g.fillRect(cx - 1, 30 + la, 5, 12);
-        g.fillRect(cx - 2, 30 + ra, 4, 10);
-        g.fillStyle(SHOES);
-        g.fillRect(cx,     41, 10, 4);
-        g.fillStyle(SHIRT);
-        g.fillRect(cx - 5, 20, 11, 12);
-        g.fillStyle(SKIN);
-        g.fillRect(cx + 5, 21 + la, 6, 9);
-        g.fillStyle(SKIN);
-        g.fillCircle(cx + 1, 13, 8);
-        g.fillStyle(HAIR);
-        g.fillRect(cx - 4, 6, 13, 6);
-        g.fillRect(cx - 7, 7, 4, 9);
-        g.fillStyle(EYE);
-        g.fillCircle(cx + 6, 13, 1.5);
-        g.fillStyle(MOUTH);
-        g.fillRect(cx + 7, 17, 3, 2);
-      }
+    ROTATION_DIRS.forEach((dir, i) => {
+      const srcKey = `${key}_${dir}`;
+      if (!this.textures.exists(srcKey)) return;
+      canvas.drawFrame(srcKey, undefined, i * size, 0);
     });
+    canvas.refresh();
 
-    g.generateTexture('hero', FW * frames.length, FH);
-    g.destroy();
-
-    const texture = this.textures.get('hero');
-    for (let i = 0; i < frames.length; i++) {
-      texture.add(i, 0, i * FW, 0, FW, FH);
+    for (let i = 0; i < ROTATION_DIRS.length; i++) {
+      canvas.add(i, 0, i * size, 0, size, size);
     }
   }
 
-  private _buildProgressBar(): void {
+  /**
+   * Build one canvas spritesheet per (action, direction) from the individually
+   * loaded PNG frames. Produces textures keyed `hero_<action>_<direction>` with
+   * N indexed frames laid out horizontally.
+   */
+  private _buildHeroAnimationTextures(): void {
+    const size = CHARACTER_FRAME_SIZE;
+    for (const [action, def] of Object.entries(HERO_ANIMS)) {
+      for (const dir of def.dirs) {
+        const textureKey = `hero_${action}_${dir}`;
+        if (this.textures.exists(textureKey)) continue;
+        const canvas = this.textures.createCanvas(textureKey, size * def.frames, size);
+        if (!canvas) continue;
+        for (let i = 0; i < def.frames; i++) {
+          const srcKey = `hero_${action}_${dir}_${i}`;
+          if (!this.textures.exists(srcKey)) continue;
+          canvas.drawFrame(srcKey, undefined, i * size, 0);
+        }
+        canvas.refresh();
+        for (let i = 0; i < def.frames; i++) {
+          canvas.add(i, 0, i * size, 0, size, size);
+        }
+      }
+    }
+  }
+
+  /**
+   * Cinematic loading visual: full-bleed splash painting, fades in from black,
+   * with a thin amber progress bar near the bottom while the rest of the assets load.
+   * Uses "cover" scaling so the splash fills the viewport at any aspect ratio.
+   */
+  private _buildLoadScreen(): void {
     const { width, height } = this.scale;
-    const bar = this.add.graphics();
 
-    this.add.text(width / 2, height / 2 - 40, 'ROBOTS', {
-      fontFamily: 'monospace',
-      fontSize:   '32px',
-      color:      '#7af',
-    }).setOrigin(0.5);
+    // Black backdrop sits behind everything in case of any sub-pixel gap.
+    this._bgBackdrop = this.add.rectangle(0, 0, width, height, 0x000000)
+      .setOrigin(0, 0)
+      .setDepth(-2);
 
-    this.add.text(width / 2, height / 2 - 12, 'The Overly Helpful Apocalypse', {
-      fontFamily: 'monospace',
-      fontSize:   '14px',
-      color:      '#556',
-    }).setOrigin(0.5);
+    if (this.textures.exists('load_screen_bg')) {
+      this._bgImage = this.add.image(width / 2, height / 2, 'load_screen_bg')
+        .setOrigin(0.5)
+        .setDepth(-1);
+      this._fitBackgroundCover();
+      // Subtle settle: drift the image up 4px while it fades in for a touch of motion.
+      this._bgImage.y += 4;
+      this.tweens.add({ targets: this._bgImage, y: height / 2, duration: 1200, ease: 'Sine.easeOut' });
+    }
 
-    this.load.on('progress', (value: number) => {
-      bar.clear();
-      bar.fillStyle(0x222244);
-      bar.fillRect(width * 0.1, height * 0.55, width * 0.8, 20);
-      bar.fillStyle(0x44aaff);
-      bar.fillRect(width * 0.1, height * 0.55, width * 0.8 * value, 20);
+    // Cinematic fade in from black.
+    this.cameras.main.fadeIn(900, 0, 0, 0);
+
+    this._progressBar = this.add.graphics().setDepth(10);
+    this._loadingText = this.add.text(0, 0, 'LOADING…', {
+      fontFamily:    'monospace',
+      fontSize:      '11px',
+      color:         '#998877',
+      letterSpacing: 3,
+    }).setOrigin(0.5).setDepth(10).setAlpha(0.8);
+
+    let lastProgress = 0;
+    const drawBar = (value: number): void => {
+      lastProgress = value;
+      const w = this.scale.width;
+      const h = this.scale.height;
+      const barY     = Math.floor(h * 0.965);
+      const barLeft  = Math.floor(w * 0.18);
+      const barRight = Math.floor(w * 0.82);
+      const barW     = barRight - barLeft;
+
+      this._progressBar.clear();
+      this._progressBar.fillStyle(0x000000, 0.55);
+      this._progressBar.fillRect(barLeft - 1, barY - 1, barW + 2, 4);
+      this._progressBar.fillStyle(0x442a1a, 0.9);
+      this._progressBar.fillRect(barLeft, barY, barW, 2);
+      this._progressBar.fillStyle(0xaa8866, 1);
+      this._progressBar.fillRect(barLeft, barY, Math.max(0, Math.floor(barW * value)), 2);
+
+      this._loadingText.setPosition(w / 2, barY - 14);
+    };
+
+    drawBar(0);
+    this.load.on('progress', (value: number) => { drawBar(value); });
+
+    this.load.on('complete', () => {
+      // Fade the loading bar away — sprite generators in create() take over briefly.
+      this.tweens.add({
+        targets:  [this._progressBar, this._loadingText],
+        alpha:    0,
+        duration: 400,
+        onComplete: () => {
+          this._progressBar.destroy();
+          this._loadingText.destroy();
+        },
+      });
     });
 
-    this.load.on('complete', () => { bar.destroy(); });
+    this.scale.on('resize', this._handleResize, this);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      this.scale.off('resize', this._handleResize, this);
+    });
+
+    // Re-draw the bar on resize using the most recent progress value.
+    this.scale.on('resize', () => drawBar(lastProgress));
+  }
+
+  /** Scale the splash to "cover" the viewport — fills both axes, crops the longer one. */
+  private _fitBackgroundCover(): void {
+    if (this._bgImage === null) return;
+    const tex = this.textures.get('load_screen_bg').getSourceImage() as HTMLImageElement;
+    const w = this.scale.width;
+    const h = this.scale.height;
+    // 1.01 overscan absorbs the 4px settle-tween so no black edge appears mid-animation.
+    const scale = Math.max(w / tex.width, h / tex.height) * 1.01;
+    this._bgImage.setScale(scale);
+    this._bgImage.setPosition(w / 2, h / 2);
+  }
+
+  /** Keep the splash, backdrop, and start-prompt centered if the user resizes the window. */
+  private _handleResize(): void {
+    const w = this.scale.width;
+    const h = this.scale.height;
+
+    if (this._bgBackdrop !== null) {
+      this._bgBackdrop.setSize(w, h);
+    }
+    this._fitBackgroundCover();
+
+    if (this._startPrompt !== null) {
+      this._startPrompt.setPosition(w / 2, h * 0.86);
+    }
+    if (this._continueText !== null) {
+      this._continueText.setPosition(w / 2, h * 0.92);
+    }
+  }
+
+  /**
+   * Once create() finishes its synchronous sprite generation, fade in the
+   * "PRESS ANY KEY TO START" prompt and arm input listeners. If a save exists,
+   * also surface a smaller [C] CONTINUE affordance underneath.
+   */
+  private _showStartPrompt(): void {
+    const { width, height } = this.scale;
+    const cx = width / 2;
+
+    // Music fades in alongside the prompt — the painting is now the title screen.
+    this._music = new ProceduralMusic();
+    this._music.play(0.32);
+
+    const promptSize = clamp(width * 0.024, 14, 22);
+    const prompt = this.add.text(cx, height * 0.86, 'PRESS ANY KEY TO START', {
+      fontFamily:      'monospace',
+      fontSize:        promptSize + 'px',
+      color:           '#e8d8b8',
+      stroke:          '#000000',
+      strokeThickness: 4,
+      letterSpacing:   3,
+    }).setOrigin(0.5).setAlpha(0).setDepth(20);
+    this._startPrompt = prompt;
+
+    this.tweens.add({
+      targets:    prompt,
+      alpha:      1,
+      duration:   800,
+      ease:       'Sine.easeOut',
+      onComplete: () => {
+        this.tweens.add({
+          targets:  prompt,
+          alpha:    0.3,
+          yoyo:     true,
+          duration: 700,
+          repeat:   -1,
+          ease:     'Sine.easeInOut',
+        });
+      },
+    });
+
+    // Optional Continue affordance.
+    const summary = SaveManager.getSummary();
+    let continueText: Phaser.GameObjects.Text | null = null;
+    if (summary !== null) {
+      const dateStr = summary.savedAt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      const label   = `[C]  CONTINUE  —  ${summary.playerName}  ·  Ch.${summary.chapter}  ·  ${dateStr}`;
+      continueText = this.add.text(cx, height * 0.92, label, {
+        fontFamily: 'monospace',
+        fontSize:   '12px',
+        color:      '#a89878',
+        stroke:     '#000000',
+        strokeThickness: 3,
+      })
+        .setOrigin(0.5)
+        .setAlpha(0)
+        .setDepth(20)
+        .setInteractive({ useHandCursor: true });
+
+      this.tweens.add({ targets: continueText, alpha: 1, duration: 700, delay: 400 });
+      this._continueText = continueText;
+    }
+
+    // Input wiring — keyboard + pointer for both paths (CLAUDE.md mobile rule).
+    const startNew = (): void => { this._startGame('PrologueScene', true); };
+    const resume   = (): void => {
+      const data = SaveManager.load();
+      if (data === null) { this._startGame('PrologueScene', true); return; }
+      SaveManager.restore(this.game, data);
+      this._startGame(data.currentScene, false);
+    };
+
+    if (continueText !== null) {
+      continueText.on('pointerdown', (_: unknown, __: unknown, ___: unknown, e: Phaser.Types.Input.EventData) => {
+        e.stopPropagation();
+        resume();
+      });
+      this.input.keyboard!.once('keydown-C', resume);
+    }
+
+    this.input.keyboard!.once('keydown', (e: KeyboardEvent) => {
+      // 'C' is consumed above when a save exists.
+      if (continueText !== null && e.key.toLowerCase() === 'c') return;
+      startNew();
+    });
+    this.input.once('pointerdown', startNew);
+  }
+
+  private _startGame(targetScene: string, isNewGame: boolean): void {
+    if (this._started) return;
+    this._started = true;
+
+    if (isNewGame) {
+      this.registry.set('playerName', 'Arlo');
+      this.registry.set('chapter', 1);
+    }
+
+    this._music?.stop(700);
+    this.cameras.main.fade(800, 0, 0, 0, false, (_cam: Phaser.Cameras.Scene2D.Camera, progress: number) => {
+      if (progress === 1) this.scene.start(targetScene);
+    });
   }
 
   private _registerAnimations(): void {
-    if (this.textures.exists('hero')) {
-      const heroAnims: Array<{ key: string; frames: number[] }> = [
-        { key: 'hero-walk-down',  frames: [0, 1] },
-        { key: 'hero-walk-left',  frames: [2, 3] },
-        { key: 'hero-walk-right', frames: [4, 5] },
-        { key: 'hero-walk-up',    frames: [6, 7] },
-      ];
-      heroAnims.forEach(({ key, frames }) => {
+    // Directional spritesheet frame indexes (see _buildCharacterSpritesheet):
+    // 0:S 1:SE 2:E 3:NE 4:N 5:NW 6:W 7:SW
+    // Per-direction idle frames pulled from the 8-frame rotation sheet.
+    const idleFrameByDir: Record<string, number> = {
+      'south':      0, 'south-east': 1, 'east':       2, 'north-east': 3,
+      'north':      4, 'north-west': 5, 'west':       6, 'south-west': 7,
+    };
+
+    // Maya still uses the legacy 4-direction static walk keys.
+    const mayaStaticAnims: Array<{ key: string; frames: number[] }> = [
+      { key: 'maya-walk-down',  frames: [0] },
+      { key: 'maya-walk-right', frames: [2] },
+      { key: 'maya-walk-up',    frames: [4] },
+      { key: 'maya-walk-left',  frames: [6] },
+      { key: 'maya-idle',       frames: [0] },
+    ];
+    if (this.textures.exists('maya')) {
+      for (const { key, frames } of mayaStaticAnims) {
         this.anims.create({
           key,
-          frames:    this.anims.generateFrameNumbers('hero', { frames }),
-          frameRate: 6,
+          frames:    this.anims.generateFrameNumbers('maya', { frames }),
+          frameRate: 1,
           repeat:    -1,
         });
-      });
+      }
+    }
+
+    // Hero per-direction idles + legacy aliases (hero-idle, hero-walk-{down/up/left/right}).
+    if (this.textures.exists('hero')) {
+      for (const [dir, frame] of Object.entries(idleFrameByDir)) {
+        this.anims.create({
+          key:       `hero-idle-${dir}`,
+          frames:    this.anims.generateFrameNumbers('hero', { frames: [frame] }),
+          frameRate: 1,
+          repeat:    -1,
+        });
+      }
       this.anims.create({
         key:       'hero-idle',
         frames:    this.anims.generateFrameNumbers('hero', { frames: [0] }),
         frameRate: 1,
         repeat:    -1,
+      });
+    }
+
+    // Hero action animations (walking/running/jumping/crouching/poking × directions).
+    for (const [action, def] of Object.entries(HERO_ANIMS)) {
+      for (const dir of def.dirs) {
+        const textureKey = `hero_${action}_${dir}`;
+        if (!this.textures.exists(textureKey)) continue;
+        this.anims.create({
+          key:       `hero-${action}-${dir}`,
+          frames:    this.anims.generateFrameNumbers(textureKey, { start: 0, end: def.frames - 1 }),
+          frameRate: def.frameRate,
+          repeat:    def.repeat,
+        });
+      }
+    }
+
+    // Legacy 4-direction walk aliases — map to the new walking animation frames.
+    const walkAliasByDir: Array<[string, string]> = [
+      ['hero-walk-down',  'south'],
+      ['hero-walk-up',    'north'],
+      ['hero-walk-left',  'west'],
+      ['hero-walk-right', 'east'],
+    ];
+    const walkDef = HERO_ANIMS.walking;
+    for (const [alias, dir] of walkAliasByDir) {
+      const textureKey = `hero_walking_${dir}`;
+      if (!this.textures.exists(textureKey)) continue;
+      this.anims.create({
+        key:       alias,
+        frames:    this.anims.generateFrameNumbers(textureKey, { start: 0, end: walkDef.frames - 1 }),
+        frameRate: walkDef.frameRate,
+        repeat:    walkDef.repeat,
       });
     }
 

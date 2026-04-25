@@ -4,7 +4,7 @@ import { DialogueManager } from '../dialogue/DialogueManager.js';
 import { MobileControls }  from '../utils/MobileControls.js';
 import type { Interactable, WasdKeys } from '../types.js';
 import {
-  MAP_W, MAP_H, WALL_T, DIVIDER_X,
+  MAP_W, MAP_H, WALL_T, TOP_WALL_H, DIVIDER_X,
   DOOR_TOP, DOOR_BOT, FDOOR_TOP, FDOOR_BOT,
   drawPrologueRoom,
 } from './PrologueRoomRenderer.js';
@@ -33,7 +33,7 @@ export class PrologueScene extends Phaser.Scene {
   private _phase:          Phase   = PHASE.WAKE_UP;
   private _inputEnabled:   boolean = false;
   private _enteredLiving:  boolean = false;
-  private _playerName:     string  = 'YOU';
+  private _playerName:     string  = 'Arlo';
   private _wallBodies:     Phaser.GameObjects.Zone[] = [];
   private _interactables:  Interactable[] = [];
   private _nearInteract:   Interactable | null = null;
@@ -54,7 +54,7 @@ export class PrologueScene extends Phaser.Scene {
     this._phase         = PHASE.WAKE_UP;
     this._inputEnabled  = false;
     this._enteredLiving = false;
-    this._playerName    = (this.registry.get('playerName') as string | undefined) ?? 'YOU';
+    this._playerName    = (this.registry.get('playerName') as string | undefined) ?? 'Arlo';
 
     drawPrologueRoom(this);
     this._buildWalls();
@@ -96,7 +96,7 @@ export class PrologueScene extends Phaser.Scene {
       this._wallBodies.push(zone);
     };
 
-    addWall(MAP_W / 2, WALL_T / 2,         MAP_W,  WALL_T);
+    addWall(MAP_W / 2, TOP_WALL_H / 2,     MAP_W,  TOP_WALL_H);
     addWall(MAP_W / 2, MAP_H - WALL_T / 2, MAP_W,  WALL_T);
     addWall(WALL_T / 2, MAP_H / 2,         WALL_T, MAP_H);
 
@@ -105,9 +105,9 @@ export class PrologueScene extends Phaser.Scene {
     const rBotH = MAP_H - FDOOR_BOT;
     addWall(MAP_W - WALL_T / 2, FDOOR_BOT + rBotH / 2, WALL_T, rBotH);
 
-    addWall(DIVIDER_X, DOOR_TOP / 2,           8, DOOR_TOP);
+    addWall(DIVIDER_X, DOOR_TOP / 2,           WALL_T, DOOR_TOP);
     const dBotH = MAP_H - DOOR_BOT;
-    addWall(DIVIDER_X, DOOR_BOT + dBotH / 2,  8, dBotH);
+    addWall(DIVIDER_X, DOOR_BOT + dBotH / 2,  WALL_T, dBotH);
   }
 
   // ─── Interactables ────────────────────────────────────────────────────────
@@ -117,27 +117,27 @@ export class PrologueScene extends Phaser.Scene {
 
     this._interactables = [
       {
-        id: 'bed', x: 128, y: 90, range: 70, label: 'Bed',
+        id: 'bed', x: 88, y: 128, range: 70, label: 'Bed',
         interact: () => { this.dialogMgr.show(n, D.interactable.bed); },
       },
       {
-        id: 'alarm', x: 242, y: 66, range: 54, label: 'Alarm Clock',
+        id: 'alarm', x: 240, y: 96, range: 54, label: 'Alarm Clock',
         interact: () => { this.dialogMgr.show('ALARM CLOCK', D.interactable.alarm_clock); },
       },
       {
-        id: 'computer', x: 258, y: 176, range: 60, label: 'Computer',
+        id: 'computer', x: 260, y: 220, range: 60, label: 'Computer',
         interact: () => { this.dialogMgr.show('BROWSER', D.interactable.computer); },
       },
       {
-        id: 'bookshelf', x: 44, y: 260, range: 60, label: 'Bookshelf',
+        id: 'bookshelf', x: 48, y: 300, range: 60, label: 'Bookshelf',
         interact: () => { this.dialogMgr.show(n, D.interactable.bookshelf); },
       },
       {
-        id: 'poster', x: 192, y: 62, range: 50, label: 'Poster',
+        id: 'poster', x: 240, y: 56, range: 56, label: 'Poster',
         interact: () => { this.dialogMgr.show(n, D.interactable.poster); },
       },
       {
-        id: 'couch', x: 476, y: 258, range: 70, label: 'Couch',
+        id: 'couch', x: 472, y: 300, range: 70, label: 'Couch',
         available: false,
         used: false,
         interact: () => { this._triggerNewscast(); },
@@ -158,9 +158,9 @@ export class PrologueScene extends Phaser.Scene {
   private _buildPlayer(): void {
     this.cursors = this.input.keyboard!.createCursorKeys();
     this.wasd    = this.input.keyboard!.addKeys('W,A,S,D') as WasdKeys;
-    this.player  = new Player(this, 160, 310);
+    this.player  = new Player(this, 200, 370);
     this.player.name = this._playerName;
-    this.physics.world.setBounds(WALL_T, WALL_T, MAP_W - WALL_T * 2, MAP_H - WALL_T * 2);
+    this.physics.world.setBounds(WALL_T, TOP_WALL_H, MAP_W - WALL_T * 2, MAP_H - TOP_WALL_H - WALL_T);
 
     if (this._wallBodies.length) {
       this.physics.add.collider(this.player.sprite, this._wallBodies);
@@ -248,7 +248,7 @@ export class PrologueScene extends Phaser.Scene {
   }
 
   private _tvScreenFlash(): void {
-    const flash = this.add.rectangle(474, 64, 196, 72, 0x003399).setDepth(8).setAlpha(0);
+    const flash = this.add.rectangle(480, 92, 40, 28, 0x003399).setDepth(8).setAlpha(0);
 
     this.tweens.add({
       targets:  flash,
@@ -265,11 +265,11 @@ export class PrologueScene extends Phaser.Scene {
   }
 
   private _addTVOverlay(): void {
-    this._tvLabel = this.add.text(474, 38, 'SUPERINTELLIGENCE INC — LIVE', {
+    this._tvLabel = this.add.text(480, 60, 'SI INC — LIVE', {
       fontFamily: 'monospace', fontSize: '5px', color: '#3366cc',
     }).setOrigin(0.5).setDepth(9);
 
-    this._tvBroadcastBar = this.add.rectangle(474, 95, 196, 8, 0x003366).setDepth(9).setAlpha(0.6);
+    this._tvBroadcastBar = this.add.rectangle(480, 116, 44, 4, 0x003366).setDepth(9).setAlpha(0.6);
   }
 
   private _playNewscast(): void {

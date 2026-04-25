@@ -7,9 +7,9 @@ export const PLAYER_START_X = 60;
 export const PLAYER_START_Y = 360;
 export const MAYA_X         = 660;
 export const MAYA_Y         = 340;
-export const EXIT_X         = 40;
-export const EXIT_Y_TOP     = 300;
-export const EXIT_Y_BOT     = 420;
+export const EXIT_X         = 80;
+export const EXIT_Y_TOP     = 280;
+export const EXIT_Y_BOT     = 440;
 
 /** NPC spawn positions for the survivor cell. Dialogue lines live in src/data/dialogue/subway.json. */
 export const SURVIVOR_NPCS = [
@@ -107,11 +107,27 @@ export function drawSubway(scene: Phaser.Scene): void {
   g.strokeRect(140, 370, 26, 30);
 
   // ── Left entrance (subway tunnel opening) ──────────────────────────────
-  g.fillStyle(0x080808);
-  g.fillRect(0, EXIT_Y_TOP - 30, 30, EXIT_Y_BOT - EXIT_Y_TOP + 60);
-  // Arrow hint
-  g.fillStyle(0x334455, 0.5);
-  g.fillTriangle(20, 350, 8, 340, 8, 360);
+  // Tunnel mouth (wider, fully black opening)
+  g.fillStyle(0x000000);
+  g.fillRect(0, EXIT_Y_TOP - 40, 80, EXIT_Y_BOT - EXIT_Y_TOP + 80);
+  // Tunnel arch highlight
+  g.lineStyle(3, 0x556677, 0.9);
+  g.strokeRect(0, EXIT_Y_TOP - 40, 80, EXIT_Y_BOT - EXIT_Y_TOP + 80);
+  // Glowing amber border to draw the eye
+  g.lineStyle(2, 0xcc8822, 0.6);
+  g.strokeRect(4, EXIT_Y_TOP - 36, 72, EXIT_Y_BOT - EXIT_Y_TOP + 72);
+
+  // Arrow hint (larger, brighter)
+  g.fillStyle(0xcc8822, 0.95);
+  g.fillTriangle(60, 360, 30, 340, 30, 380);
+  g.fillStyle(0xcc8822, 0.95);
+  g.fillRect(60, 354, 14, 12);
+
+  // "EXIT" label above tunnel
+  scene.add.text(40, EXIT_Y_TOP - 56, 'EXIT', {
+    fontFamily: 'monospace', fontSize: '14px', color: '#ffcc66',
+    stroke: '#000000', strokeThickness: 3,
+  }).setOrigin(0.5).setDepth(8);
 
   // ── Old subway signage ─────────────────────────────────────────────────
   g.fillStyle(0x880000, 0.4);

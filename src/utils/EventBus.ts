@@ -1,4 +1,5 @@
 import { EVENTS } from './constants.js';
+import type { SurvivalState, TravelEvent } from '../types.js';
 
 /**
  * Typed event detail map — each key is an event name, value is its detail shape.
@@ -11,6 +12,12 @@ type BusEventMap = {
   [EVENTS.SCENE_TRANSITION]: Record<string, never>;
   [EVENTS.PAUSE_OPEN]:       Record<string, never>;
   [EVENTS.PAUSE_CLOSE]:      Record<string, never>;
+  // ─── Phase B additions ────────────────────────────────────────────
+  [EVENTS.WORLD_MAP_TRAVEL]: { fromNodeId: string; toNodeId: string; days: number };
+  [EVENTS.SURVIVAL_TICK]:    { state: SurvivalState; event?: TravelEvent };
+  [EVENTS.SAVE_REQUESTED]:   { slot: number };
+  [EVENTS.DIALOGUE_CHOICE]:  { choiceId: string; setFlags?: readonly string[]; nextId: string };
+  [EVENTS.NODE_ENTER]:       { nodeId: string; sceneKey: string };
 };
 
 type BusEventName = keyof BusEventMap;

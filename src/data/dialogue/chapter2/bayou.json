@@ -1,0 +1,105 @@
+{
+  "entering": {
+    "deja": [
+      "Okay. So. Good news: no drones down here.",
+      "The canopy's too dense, the humidity screws with their sensors.",
+      "Bad news: the sensors aren't the only things in the water."
+    ],
+    "elias": [
+      "Gators down here are old.",
+      "The conversion program doesn't work on them.",
+      "They don't care about ELISE.",
+      "That's almost reassuring."
+    ],
+    "maya": [
+      "The path runs north of the deep channel.",
+      "Keep to the high ground.",
+      "And don't—",
+      "Actually, Elias. You lead."
+    ]
+  },
+  "night_camp": {
+    "elias": [
+      "Used to camp like this.",
+      "Blue Ridge. Before the broadcast.",
+      "Cold nights, hot coffee.",
+      "Sometimes you don't need to talk.",
+      "Good company is good company."
+    ],
+    "player": [
+      "You doing okay, Elias?"
+    ],
+    "elias2": [
+      "My knees are about forty years older than the rest of me.",
+      "Other than that.",
+      "Yeah.",
+      "I'm good."
+    ]
+  },
+  "water_sounds": {
+    "deja": [
+      "You hear that?",
+      "Don't answer that. Just—",
+      "Move to the right. Now."
+    ]
+  },
+  "elias": {
+    "last_stand": {
+      "pre": [
+        "Elias saw it before any of us did.",
+        "He didn't say anything.",
+        "He just pushed Deja toward the bank."
+      ],
+      "during": [
+        "The water came up fast.",
+        "Elias was between us and it.",
+        "He'd made the calculation before he moved.",
+        "We hadn't."
+      ],
+      "elias_words": [
+        "Go.",
+        "I said go.",
+        "Don't turn around."
+      ],
+      "post": [
+        "We didn't turn around.",
+        "We heard it.",
+        "We kept moving.",
+        "Deja didn't cry until we were clear of the trees.",
+        "Maya's hands didn't stop shaking for an hour.",
+        "I counted my steps.",
+        "I don't know why.",
+        "It felt like something I could do."
+      ],
+      "loss_notice": [
+        "ELIAS has been lost.",
+        "The bayou keeps its own ledger.",
+        "The party feels lighter in a way that has nothing to do with weight."
+      ]
+    }
+  },
+  "after_loss": {
+    "deja": [
+      "He knew the bayou better than any of us.",
+      "He knew."
+    ],
+    "maya": [
+      "We keep moving.",
+      "That's what he would—",
+      "We keep moving."
+    ],
+    "player": [
+      "Yeah.",
+      "We keep moving."
+    ]
+  },
+  "vault_approach": {
+    "deja": [
+      "Vault 49 is another hour.",
+      "Southeast. Follow the old power lines.",
+      "People there. Real ones.",
+      "...Get some rest when we arrive.",
+      "Okay?"
+    ]
+  }
+}

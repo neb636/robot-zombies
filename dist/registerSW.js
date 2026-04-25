@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/robot-zombies/sw.js', { scope: '/robot-zombies/' })})}

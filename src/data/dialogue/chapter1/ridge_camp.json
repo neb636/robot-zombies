@@ -1,0 +1,210 @@
+{
+  "arriving": {
+    "player": [
+      "Inside the perimeter now.",
+      "Real people. A fire. Someone cooking.",
+      "My hands are still shaking."
+    ],
+    "elias": [
+      "They'll want to see your faces.",
+      "Don't look scared. They'll think you brought something with you."
+    ]
+  },
+  "guard_challenge_a": {
+    "guard": [
+      "Elias. You're back.",
+      "Who are these two?"
+    ],
+    "elias": [
+      "From Boston. They're clean.",
+      "I walked the last six miles with them."
+    ]
+  },
+  "guard_challenge_b": {
+    "guard": [
+      "Boston.",
+      "All right. Come on in. Don't touch anything."
+    ]
+  },
+  "camp_overview": {
+    "player": [
+      "Thirty-odd people. Maybe more.",
+      "They've been here a while. This is organized."
+    ]
+  },
+  "sam_meet_a": {
+    "sam": [
+      "You need food? I've got rabbit stew. Don't ask what it's stretched with.",
+      "Sit. You look like you've been walking for three days."
+    ],
+    "player": [
+      "Two and a half."
+    ]
+  },
+  "sam_meet_b": {
+    "sam": [
+      "Close enough. Sit."
+    ]
+  },
+  "sam_husband": {
+    "sam": [
+      "My husband was a hunter. Good one.",
+      "He went out three weeks ago and didn't come back.",
+      "His rifle's still up at the old lookout. End of the east trail, past the deadfall.",
+      "I'd get it myself but my knee's bad and I don't—",
+      "I just would rather it not stay up there."
+    ]
+  },
+  "sam_husband_prompt": {
+    "player": [
+      "I'll bring it back."
+    ],
+    "sam": [
+      "You don't have to say that."
+    ],
+    "player2": [
+      "I know."
+    ]
+  },
+  "sam_rifle_return": {
+    "player": [
+      "I found it. At the lookout."
+    ],
+    "sam": [
+      "...",
+      "Thank you.",
+      "He'd been meaning to clean it.",
+      "He always said next week."
+    ]
+  },
+  "tilly_meet": {
+    "tilly": [
+      "Elias says you came through Blue Ridge in the dark.",
+      "That's either brave or stupid.",
+      "I haven't decided which."
+    ],
+    "player": [
+      "Maybe both."
+    ],
+    "tilly2": [
+      "Maybe.",
+      "Come sit with us tonight. After dinner.",
+      "Nothing to do here but talk."
+    ]
+  },
+  "tilly_campfire": {
+    "tilly": [
+      "My grandmother was from Harlan County.",
+      "She said the mountains never change, only the people do.",
+      "She was right, she was just wrong about which direction the change went."
+    ],
+    "player": [
+      "What was she like?"
+    ],
+    "tilly2": [
+      "Hard. Warm. Couldn't tell which one she was until you needed something.",
+      "I think about her a lot lately.",
+      "She'd have handled this better than I am."
+    ]
+  },
+  "tilly_gift_offer": {
+    "tilly": [
+      "Here.",
+      "I found this in an abandoned house outside of Buchanan.",
+      "Figured it was waiting for the right person."
+    ]
+  },
+  "tilly_gift_accept": {
+    "player": [
+      "Are you sure?"
+    ],
+    "tilly": [
+      "If I wasn't sure I wouldn't have offered.",
+      "Take it."
+    ],
+    "player2": [
+      "Thank you."
+    ],
+    "tilly2": [
+      "Come back. After the mine. If you get through.",
+      "I'll be here."
+    ]
+  },
+  "tilly_gift_decline": {
+    "player": [
+      "I can't take that. You might need it."
+    ],
+    "tilly": [
+      "Probably. Keep it anyway.",
+      "People need things. Doesn't mean they shouldn't give them."
+    ]
+  },
+  "rook_meet": {
+    "rook": [
+      "You're from Boston.",
+      "You shouldn't have made it this far.",
+      "No offense. The odds were not in your favor."
+    ],
+    "player": [
+      "We got lucky."
+    ],
+    "rook2": [
+      "People keep saying that.",
+      "They mean they had help and didn't die.",
+      "That's not luck. That's just not dying."
+    ]
+  },
+  "rook_intel": {
+    "rook": [
+      "The mine goes four floors down.",
+      "Excavator-class bot on the bottom level. That's the boss of it.",
+      "Take it out and the upper floors go passive.",
+      "The captives are on floors two and three."
+    ],
+    "player": [
+      "How do you know this?"
+    ],
+    "rook2": [
+      "I've been watching it for ten days.",
+      "I was going to do something about it.",
+      "Hadn't figured out what yet."
+    ]
+  },
+  "rumors_harvest_town": {
+    "survivor_a": [
+      "Heard there's a settlement out in Kansas that went voluntary.",
+      "Whole town converted. People say they're fine. Look fine.",
+      "Someone said they saw a man there tending a garden.",
+      "Said he looked familiar. Boston accent.",
+      "I don't know. Maybe nothing."
+    ]
+  },
+  "camp_rest": {
+    "player": [
+      "First real sleep in days.",
+      "It doesn't feel safe to stay.",
+      "It never feels safe to stay."
+    ]
+  },
+  "pre_mine": {
+    "elias": [
+      "You don't have to go in.",
+      "Anyone who wants to stay at camp, stays."
+    ],
+    "player": [
+      "I'm going."
+    ],
+    "elias2": [
+      "Figured."
+    ]
+  },
+  "warden_six_warning": {
+    "rook": [
+      "One more thing.",
+      "There's a secondary unit. Smaller than the Excavator. Call sign Warden Six.",
+      "Overseers say it shows up after the big one goes down.",
+      "Like a backup alarm.",
+      "If you beat the Excavator, assume it's coming."
+    ]
+  }
+}

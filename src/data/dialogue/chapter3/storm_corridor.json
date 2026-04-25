@@ -1,0 +1,85 @@
+{
+  "arriving": {
+    "player": [
+      "The sky changed while we were moving.",
+      "Green. Yellow. No birds."
+    ],
+    "maya": [
+      "Tornado. Category three, maybe four.",
+      "Lightning at this frequency disrupts the Sentinels' sensor array.",
+      "It's cover. If we can stay ahead of the funnel."
+    ]
+  },
+
+  "storm_warning": {
+    "system": [
+      "The wind picks up.",
+      "The sky turns the color of a bruise."
+    ]
+  },
+
+  "storm_hits": {
+    "system": [
+      "The funnel wall hits the road two hundred yards north.",
+      "It's moving south."
+    ],
+    "maya": [
+      "Keep moving. Don't stop for any of them."
+    ]
+  },
+
+  "mid_battle": {
+    "system": [
+      "Lightning splits a grain silo directly overhead.",
+      "The Sentinels stagger. Their targeting blinks out for six seconds."
+    ],
+    "player": [
+      "Now!"
+    ]
+  },
+
+  "storm_corridor.warden_six.return": {
+    "system": [
+      "It steps out of the rain.",
+      "You've seen this configuration before.",
+      "Warden Six. You thought you left it in Appalachia."
+    ],
+    "warden_six": [
+      "PURSUIT PROTOCOL: ACTIVE.",
+      "SUBJECT RECLASSIFIED: HIGH PRIORITY.",
+      "OPTIMAL TERMINATION WINDOW: NOW."
+    ],
+    "maya": [
+      "It followed us.",
+      "This whole chapter. It's been behind us the whole chapter.",
+      "Hit it. Hit it hard."
+    ]
+  },
+
+  "warden_six_defeated": {
+    "system": [
+      "It goes down in the mud.",
+      "Lightning again. The funnel wall is sixty yards east."
+    ],
+    "maya": [
+      "Run.",
+      "We can make it to the tower if we run."
+    ]
+  },
+
+  "storm_passing": {
+    "system": [
+      "The tornado passes north.",
+      "The silence afterward is enormous.",
+      "The plains stretch out flat and grey and washed clean."
+    ],
+    "player": [
+      "You alive?"
+    ],
+    "maya": [
+      "I'm annoyed, which means yes.",
+      "Tower's a mile out.",
+      "Keep moving."
+    ]
+  }
+}

@@ -1,0 +1,45 @@
+[
+  {
+    "kind": "hunting_opportunity",
+    "weight": 25,
+    "text": "A deer steps into the clearing, ears up. It hasn't scented you yet. The drones don't come this far into the tree line.",
+    "effect": {}
+  },
+  {
+    "kind": "hunting_opportunity",
+    "weight": 15,
+    "text": "Wild turkey flock moving through the hollow. Elias goes still. You go still. Nobody breathes.",
+    "effect": {}
+  },
+  {
+    "kind": "survivor_camp",
+    "weight": 20,
+    "text": "Smoke from a chimney, too regular to be accidental. A small group of ridge folk — suspicious but willing to trade.",
+    "effect": {}
+  },
+  {
+    "kind": "lucky_find",
+    "weight": 15,
+    "text": "An old hunting cabin, untouched. Canned goods stacked neatly, like whoever left them expected to come back.",
+    "effect": { "food": 4, "medicine": 1, "fuel": 1 }
+  },
+  {
+    "kind": "vehicle_breakdown",
+    "weight": 10,
+    "text": "The rear axle gives out on a switchback. Takes the better part of a day to limp to flat ground.",
+    "effect": { "fuel": -1 },
+    "delayDays": 1
+  },
+  {
+    "kind": "campfire_night",
+    "weight": 10,
+    "text": "Elias builds a fire so small it casts almost no light. You eat what you have and watch the stars. He names three constellations without being asked.",
+    "effect": { "morale": 8 }
+  },
+  {
+    "kind": "illness",
+    "weight": 5,
+    "text": "Someone drank from a stream that looked clean. It wasn't.",
+    "effect": { "morale": -5 }
+  }
+]

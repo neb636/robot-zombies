@@ -1,0 +1,13 @@
+{
+  "region": "silicon_valley",
+  "description": "Nothing for sale. Everything is optimally allocated. There is no market here.",
+  "entries": [
+    { "item": "food",        "buyPrice": 30, "sellPrice": 1 },
+    { "item": "fuel",        "buyPrice": 40, "sellPrice": 1 },
+    { "item": "medicine",    "buyPrice": 35, "sellPrice": 1 },
+    { "item": "ammo",        "buyPrice": 50, "sellPrice": 1 },
+    { "item": "morale_item", "buyPrice": 60, "sellPrice": 0 }
+  ],
+  "moraleItemName": "Nothing",
+  "moraleItemFlavor": "There's nothing here for sale. That's the point."
+}
