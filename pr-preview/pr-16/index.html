@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#0a0a1e" />
+  <meta name="theme-color" content="#14110f" />
   <meta name="description" content="A browser-based SNES-style JRPG. Fight for the right to be inefficient." />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  <meta name="apple-mobile-web-app-title" content="Silicon Requiem" />
-  <title>Silicon Requiem</title>
+  <meta name="apple-mobile-web-app-title" content="Quiet Machines" />
+  <title>Quiet Machines</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -24,6 +24,27 @@
     }
     canvas { display: block; }
 
+    /* ──────────────────────────────────────────────────────────
+       Quiet Machines UI palette — derived from load-screen.png
+       Muted, post-apocalyptic. Neutral charcoal greys with a
+       single amber accent (echoing the BOSTON sign / ELISE eye).
+       ────────────────────────────────────────────────────────── */
+    :root {
+      --qm-bg-overlay:   rgba(6, 7, 8, 0.82);
+      --qm-bg-panel:     rgba(20, 22, 24, 0.96);
+      --qm-bg-deep:      rgba(12, 13, 14, 0.95);
+      --qm-border:       #4a4f54;
+      --qm-border-strong:#5e646a;
+      --qm-border-soft:  #2a2d30;
+      --qm-text:         #c2c7cb;
+      --qm-text-dim:     #7c8186;
+      --qm-accent:       #d99846;
+      --qm-accent-soft:  #a87838;
+      --qm-muted:        #5e6266;
+      --qm-disabled:     #3a3d40;
+      --qm-disabled-bd:  #25282b;
+    }
+
     /* Dialogue overlay sits above the Phaser canvas */
     #dialogue-overlay {
       position: absolute;
@@ -32,28 +53,34 @@
       transform: translateX(-50%);
       width: 760px;
       max-width: 96vw;
-      background: rgba(10, 10, 30, 0.92);
-      border: 3px solid #7af;
-      border-radius: 8px;
+      background: var(--qm-bg-panel);
+      border: 3px solid var(--qm-border);
+      border-radius: 4px;
       padding: 18px 24px;
-      color: #e8f4ff;
+      color: var(--qm-text);
       font-family: 'Courier New', monospace;
       font-size: 16px;
       line-height: 1.6;
       display: none;
       z-index: 100;
+      box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.7),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+        0 10px 30px rgba(0, 0, 0, 0.6);
+      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.7);
     }
     #dialogue-overlay .speaker {
-      color: #7af;
+      color: var(--qm-accent);
       font-weight: bold;
       margin-bottom: 6px;
       font-size: 13px;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
       text-transform: uppercase;
+      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8);
     }
     #dialogue-overlay .prompt {
       float: right;
-      color: #7af;
+      color: var(--qm-accent);
       animation: blink 0.8s step-end infinite;
     }
     @keyframes blink { 50% { opacity: 0; } }
@@ -63,22 +90,33 @@
       position: fixed;
       top: 12px;
       right: 12px;
-      background: rgba(10, 10, 30, 0.88);
-      border: 2px solid #336688;
-      border-radius: 6px;
-      color: #7aaeff;
-      font-size: 17px;
-      padding: 5px 10px;
+      background: var(--qm-bg-deep);
+      border: 2px solid var(--qm-border-soft);
+      border-radius: 3px;
+      color: var(--qm-accent);
+      padding: 6px 12px;
       cursor: pointer;
       z-index: 200;
       font-family: 'Courier New', monospace;
-      font-size: 13px;
-      letter-spacing: 1px;
-      transition: border-color 0.15s, opacity 0.15s;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: border-color 0.15s, color 0.15s, opacity 0.15s;
       user-select: none;
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+        0 2px 6px rgba(0, 0, 0, 0.5);
+      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8);
     }
-    #tts-mute-btn:hover { border-color: #7aaeff; }
-    #tts-mute-btn.muted { color: #445566; border-color: #223344; opacity: 0.55; }
+    #tts-mute-btn:hover {
+      border-color: var(--qm-border);
+      color: #e8a85a;
+    }
+    #tts-mute-btn.muted {
+      color: var(--qm-muted);
+      border-color: var(--qm-disabled-bd);
+      opacity: 0.6;
+    }
 
     /* Pause menu overlay */
     #pause-overlay {
@@ -87,24 +125,39 @@
       display: none;
       align-items: center;
       justify-content: center;
-      background: rgba(0, 0, 10, 0.75);
+      background: var(--qm-bg-overlay);
       z-index: 150;
+      backdrop-filter: blur(2px);
     }
     #pause-panel {
-      background: rgba(10, 10, 30, 0.95);
-      border: 3px solid #7af;
-      border-radius: 8px;
-      padding: 32px 48px;
+      background: var(--qm-bg-panel);
+      border: 3px solid var(--qm-border);
+      border-radius: 4px;
+      padding: 36px 56px;
       font-family: 'Courier New', monospace;
-      min-width: 280px;
+      min-width: 300px;
       text-align: center;
+      box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.7),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+        0 16px 48px rgba(0, 0, 0, 0.7);
     }
     #pause-title {
-      color: #7aaeff;
+      color: var(--qm-accent);
       font-size: 20px;
-      letter-spacing: 4px;
+      letter-spacing: 6px;
       text-transform: uppercase;
-      margin-bottom: 24px;
+      margin-bottom: 28px;
+      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8);
+    }
+    #pause-title::after {
+      content: '';
+      display: block;
+      width: 56px;
+      height: 1px;
+      background: var(--qm-accent-soft);
+      margin: 12px auto 0;
+      opacity: 0.6;
     }
     #pause-menu-list {
       list-style: none;
@@ -112,21 +165,24 @@
       margin: 0;
     }
     #pause-menu-list li {
-      color: #e8f4ff;
+      color: var(--qm-text);
       font-size: 16px;
-      padding: 6px 0;
+      padding: 7px 0;
       cursor: pointer;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: color 0.12s;
+      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.7);
     }
-    #pause-menu-list li:hover { color: #7aaeff; }
+    #pause-menu-list li:hover { color: var(--qm-accent); }
     #pause-hint {
-      color: #446688;
+      color: var(--qm-text-dim);
       font-size: 11px;
-      margin-top: 20px;
-      letter-spacing: 1px;
+      margin-top: 24px;
+      letter-spacing: 2px;
     }
   </style>
-  <script type="module" crossorigin src="/robot-zombies/pr-preview/pr-16/assets/index-Dn-MRfZK.js"></script>
+  <script type="module" crossorigin src="/robot-zombies/pr-preview/pr-16/assets/index-Dmtk9Gkc.js"></script>
 <link rel="manifest" href="/robot-zombies/pr-preview/pr-16/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/robot-zombies/pr-preview/pr-16/registerSW.js"></script></head>
 <body>
   <div id="game-container"></div>
