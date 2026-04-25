@@ -49,7 +49,7 @@ export class StormCorridorScene extends Phaser.Scene {
 
   private _phase:         Phase   = 'ARRIVING';
   private _inputEnabled:  boolean = false;
-  private _playerName:    string  = 'YOU';
+  private _playerName:    string  = 'Arlo';
 
   // Storm state
   private _stormActive:       boolean = false;
@@ -71,7 +71,7 @@ export class StormCorridorScene extends Phaser.Scene {
     this._stormActive  = false;
     this._stormDamageTimer = 0;
     this._wardenTriggered = false;
-    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'YOU';
+    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'Arlo';
 
     this._drawScene();
     this._buildPlayer();

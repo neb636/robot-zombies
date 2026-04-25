@@ -33,7 +33,7 @@ export class PrologueScene extends Phaser.Scene {
   private _phase:          Phase   = PHASE.WAKE_UP;
   private _inputEnabled:   boolean = false;
   private _enteredLiving:  boolean = false;
-  private _playerName:     string  = 'YOU';
+  private _playerName:     string  = 'Arlo';
   private _wallBodies:     Phaser.GameObjects.Zone[] = [];
   private _interactables:  Interactable[] = [];
   private _nearInteract:   Interactable | null = null;
@@ -54,7 +54,7 @@ export class PrologueScene extends Phaser.Scene {
     this._phase         = PHASE.WAKE_UP;
     this._inputEnabled  = false;
     this._enteredLiving = false;
-    this._playerName    = (this.registry.get('playerName') as string | undefined) ?? 'YOU';
+    this._playerName    = (this.registry.get('playerName') as string | undefined) ?? 'Arlo';
 
     drawPrologueRoom(this);
     this._buildWalls();

@@ -38,7 +38,7 @@ export class SubwayScene extends Phaser.Scene {
 
   private _phase:        Phase   = PHASE.ARRIVING;
   private _inputEnabled: boolean = false;
-  private _playerName:   string  = 'YOU';
+  private _playerName:   string  = 'Arlo';
 
   // NPC interaction tracking
   private _survivorTalked: Set<number> = new Set();
@@ -63,7 +63,7 @@ export class SubwayScene extends Phaser.Scene {
     this._mayaFollowUp  = false;
     this._exitHintShown = false;
     this._survivorTalked = new Set();
-    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'YOU';
+    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'Arlo';
 
     drawSubway(this);
     this._buildPlayer();

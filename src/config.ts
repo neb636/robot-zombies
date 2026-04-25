@@ -1,8 +1,6 @@
 import Phaser from 'phaser';
 import { BootScene }       from './scenes/BootScene.js';
 import { PreloadScene }    from './scenes/PreloadScene.js';
-import { TitleScene }      from './scenes/TitleScene.js';
-import { NameEntryScene }  from './scenes/NameEntryScene.js';
 import { PrologueScene }   from './scenes/PrologueScene.js';
 import { NewBostonScene }  from './scenes/NewBostonScene.js';
 import { SubwayScene }     from './scenes/SubwayScene.js';
@@ -30,8 +28,6 @@ import { CHAPTER5_SCENES } from './scenes/chapter5/index.js';
 const coreScenes: Phaser.Types.Scenes.SceneType[] = [
   BootScene,
   PreloadScene,
-  TitleScene,
-  NameEntryScene,
   PrologueScene,
   NewBostonScene,
   SubwayScene,
@@ -67,7 +63,7 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
   width: window.innerWidth,
   height: window.innerHeight,
   parent: 'game-container',
-  backgroundColor: '#1a0a2e',
+  backgroundColor: '#000000',
   pixelArt: true,
   scale: {
     mode: Phaser.Scale.RESIZE,

@@ -2,8 +2,7 @@ import Phaser from 'phaser';
 import { jumpToScene } from '../utils/devJump.js';
 
 const SCENES = [
-  'TitleScene',
-  'NameEntryScene',
+  'PreloadScene',
   'PrologueScene',
   'NewBostonScene',
   'SubwayScene',

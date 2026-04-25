@@ -38,7 +38,7 @@ export class BoardroomScene extends Phaser.Scene {
   mobileControls!: MobileControls;
 
   private _bossPhase:      BossPhase = PHASE.ENTERING;
-  private _playerName:     string    = 'YOU';
+  private _playerName:     string    = 'Arlo';
   private _talkdownSeq:    number    = 0;
   private _creditsStarted: boolean   = false;
 
@@ -51,7 +51,7 @@ export class BoardroomScene extends Phaser.Scene {
     this._talkdownSeq    = 0;
     this._creditsStarted = false;
 
-    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'YOU';
+    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'Arlo';
 
     this._buildRoom();
 
@@ -461,7 +461,7 @@ export class BoardroomScene extends Phaser.Scene {
     this.cameras.main.fadeOut(2000, 0, 0, 0, (_cam: Phaser.Cameras.Scene2D.Camera, p: number) => {
       if (p === 1) {
         // Return to title / world map — game complete
-        this.scene.start('TitleScene');
+        this.scene.start('PreloadScene');
       }
     });
   }

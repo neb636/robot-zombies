@@ -60,7 +60,7 @@ export class HermitsPeakScene extends Phaser.Scene {
 
   private _phase:          Phase   = PHASE.ARRIVING;
   private _inputEnabled:   boolean = false;
-  private _playerName:     string  = 'YOU';
+  private _playerName:     string  = 'Arlo';
   private _chenTriggered:  boolean = false;
   private _interactKey!:   Phaser.Input.Keyboard.Key;
   private _terminalsRead:  Set<number> = new Set();
@@ -73,7 +73,7 @@ export class HermitsPeakScene extends Phaser.Scene {
   create(): void {
     this._phase          = PHASE.ARRIVING;
     this._inputEnabled   = false;
-    this._playerName     = (this.registry.get('playerName') as string | undefined) ?? 'YOU';
+    this._playerName     = (this.registry.get('playerName') as string | undefined) ?? 'Arlo';
     this._chenTriggered  = false;
     this._terminalsRead  = new Set();
     this._nearInteract   = null;

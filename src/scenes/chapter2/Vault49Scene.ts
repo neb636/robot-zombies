@@ -65,7 +65,7 @@ export class Vault49Scene extends Phaser.Scene {
 
   private _phase:          Phase   = PHASE.ARRIVING;
   private _inputEnabled:   boolean = false;
-  private _playerName:     string  = 'YOU';
+  private _playerName:     string  = 'Arlo';
 
   private _samTriggered:   boolean = false;
   private _terminalsRead:  Set<TerminalId> = new Set();
@@ -85,7 +85,7 @@ export class Vault49Scene extends Phaser.Scene {
     this._terminalsRead  = new Set();
     this._governorFought = false;
     this._terminalRects  = new Map();
-    this._playerName     = (this.registry.get('playerName') as string | undefined) ?? 'YOU';
+    this._playerName     = (this.registry.get('playerName') as string | undefined) ?? 'Arlo';
 
     this._drawScene();
     this._buildPlayer();

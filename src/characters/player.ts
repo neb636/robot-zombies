@@ -6,7 +6,7 @@ import type { CharacterDef } from '../types.js';
  */
 export const PLAYER_DEF: CharacterDef = {
   id:          'player',
-  name:        'YOU',
+  name:        'Arlo',
   color:       0x4488ff,
   joinChapter: 0,
   chapterStats: [

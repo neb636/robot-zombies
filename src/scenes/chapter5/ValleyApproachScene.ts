@@ -41,7 +41,7 @@ export class ValleyApproachScene extends Phaser.Scene {
 
   private _phase:          Phase   = PHASE.ARRIVING;
   private _inputEnabled:   boolean = false;
-  private _playerName:     string  = 'YOU';
+  private _playerName:     string  = 'Arlo';
   private _robotsDialogue: boolean = false;
   private _citizenDialogue:boolean = false;
   private _chenDialogue:   boolean = false;
@@ -57,7 +57,7 @@ export class ValleyApproachScene extends Phaser.Scene {
     this._citizenDialogue = false;
     this._chenDialogue    = false;
 
-    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'YOU';
+    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'Arlo';
 
     this._buildWorld();
     this._buildPlayer();

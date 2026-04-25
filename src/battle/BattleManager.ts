@@ -205,7 +205,7 @@ export class BattleManager {
 
   private _buildBattlePlayer(): ATBCombatant {
     const { width, height } = this.scene.scale;
-    const playerName = (this.scene.registry.get('playerName') as string | undefined) ?? 'KAI';
+    const playerName = (this.scene.registry.get('playerName') as string | undefined) ?? 'Arlo';
     const chapter    = (this.scene.registry.get('chapter')    as number | undefined) ?? 0;
 
     const statIdx = Math.min(chapter, PLAYER_DEF.chapterStats.length - 1);

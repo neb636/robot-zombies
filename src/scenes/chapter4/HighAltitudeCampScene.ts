@@ -60,7 +60,7 @@ export class HighAltitudeCampScene extends Phaser.Scene {
 
   private _phase:         Phase   = PHASE.ARRIVING;
   private _inputEnabled:  boolean = false;
-  private _playerName:    string  = 'YOU';
+  private _playerName:    string  = 'Arlo';
   private _isFirstVisit:  boolean = true;
   private _echoRect:      Phaser.GameObjects.Rectangle | null = null;
   private _restLabel:     Phaser.GameObjects.Text | null      = null;
@@ -73,7 +73,7 @@ export class HighAltitudeCampScene extends Phaser.Scene {
   create(): void {
     this._phase        = PHASE.ARRIVING;
     this._inputEnabled = false;
-    this._playerName   = (this.registry.get('playerName') as string | undefined) ?? 'YOU';
+    this._playerName   = (this.registry.get('playerName') as string | undefined) ?? 'Arlo';
 
     const flags      = getFlags(this.registry);
     this._isFirstVisit = !flags[FLAG_ALTITUDE_RESTED];

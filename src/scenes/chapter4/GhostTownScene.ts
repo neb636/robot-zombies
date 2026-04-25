@@ -58,7 +58,7 @@ export class GhostTownScene extends Phaser.Scene {
 
   private _phase:        Phase   = PHASE.ARRIVING;
   private _inputEnabled: boolean = false;
-  private _playerName:   string  = 'YOU';
+  private _playerName:   string  = 'Arlo';
   private _interactKey!: Phaser.Input.Keyboard.Key;
 
   /** Which interactables have been activated. */
@@ -74,7 +74,7 @@ export class GhostTownScene extends Phaser.Scene {
   create(): void {
     this._phase            = PHASE.ARRIVING;
     this._inputEnabled     = false;
-    this._playerName       = (this.registry.get('playerName') as string | undefined) ?? 'YOU';
+    this._playerName       = (this.registry.get('playerName') as string | undefined) ?? 'Arlo';
     this._journalsRead     = new Set();
     this._photoSeen        = false;
     this._moraleTriggered  = false;

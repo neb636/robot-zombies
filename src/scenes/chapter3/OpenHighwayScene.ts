@@ -48,7 +48,7 @@ export class OpenHighwayScene extends Phaser.Scene {
 
   private _phase:         Phase   = PHASE.ARRIVING;
   private _inputEnabled:  boolean = false;
-  private _playerName:    string  = 'YOU';
+  private _playerName:    string  = 'Arlo';
 
   // Patrol timing
   private _sweepTimer:    number  = 0;
@@ -66,7 +66,7 @@ export class OpenHighwayScene extends Phaser.Scene {
     this._sweepTimer   = 0;
     this._sweepActive  = false;
     this._zonesTriggered = new Set();
-    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'YOU';
+    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'Arlo';
 
     this._drawScene();
     this._buildPlayer();

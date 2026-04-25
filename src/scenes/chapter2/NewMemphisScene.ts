@@ -57,7 +57,7 @@ export class NewMemphisScene extends Phaser.Scene {
 
   private _phase:         Phase   = PHASE.ARRIVING;
   private _inputEnabled:  boolean = false;
-  private _playerName:    string  = 'YOU';
+  private _playerName:    string  = 'Arlo';
 
   private _dejaTriggered:     boolean = false;
   private _npcsTalked:        Set<number> = new Set();
@@ -73,7 +73,7 @@ export class NewMemphisScene extends Phaser.Scene {
     this._dejaTriggered   = false;
     this._governorApproach = false;
     this._npcsTalked      = new Set();
-    this._playerName      = (this.registry.get('playerName') as string | undefined) ?? 'YOU';
+    this._playerName      = (this.registry.get('playerName') as string | undefined) ?? 'Arlo';
 
     this._drawScene();
     this._buildPlayer();

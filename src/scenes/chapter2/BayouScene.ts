@@ -62,7 +62,7 @@ export class BayouScene extends Phaser.Scene {
 
   private _phase:           Phase   = PHASE.ENTERING;
   private _inputEnabled:    boolean = false;
-  private _playerName:      string  = 'YOU';
+  private _playerName:      string  = 'Arlo';
 
   private _campTriggered:   boolean = false;
   private _waterTriggered:  boolean = false;
@@ -83,7 +83,7 @@ export class BayouScene extends Phaser.Scene {
     this._waterTriggered = false;
     this._lossTriggered  = false;
     this._encounterCount = 0;
-    this._playerName     = (this.registry.get('playerName') as string | undefined) ?? 'YOU';
+    this._playerName     = (this.registry.get('playerName') as string | undefined) ?? 'Arlo';
 
     this._drawScene();
     this._buildPlayer();

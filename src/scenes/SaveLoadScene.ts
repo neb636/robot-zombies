@@ -7,7 +7,6 @@ import type { SaveSlotInfo } from '../types.js';
  * SaveLoadScene — 3-slot save/load picker.
  *
  * Launched from:
- *   - TitleScene "Continue" button  (mode: 'load')
  *   - PauseMenu  "Save" option      (mode: 'save', callerScene provided)
  *   - PauseMenu  "Load" option      (mode: 'load')
  *

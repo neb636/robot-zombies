@@ -1,6 +1,8 @@
 import Phaser from 'phaser';
 import { jumpToScene } from '../utils/devJump.js';
 import { preloadApartmentAssets } from './PrologueRoomRenderer.js';
+import { SaveManager } from '../save/SaveManager.js';
+import { ProceduralMusic } from '../audio/ProceduralMusic.js';
 import {
   // regions
   generateBostonTiles,
@@ -65,16 +67,31 @@ const HERO_ANIMS: Record<HeroAnimKey, HeroAnimDef> = {
 
 const CHARACTER_FRAME_SIZE = 108;
 
+function clamp(val: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, val));
+}
+
 /**
- * PreloadScene — loads all game assets with a progress bar.
+ * PreloadScene — loads all game assets behind the cinematic Quiet Machines splash,
+ * then gates entry with a "PRESS ANY KEY TO START" prompt (also acts as title screen).
  */
 export class PreloadScene extends Phaser.Scene {
+  private _progressBar!:  Phaser.GameObjects.Graphics;
+  private _loadingText!:  Phaser.GameObjects.Text;
+  private _bgImage:       Phaser.GameObjects.Image | null     = null;
+  private _bgBackdrop:    Phaser.GameObjects.Rectangle | null = null;
+  private _startPrompt:   Phaser.GameObjects.Text | null      = null;
+  private _continueText:  Phaser.GameObjects.Text | null      = null;
+  private _music:         ProceduralMusic | null = null;
+  private _started:       boolean                = false;
+
   constructor() {
     super({ key: 'PreloadScene' });
   }
 
   preload(): void {
-    this._buildProgressBar();
+    // The splash image is loaded by BootScene so it's already a texture by now.
+    this._buildLoadScreen();
 
     this.load.tilemapTiledJSON('world-map', 'assets/tilemaps/world.json');
     this.load.image('world-tiles', 'assets/tilesets/world_tiles.png');
@@ -211,7 +228,7 @@ export class PreloadScene extends Phaser.Scene {
       }
     }
 
-    this.scene.start('TitleScene');
+    this._showStartPrompt();
   }
 
   /**
@@ -262,31 +279,217 @@ export class PreloadScene extends Phaser.Scene {
     }
   }
 
-  private _buildProgressBar(): void {
+  /**
+   * Cinematic loading visual: full-bleed splash painting, fades in from black,
+   * with a thin amber progress bar near the bottom while the rest of the assets load.
+   * Uses "cover" scaling so the splash fills the viewport at any aspect ratio.
+   */
+  private _buildLoadScreen(): void {
     const { width, height } = this.scale;
-    const bar = this.add.graphics();
 
-    this.add.text(width / 2, height / 2 - 40, 'ROBOTS', {
-      fontFamily: 'monospace',
-      fontSize:   '32px',
-      color:      '#7af',
-    }).setOrigin(0.5);
+    // Black backdrop sits behind everything in case of any sub-pixel gap.
+    this._bgBackdrop = this.add.rectangle(0, 0, width, height, 0x000000)
+      .setOrigin(0, 0)
+      .setDepth(-2);
 
-    this.add.text(width / 2, height / 2 - 12, 'The Overly Helpful Apocalypse', {
-      fontFamily: 'monospace',
-      fontSize:   '14px',
-      color:      '#556',
-    }).setOrigin(0.5);
+    if (this.textures.exists('load_screen_bg')) {
+      this._bgImage = this.add.image(width / 2, height / 2, 'load_screen_bg')
+        .setOrigin(0.5)
+        .setDepth(-1);
+      this._fitBackgroundCover();
+      // Subtle settle: drift the image up 4px while it fades in for a touch of motion.
+      this._bgImage.y += 4;
+      this.tweens.add({ targets: this._bgImage, y: height / 2, duration: 1200, ease: 'Sine.easeOut' });
+    }
 
-    this.load.on('progress', (value: number) => {
-      bar.clear();
-      bar.fillStyle(0x222244);
-      bar.fillRect(width * 0.1, height * 0.55, width * 0.8, 20);
-      bar.fillStyle(0x44aaff);
-      bar.fillRect(width * 0.1, height * 0.55, width * 0.8 * value, 20);
+    // Cinematic fade in from black.
+    this.cameras.main.fadeIn(900, 0, 0, 0);
+
+    this._progressBar = this.add.graphics().setDepth(10);
+    this._loadingText = this.add.text(0, 0, 'LOADING…', {
+      fontFamily:    'monospace',
+      fontSize:      '11px',
+      color:         '#998877',
+      letterSpacing: 3,
+    }).setOrigin(0.5).setDepth(10).setAlpha(0.8);
+
+    let lastProgress = 0;
+    const drawBar = (value: number): void => {
+      lastProgress = value;
+      const w = this.scale.width;
+      const h = this.scale.height;
+      const barY     = Math.floor(h * 0.965);
+      const barLeft  = Math.floor(w * 0.18);
+      const barRight = Math.floor(w * 0.82);
+      const barW     = barRight - barLeft;
+
+      this._progressBar.clear();
+      this._progressBar.fillStyle(0x000000, 0.55);
+      this._progressBar.fillRect(barLeft - 1, barY - 1, barW + 2, 4);
+      this._progressBar.fillStyle(0x442a1a, 0.9);
+      this._progressBar.fillRect(barLeft, barY, barW, 2);
+      this._progressBar.fillStyle(0xaa8866, 1);
+      this._progressBar.fillRect(barLeft, barY, Math.max(0, Math.floor(barW * value)), 2);
+
+      this._loadingText.setPosition(w / 2, barY - 14);
+    };
+
+    drawBar(0);
+    this.load.on('progress', (value: number) => { drawBar(value); });
+
+    this.load.on('complete', () => {
+      // Fade the loading bar away — sprite generators in create() take over briefly.
+      this.tweens.add({
+        targets:  [this._progressBar, this._loadingText],
+        alpha:    0,
+        duration: 400,
+        onComplete: () => {
+          this._progressBar.destroy();
+          this._loadingText.destroy();
+        },
+      });
     });
 
-    this.load.on('complete', () => { bar.destroy(); });
+    this.scale.on('resize', this._handleResize, this);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      this.scale.off('resize', this._handleResize, this);
+    });
+
+    // Re-draw the bar on resize using the most recent progress value.
+    this.scale.on('resize', () => drawBar(lastProgress));
+  }
+
+  /** Scale the splash to "cover" the viewport — fills both axes, crops the longer one. */
+  private _fitBackgroundCover(): void {
+    if (this._bgImage === null) return;
+    const tex = this.textures.get('load_screen_bg').getSourceImage() as HTMLImageElement;
+    const w = this.scale.width;
+    const h = this.scale.height;
+    // 1.01 overscan absorbs the 4px settle-tween so no black edge appears mid-animation.
+    const scale = Math.max(w / tex.width, h / tex.height) * 1.01;
+    this._bgImage.setScale(scale);
+    this._bgImage.setPosition(w / 2, h / 2);
+  }
+
+  /** Keep the splash, backdrop, and start-prompt centered if the user resizes the window. */
+  private _handleResize(): void {
+    const w = this.scale.width;
+    const h = this.scale.height;
+
+    if (this._bgBackdrop !== null) {
+      this._bgBackdrop.setSize(w, h);
+    }
+    this._fitBackgroundCover();
+
+    if (this._startPrompt !== null) {
+      this._startPrompt.setPosition(w / 2, h * 0.86);
+    }
+    if (this._continueText !== null) {
+      this._continueText.setPosition(w / 2, h * 0.92);
+    }
+  }
+
+  /**
+   * Once create() finishes its synchronous sprite generation, fade in the
+   * "PRESS ANY KEY TO START" prompt and arm input listeners. If a save exists,
+   * also surface a smaller [C] CONTINUE affordance underneath.
+   */
+  private _showStartPrompt(): void {
+    const { width, height } = this.scale;
+    const cx = width / 2;
+
+    // Music fades in alongside the prompt — the painting is now the title screen.
+    this._music = new ProceduralMusic();
+    this._music.play(0.32);
+
+    const promptSize = clamp(width * 0.024, 14, 22);
+    const prompt = this.add.text(cx, height * 0.86, 'PRESS ANY KEY TO START', {
+      fontFamily:      'monospace',
+      fontSize:        promptSize + 'px',
+      color:           '#e8d8b8',
+      stroke:          '#000000',
+      strokeThickness: 4,
+      letterSpacing:   3,
+    }).setOrigin(0.5).setAlpha(0).setDepth(20);
+    this._startPrompt = prompt;
+
+    this.tweens.add({
+      targets:    prompt,
+      alpha:      1,
+      duration:   800,
+      ease:       'Sine.easeOut',
+      onComplete: () => {
+        this.tweens.add({
+          targets:  prompt,
+          alpha:    0.3,
+          yoyo:     true,
+          duration: 700,
+          repeat:   -1,
+          ease:     'Sine.easeInOut',
+        });
+      },
+    });
+
+    // Optional Continue affordance.
+    const summary = SaveManager.getSummary();
+    let continueText: Phaser.GameObjects.Text | null = null;
+    if (summary !== null) {
+      const dateStr = summary.savedAt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      const label   = `[C]  CONTINUE  —  ${summary.playerName}  ·  Ch.${summary.chapter}  ·  ${dateStr}`;
+      continueText = this.add.text(cx, height * 0.92, label, {
+        fontFamily: 'monospace',
+        fontSize:   '12px',
+        color:      '#a89878',
+        stroke:     '#000000',
+        strokeThickness: 3,
+      })
+        .setOrigin(0.5)
+        .setAlpha(0)
+        .setDepth(20)
+        .setInteractive({ useHandCursor: true });
+
+      this.tweens.add({ targets: continueText, alpha: 1, duration: 700, delay: 400 });
+      this._continueText = continueText;
+    }
+
+    // Input wiring — keyboard + pointer for both paths (CLAUDE.md mobile rule).
+    const startNew = (): void => { this._startGame('PrologueScene', true); };
+    const resume   = (): void => {
+      const data = SaveManager.load();
+      if (data === null) { this._startGame('PrologueScene', true); return; }
+      SaveManager.restore(this.game, data);
+      this._startGame(data.currentScene, false);
+    };
+
+    if (continueText !== null) {
+      continueText.on('pointerdown', (_: unknown, __: unknown, ___: unknown, e: Phaser.Types.Input.EventData) => {
+        e.stopPropagation();
+        resume();
+      });
+      this.input.keyboard!.once('keydown-C', resume);
+    }
+
+    this.input.keyboard!.once('keydown', (e: KeyboardEvent) => {
+      // 'C' is consumed above when a save exists.
+      if (continueText !== null && e.key.toLowerCase() === 'c') return;
+      startNew();
+    });
+    this.input.once('pointerdown', startNew);
+  }
+
+  private _startGame(targetScene: string, isNewGame: boolean): void {
+    if (this._started) return;
+    this._started = true;
+
+    if (isNewGame) {
+      this.registry.set('playerName', 'Arlo');
+      this.registry.set('chapter', 1);
+    }
+
+    this._music?.stop(700);
+    this.cameras.main.fade(800, 0, 0, 0, false, (_cam: Phaser.Cameras.Scene2D.Camera, progress: number) => {
+      if (progress === 1) this.scene.start(targetScene);
+    });
   }
 
   private _registerAnimations(): void {

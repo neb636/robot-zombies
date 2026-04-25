@@ -55,7 +55,7 @@ export class BlueRidgePassageScene extends Phaser.Scene {
 
   private _phase:          Phase   = PHASE.ARRIVING;
   private _inputEnabled:   boolean = false;
-  private _playerName:     string  = 'YOU';
+  private _playerName:     string  = 'Arlo';
   private _droneTriggered: boolean = false;
   private _eliasTriggered: boolean = false;
   private _bossTriggered:  boolean = false;
@@ -70,7 +70,7 @@ export class BlueRidgePassageScene extends Phaser.Scene {
     this._droneTriggered = false;
     this._eliasTriggered = false;
     this._bossTriggered  = false;
-    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'YOU';
+    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'Arlo';
 
     this._drawWorld();
     this.physics.world.setBounds(0, 0, MAP_W, MAP_H);

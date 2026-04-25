@@ -68,7 +68,7 @@ export class CampusPerimeterScene extends Phaser.Scene {
 
   private _phase:             Phase   = PHASE.ARRIVING;
   private _inputEnabled:      boolean = false;
-  private _playerName:        string  = 'YOU';
+  private _playerName:        string  = 'Arlo';
   private _marcusBeatDone:    boolean = false;
   private _lilaTriggered:     boolean = false;
   private _wardenTriggered:   boolean = false;
@@ -90,7 +90,7 @@ export class CampusPerimeterScene extends Phaser.Scene {
     this._combatSkippedKey= false;
     this._eastWingChosen  = false;
 
-    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'YOU';
+    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'Arlo';
 
     const flags = getFlags(this.registry);
 

@@ -237,27 +237,32 @@ export class DialogueBox {
       const btn = document.createElement('button');
       btn.textContent = choice.label;
       btn.style.cssText = [
-        'background:rgba(10,10,30,0.85)',
-        `border:2px solid ${isAvail ? '#7aaeff' : '#334455'}`,
-        'border-radius:4px',
-        `color:${isAvail ? '#e8f4ff' : '#556677'}`,
+        'background:rgba(12,13,14,0.92)',
+        `border:2px solid ${isAvail ? '#4a4f54' : '#25282b'}`,
+        'border-radius:3px',
+        `color:${isAvail ? '#c2c7cb' : '#5e6266'}`,
         'font-family:"Courier New",monospace',
         'font-size:14px',
-        'padding:8px 14px',
+        'padding:9px 16px',
         'text-align:left',
+        'letter-spacing:1px',
         `cursor:${isAvail ? 'pointer' : 'not-allowed'}`,
-        'transition:background 0.12s,border-color 0.12s',
+        'transition:background 0.12s,border-color 0.12s,color 0.12s',
         'width:100%',
+        `box-shadow:${isAvail ? 'inset 0 0 0 1px rgba(255,255,255,0.03)' : 'none'}`,
+        'text-shadow:0 1px 0 rgba(0,0,0,0.7)',
       ].join(';');
 
       if (isAvail) {
         btn.addEventListener('pointerenter', () => {
-          btn.style.background   = 'rgba(30,40,80,0.95)';
-          btn.style.borderColor  = '#aaccff';
+          btn.style.background   = 'rgba(28,30,32,0.95)';
+          btn.style.borderColor  = '#d99846';
+          btn.style.color        = '#e8a85a';
         });
         btn.addEventListener('pointerleave', () => {
-          btn.style.background   = 'rgba(10,10,30,0.85)';
-          btn.style.borderColor  = '#7aaeff';
+          btn.style.background   = 'rgba(12,13,14,0.92)';
+          btn.style.borderColor  = '#4a4f54';
+          btn.style.color        = '#c2c7cb';
         });
         btn.addEventListener('pointerdown', (e) => {
           e.stopPropagation();
@@ -327,13 +332,15 @@ export class DialogueBox {
   private _updateChoiceHighlight(idx: number): void {
     const buttons = Array.from(this.choiceEl.querySelectorAll('button')) as HTMLElement[];
     buttons.forEach((btn, i) => {
-      const isBlue = btn.style.borderColor !== 'rgb(51, 68, 85)';
-      if (i === idx && isBlue) {
-        btn.style.background  = 'rgba(30,40,80,0.95)';
-        btn.style.borderColor = '#aaccff';
-      } else if (isBlue) {
-        btn.style.background  = 'rgba(10,10,30,0.85)';
-        btn.style.borderColor = '#7aaeff';
+      const isAvail = btn.style.borderColor !== 'rgb(37, 40, 43)';
+      if (i === idx && isAvail) {
+        btn.style.background  = 'rgba(28,30,32,0.95)';
+        btn.style.borderColor = '#d99846';
+        btn.style.color       = '#e8a85a';
+      } else if (isAvail) {
+        btn.style.background  = 'rgba(12,13,14,0.92)';
+        btn.style.borderColor = '#4a4f54';
+        btn.style.color       = '#c2c7cb';
       }
     });
   }

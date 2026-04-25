@@ -71,7 +71,7 @@ export class RidgeCampScene extends Phaser.Scene {
 
   private _phase:           Phase   = PHASE.ARRIVING;
   private _inputEnabled:    boolean = false;
-  private _playerName:      string  = 'YOU';
+  private _playerName:      string  = 'Arlo';
 
   // NPC state
   private _sam:   NpcState = { x: SAM_X,   y: SAM_Y,   talked: false };
@@ -103,7 +103,7 @@ export class RidgeCampScene extends Phaser.Scene {
     this._tillyBondDone    = false;
     this._rookIntelDone    = false;
     this._harvestTownPrimed = false;
-    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'YOU';
+    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'Arlo';
 
     this._drawWorld();
     this.physics.world.setBounds(0, 0, MAP_W, MAP_H);

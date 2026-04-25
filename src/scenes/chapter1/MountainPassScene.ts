@@ -58,7 +58,7 @@ export class MountainPassScene extends Phaser.Scene {
 
   private _phase:            Phase   = PHASE.ARRIVING;
   private _inputEnabled:     boolean = false;
-  private _playerName:       string  = 'YOU';
+  private _playerName:       string  = 'Arlo';
   private _exposedDone:      boolean = false;
   private _weatherDone:      boolean = false;
   private _vehicleDone:      boolean = false;
@@ -77,7 +77,7 @@ export class MountainPassScene extends Phaser.Scene {
     this._vehicleDone   = false;
     this._patrolDone    = false;
     this._vistaDone     = false;
-    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'YOU';
+    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'Arlo';
 
     this._drawWorld();
     this.physics.world.setBounds(0, 0, MAP_W, MAP_H);

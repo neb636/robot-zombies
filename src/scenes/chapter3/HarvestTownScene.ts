@@ -68,7 +68,7 @@ export class HarvestTownScene extends Phaser.Scene {
 
   private _phase:         Phase   = 'ARRIVING';
   private _inputEnabled:  boolean = false;
-  private _playerName:    string  = 'YOU';
+  private _playerName:    string  = 'Arlo';
 
   // Interaction tracking
   private _coraTriggered:   boolean = false;
@@ -98,7 +98,7 @@ export class HarvestTownScene extends Phaser.Scene {
     this._marcusTriggered = false;
     this._gideonTriggered = false;
     this._nearNPC = null;
-    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'YOU';
+    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'Arlo';
 
     this._drawScene();
     this._buildPlayer();

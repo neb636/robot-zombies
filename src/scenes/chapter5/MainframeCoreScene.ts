@@ -64,7 +64,7 @@ export class MainframeCoreScene extends Phaser.Scene {
 
   private _phase:         Phase   = PHASE.DESCENDING;
   private _inputEnabled:  boolean = false;
-  private _playerName:    string  = 'YOU';
+  private _playerName:    string  = 'Arlo';
   private _combat1Done:   boolean = false;
   private _combat2Done:   boolean = false;
   private _combat3Done:   boolean = false;
@@ -87,7 +87,7 @@ export class MainframeCoreScene extends Phaser.Scene {
     this._currentCombat = null;
     this._sixsDropped   = false;
 
-    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'YOU';
+    this._playerName = (this.registry.get('playerName') as string | undefined) ?? 'Arlo';
 
     const flags = getFlags(this.registry);
     this._echoAssist = flags['ECHO_CURED'] === true;

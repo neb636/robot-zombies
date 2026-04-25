@@ -120,9 +120,9 @@ export class PauseMenuScene extends Phaser.Scene {
     this._items.forEach((item, i) => {
       const li = document.createElement('li');
       li.textContent = i === this._selectedIndex ? `> ${item.label}` : `  ${item.label}`;
-      if (i === this._selectedIndex) li.style.color = '#7aaeff';
+      if (i === this._selectedIndex) li.style.color = '#d99846';
       if (item.disabled) {
-        li.style.color = '#334455';
+        li.style.color = '#4a4338';
         li.style.cursor = 'not-allowed';
       } else {
         li.style.cursor = 'pointer';
@@ -188,45 +188,51 @@ export class PauseMenuScene extends Phaser.Scene {
       'display:flex',
       'align-items:center',
       'justify-content:center',
-      'background:rgba(0,0,10,0.75)',
+      'background:rgba(6,7,8,0.82)',
       'z-index:151',
+      'backdrop-filter:blur(2px)',
     ].join(';');
 
     const inner = document.createElement('div');
     inner.style.cssText = [
-      'background:rgba(10,10,30,0.97)',
-      'border:3px solid #7af',
-      'border-radius:8px',
-      'padding:32px 48px',
+      'background:rgba(20,22,24,0.97)',
+      'border:3px solid #4a4f54',
+      'border-radius:4px',
+      'padding:36px 56px',
       'font-family:"Courier New",monospace',
-      'min-width:280px',
+      'min-width:300px',
       'text-align:center',
-      'color:#e8f4ff',
+      'color:#c2c7cb',
+      'box-shadow:0 0 0 1px rgba(0,0,0,0.7),inset 0 0 0 1px rgba(255,255,255,0.04),0 16px 48px rgba(0,0,0,0.7)',
+      'text-shadow:0 1px 0 rgba(0,0,0,0.7)',
     ].join(';');
 
     inner.innerHTML = `
-      <div style="color:#7aaeff;font-size:18px;letter-spacing:4px;margin-bottom:20px">SETTINGS</div>
-      <div style="margin-bottom:14px">
-        <label style="display:flex;align-items:center;justify-content:center;gap:12px;font-size:14px">
+      <div style="color:#d99846;font-size:18px;letter-spacing:6px;margin-bottom:6px;text-transform:uppercase">SETTINGS</div>
+      <div style="width:56px;height:1px;background:#a87838;opacity:0.6;margin:0 auto 22px"></div>
+      <div style="margin-bottom:18px">
+        <label style="display:flex;align-items:center;justify-content:center;gap:12px;font-size:14px;letter-spacing:1px">
           <span>VOICE NARRATION</span>
           <button id="ps-tts-toggle" style="
-            background:rgba(10,10,30,0.85);border:2px solid #7aaeff;border-radius:4px;
-            color:#e8f4ff;font-family:'Courier New',monospace;font-size:13px;
-            padding:4px 12px;cursor:pointer
+            background:rgba(12,13,14,0.95);border:2px solid #4a4f54;border-radius:3px;
+            color:#d99846;font-family:'Courier New',monospace;font-size:12px;
+            padding:5px 14px;cursor:pointer;letter-spacing:2px;text-transform:uppercase;
+            box-shadow:inset 0 0 0 1px rgba(255,255,255,0.03)
           ">ON</button>
         </label>
       </div>
-      <div style="margin-bottom:24px">
-        <label style="font-size:14px;display:block;margin-bottom:6px">MUSIC VOLUME</label>
+      <div style="margin-bottom:26px">
+        <label style="font-size:14px;display:block;margin-bottom:8px;letter-spacing:1px">MUSIC VOLUME</label>
         <input id="ps-vol" type="range" min="0" max="100" value="70"
-          style="width:180px;accent-color:#7aaeff" />
+          style="width:180px;accent-color:#d99846" />
       </div>
       <button id="ps-back" style="
-        background:rgba(10,10,30,0.85);border:2px solid #7aaeff;border-radius:4px;
-        color:#7aaeff;font-family:'Courier New',monospace;font-size:14px;
-        padding:8px 24px;cursor:pointer;letter-spacing:2px
+        background:rgba(12,13,14,0.95);border:2px solid #4a4f54;border-radius:3px;
+        color:#d99846;font-family:'Courier New',monospace;font-size:13px;
+        padding:9px 28px;cursor:pointer;letter-spacing:3px;text-transform:uppercase;
+        box-shadow:inset 0 0 0 1px rgba(255,255,255,0.03)
       ">BACK</button>
-      <div style="color:#446688;font-size:11px;margin-top:14px">[ESC] Back</div>
+      <div style="color:#7c8186;font-size:11px;margin-top:16px;letter-spacing:2px">[ESC] BACK</div>
     `;
 
     panel.appendChild(inner);
@@ -263,10 +269,10 @@ export class PauseMenuScene extends Phaser.Scene {
   private _quitToTitle(): void {
     // Save nothing — just transition
     this._cleanup();
-    // Stop everything and go to title
+    // Stop everything and go back to the load/title screen
     this.scene.stop(this._callerKey);
     this.scene.stop();
-    this.scene.start('TitleScene');
+    this.scene.start('PreloadScene');
   }
 
   // ─── Helpers ──────────────────────────────────────────────────────────────
