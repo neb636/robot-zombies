@@ -146,70 +146,70 @@
           "animations/poke_someone._similar_to_punching_but_less_violent-ebf05df7/east/frame_003.png"
         ]
       },
-      "animation-b5ada3a1": {
+      "Walking-b5ada3a1": {
         "south": [
-          "animations/animation-b5ada3a1/south/frame_000.png",
-          "animations/animation-b5ada3a1/south/frame_001.png",
-          "animations/animation-b5ada3a1/south/frame_002.png",
-          "animations/animation-b5ada3a1/south/frame_003.png",
-          "animations/animation-b5ada3a1/south/frame_004.png",
-          "animations/animation-b5ada3a1/south/frame_005.png"
+          "animations/Walking-b5ada3a1/south/frame_000.png",
+          "animations/Walking-b5ada3a1/south/frame_001.png",
+          "animations/Walking-b5ada3a1/south/frame_002.png",
+          "animations/Walking-b5ada3a1/south/frame_003.png",
+          "animations/Walking-b5ada3a1/south/frame_004.png",
+          "animations/Walking-b5ada3a1/south/frame_005.png"
         ],
         "north-east": [
-          "animations/animation-b5ada3a1/north-east/frame_000.png",
-          "animations/animation-b5ada3a1/north-east/frame_001.png",
-          "animations/animation-b5ada3a1/north-east/frame_002.png",
-          "animations/animation-b5ada3a1/north-east/frame_003.png",
-          "animations/animation-b5ada3a1/north-east/frame_004.png",
-          "animations/animation-b5ada3a1/north-east/frame_005.png"
+          "animations/Walking-b5ada3a1/north-east/frame_000.png",
+          "animations/Walking-b5ada3a1/north-east/frame_001.png",
+          "animations/Walking-b5ada3a1/north-east/frame_002.png",
+          "animations/Walking-b5ada3a1/north-east/frame_003.png",
+          "animations/Walking-b5ada3a1/north-east/frame_004.png",
+          "animations/Walking-b5ada3a1/north-east/frame_005.png"
         ],
         "south-east": [
-          "animations/animation-b5ada3a1/south-east/frame_000.png",
-          "animations/animation-b5ada3a1/south-east/frame_001.png",
-          "animations/animation-b5ada3a1/south-east/frame_002.png",
-          "animations/animation-b5ada3a1/south-east/frame_003.png",
-          "animations/animation-b5ada3a1/south-east/frame_004.png",
-          "animations/animation-b5ada3a1/south-east/frame_005.png"
+          "animations/Walking-b5ada3a1/south-east/frame_000.png",
+          "animations/Walking-b5ada3a1/south-east/frame_001.png",
+          "animations/Walking-b5ada3a1/south-east/frame_002.png",
+          "animations/Walking-b5ada3a1/south-east/frame_003.png",
+          "animations/Walking-b5ada3a1/south-east/frame_004.png",
+          "animations/Walking-b5ada3a1/south-east/frame_005.png"
         ],
         "east": [
-          "animations/animation-b5ada3a1/east/frame_000.png",
-          "animations/animation-b5ada3a1/east/frame_001.png",
-          "animations/animation-b5ada3a1/east/frame_002.png",
-          "animations/animation-b5ada3a1/east/frame_003.png",
-          "animations/animation-b5ada3a1/east/frame_004.png",
-          "animations/animation-b5ada3a1/east/frame_005.png"
+          "animations/Walking-b5ada3a1/east/frame_000.png",
+          "animations/Walking-b5ada3a1/east/frame_001.png",
+          "animations/Walking-b5ada3a1/east/frame_002.png",
+          "animations/Walking-b5ada3a1/east/frame_003.png",
+          "animations/Walking-b5ada3a1/east/frame_004.png",
+          "animations/Walking-b5ada3a1/east/frame_005.png"
         ],
         "west": [
-          "animations/animation-b5ada3a1/west/frame_000.png",
-          "animations/animation-b5ada3a1/west/frame_001.png",
-          "animations/animation-b5ada3a1/west/frame_002.png",
-          "animations/animation-b5ada3a1/west/frame_003.png",
-          "animations/animation-b5ada3a1/west/frame_004.png",
-          "animations/animation-b5ada3a1/west/frame_005.png"
+          "animations/Walking-b5ada3a1/west/frame_000.png",
+          "animations/Walking-b5ada3a1/west/frame_001.png",
+          "animations/Walking-b5ada3a1/west/frame_002.png",
+          "animations/Walking-b5ada3a1/west/frame_003.png",
+          "animations/Walking-b5ada3a1/west/frame_004.png",
+          "animations/Walking-b5ada3a1/west/frame_005.png"
         ],
         "south-west": [
-          "animations/animation-b5ada3a1/south-west/frame_000.png",
-          "animations/animation-b5ada3a1/south-west/frame_001.png",
-          "animations/animation-b5ada3a1/south-west/frame_002.png",
-          "animations/animation-b5ada3a1/south-west/frame_003.png",
-          "animations/animation-b5ada3a1/south-west/frame_004.png",
-          "animations/animation-b5ada3a1/south-west/frame_005.png"
+          "animations/Walking-b5ada3a1/south-west/frame_000.png",
+          "animations/Walking-b5ada3a1/south-west/frame_001.png",
+          "animations/Walking-b5ada3a1/south-west/frame_002.png",
+          "animations/Walking-b5ada3a1/south-west/frame_003.png",
+          "animations/Walking-b5ada3a1/south-west/frame_004.png",
+          "animations/Walking-b5ada3a1/south-west/frame_005.png"
         ],
         "north-west": [
-          "animations/animation-b5ada3a1/north-west/frame_000.png",
-          "animations/animation-b5ada3a1/north-west/frame_001.png",
-          "animations/animation-b5ada3a1/north-west/frame_002.png",
-          "animations/animation-b5ada3a1/north-west/frame_003.png",
-          "animations/animation-b5ada3a1/north-west/frame_004.png",
-          "animations/animation-b5ada3a1/north-west/frame_005.png"
+          "animations/Walking-b5ada3a1/north-west/frame_000.png",
+          "animations/Walking-b5ada3a1/north-west/frame_001.png",
+          "animations/Walking-b5ada3a1/north-west/frame_002.png",
+          "animations/Walking-b5ada3a1/north-west/frame_003.png",
+          "animations/Walking-b5ada3a1/north-west/frame_004.png",
+          "animations/Walking-b5ada3a1/north-west/frame_005.png"
         ],
         "north": [
-          "animations/animation-b5ada3a1/north/frame_000.png",
-          "animations/animation-b5ada3a1/north/frame_001.png",
-          "animations/animation-b5ada3a1/north/frame_002.png",
-          "animations/animation-b5ada3a1/north/frame_003.png",
-          "animations/animation-b5ada3a1/north/frame_004.png",
-          "animations/animation-b5ada3a1/north/frame_005.png"
+          "animations/Walking-b5ada3a1/north/frame_000.png",
+          "animations/Walking-b5ada3a1/north/frame_001.png",
+          "animations/Walking-b5ada3a1/north/frame_002.png",
+          "animations/Walking-b5ada3a1/north/frame_003.png",
+          "animations/Walking-b5ada3a1/north/frame_004.png",
+          "animations/Walking-b5ada3a1/north/frame_005.png"
         ]
       },
       "Jumping-3b85dd59": {

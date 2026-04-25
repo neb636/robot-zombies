@@ -42,6 +42,27 @@ const ROTATION_DIRS = [
   'north', 'north-west', 'west', 'south-west',
 ] as const;
 
+const DIRS_8 = ROTATION_DIRS;
+const DIRS_4 = ['south', 'east', 'north', 'west'] as const;
+
+type HeroAnimKey = 'walking' | 'running' | 'jumping' | 'crouching' | 'poking';
+
+interface HeroAnimDef {
+  folder:    string;
+  frames:    number;
+  dirs:      readonly string[];
+  frameRate: number;
+  repeat:    number;
+}
+
+const HERO_ANIMS: Record<HeroAnimKey, HeroAnimDef> = {
+  walking:   { folder: 'Walking-b5ada3a1',                                              frames: 6, dirs: DIRS_8, frameRate: 10, repeat: -1 },
+  running:   { folder: 'Running-4263a14a',                                              frames: 6, dirs: DIRS_8, frameRate: 14, repeat: -1 },
+  jumping:   { folder: 'Jumping-3b85dd59',                                              frames: 9, dirs: DIRS_8, frameRate: 12, repeat:  0 },
+  crouching: { folder: 'Crouching-b9994c7c',                                            frames: 5, dirs: DIRS_4, frameRate:  8, repeat: -1 },
+  poking:    { folder: 'poke_someone._similar_to_punching_but_less_violent-ebf05df7',   frames: 4, dirs: DIRS_4, frameRate: 10, repeat:  0 },
+};
+
 const CHARACTER_FRAME_SIZE = 108;
 
 /**
@@ -62,6 +83,19 @@ export class PreloadScene extends Phaser.Scene {
     for (const c of ['hero', 'maya'] as const) {
       for (const dir of ROTATION_DIRS) {
         this.load.image(`${c}_${dir}`, `assets/sprites/characters/${c}/rotations/${dir}.png`);
+      }
+    }
+
+    // ── Hero action animation frames (Walking/Running/Jumping/Crouching/Poking) ──
+    for (const [action, def] of Object.entries(HERO_ANIMS)) {
+      for (const dir of def.dirs) {
+        for (let i = 0; i < def.frames; i++) {
+          const f = i.toString().padStart(3, '0');
+          this.load.image(
+            `hero_${action}_${dir}_${i}`,
+            `assets/sprites/characters/hero/animations/${def.folder}/${dir}/frame_${f}.png`,
+          );
+        }
       }
     }
 
@@ -102,6 +136,7 @@ export class PreloadScene extends Phaser.Scene {
   create(): void {
     if (!this.textures.exists('hero'))            this._buildCharacterSpritesheet('hero');
     if (!this.textures.exists('maya'))            this._buildCharacterSpritesheet('maya');
+    this._buildHeroAnimationTextures();
     if (!this.textures.exists('warden_alpha'))    this._generateWardenAlphaTexture();
     if (!this.textures.exists('excavator_prime')) this._generateExcavatorPrimeTexture();
     if (!this.textures.exists('the_governor'))    this._generateTheGovernorTexture();
@@ -201,6 +236,32 @@ export class PreloadScene extends Phaser.Scene {
     }
   }
 
+  /**
+   * Build one canvas spritesheet per (action, direction) from the individually
+   * loaded PNG frames. Produces textures keyed `hero_<action>_<direction>` with
+   * N indexed frames laid out horizontally.
+   */
+  private _buildHeroAnimationTextures(): void {
+    const size = CHARACTER_FRAME_SIZE;
+    for (const [action, def] of Object.entries(HERO_ANIMS)) {
+      for (const dir of def.dirs) {
+        const textureKey = `hero_${action}_${dir}`;
+        if (this.textures.exists(textureKey)) continue;
+        const canvas = this.textures.createCanvas(textureKey, size * def.frames, size);
+        if (!canvas) continue;
+        for (let i = 0; i < def.frames; i++) {
+          const srcKey = `hero_${action}_${dir}_${i}`;
+          if (!this.textures.exists(srcKey)) continue;
+          canvas.drawFrame(srcKey, undefined, i * size, 0);
+        }
+        canvas.refresh();
+        for (let i = 0; i < def.frames; i++) {
+          canvas.add(i, 0, i * size, 0, size, size);
+        }
+      }
+    }
+  }
+
   private _buildProgressBar(): void {
     const { width, height } = this.scale;
     const bar = this.add.graphics();
@@ -231,24 +292,80 @@ export class PreloadScene extends Phaser.Scene {
   private _registerAnimations(): void {
     // Directional spritesheet frame indexes (see _buildCharacterSpritesheet):
     // 0:S 1:SE 2:E 3:NE 4:N 5:NW 6:W 7:SW
-    const directionalAnims = (key: 'hero' | 'maya'): Array<{ key: string; frames: number[] }> => [
-      { key: `${key}-walk-down`,  frames: [0] },
-      { key: `${key}-walk-right`, frames: [2] },
-      { key: `${key}-walk-up`,    frames: [4] },
-      { key: `${key}-walk-left`,  frames: [6] },
-      { key: `${key}-idle`,       frames: [0] },
-    ];
+    // Per-direction idle frames pulled from the 8-frame rotation sheet.
+    const idleFrameByDir: Record<string, number> = {
+      'south':      0, 'south-east': 1, 'east':       2, 'north-east': 3,
+      'north':      4, 'north-west': 5, 'west':       6, 'south-west': 7,
+    };
 
-    for (const textureKey of ['hero', 'maya'] as const) {
-      if (!this.textures.exists(textureKey)) continue;
-      for (const { key, frames } of directionalAnims(textureKey)) {
+    // Maya still uses the legacy 4-direction static walk keys.
+    const mayaStaticAnims: Array<{ key: string; frames: number[] }> = [
+      { key: 'maya-walk-down',  frames: [0] },
+      { key: 'maya-walk-right', frames: [2] },
+      { key: 'maya-walk-up',    frames: [4] },
+      { key: 'maya-walk-left',  frames: [6] },
+      { key: 'maya-idle',       frames: [0] },
+    ];
+    if (this.textures.exists('maya')) {
+      for (const { key, frames } of mayaStaticAnims) {
         this.anims.create({
           key,
-          frames:    this.anims.generateFrameNumbers(textureKey, { frames }),
+          frames:    this.anims.generateFrameNumbers('maya', { frames }),
           frameRate: 1,
           repeat:    -1,
         });
       }
+    }
+
+    // Hero per-direction idles + legacy aliases (hero-idle, hero-walk-{down/up/left/right}).
+    if (this.textures.exists('hero')) {
+      for (const [dir, frame] of Object.entries(idleFrameByDir)) {
+        this.anims.create({
+          key:       `hero-idle-${dir}`,
+          frames:    this.anims.generateFrameNumbers('hero', { frames: [frame] }),
+          frameRate: 1,
+          repeat:    -1,
+        });
+      }
+      this.anims.create({
+        key:       'hero-idle',
+        frames:    this.anims.generateFrameNumbers('hero', { frames: [0] }),
+        frameRate: 1,
+        repeat:    -1,
+      });
+    }
+
+    // Hero action animations (walking/running/jumping/crouching/poking × directions).
+    for (const [action, def] of Object.entries(HERO_ANIMS)) {
+      for (const dir of def.dirs) {
+        const textureKey = `hero_${action}_${dir}`;
+        if (!this.textures.exists(textureKey)) continue;
+        this.anims.create({
+          key:       `hero-${action}-${dir}`,
+          frames:    this.anims.generateFrameNumbers(textureKey, { start: 0, end: def.frames - 1 }),
+          frameRate: def.frameRate,
+          repeat:    def.repeat,
+        });
+      }
+    }
+
+    // Legacy 4-direction walk aliases — map to the new walking animation frames.
+    const walkAliasByDir: Array<[string, string]> = [
+      ['hero-walk-down',  'south'],
+      ['hero-walk-up',    'north'],
+      ['hero-walk-left',  'west'],
+      ['hero-walk-right', 'east'],
+    ];
+    const walkDef = HERO_ANIMS.walking;
+    for (const [alias, dir] of walkAliasByDir) {
+      const textureKey = `hero_walking_${dir}`;
+      if (!this.textures.exists(textureKey)) continue;
+      this.anims.create({
+        key:       alias,
+        frames:    this.anims.generateFrameNumbers(textureKey, { start: 0, end: walkDef.frames - 1 }),
+        frameRate: walkDef.frameRate,
+        repeat:    walkDef.repeat,
+      });
     }
 
     if (this.textures.exists('robot_zombie')) {
