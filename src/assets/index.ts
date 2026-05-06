@@ -1,10 +1,10 @@
 /**
- * Cross-scene asset URL maps. These are loaded globally by
- * `_core/preload/PreloadScene` because they're used across multiple scenes
- * (party characters travel; UI and audio are scene-agnostic).
+ * Cross-scene asset URL maps for assets that aren't tied to a single
+ * feature folder (currently just the world tilemap).
  *
  * Scene-specific assets live in `src/scenes/<chapter>/<scene>/assets/`
- * with a sibling `assets.ts` that exports their URL maps.
+ * with a sibling `assets.ts`. Character art is colocated with each
+ * character's definition: `src/characters/<name>/assets/` + sibling
+ * `assets.ts`.
  */
-export * from './characters/index.js';
 export * from './world/index.js';
