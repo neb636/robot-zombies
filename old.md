@@ -13,5 +13,3 @@ https://chatgpt.com/share/69ec23c0-37e0-83ea-a685-301a33a8a8b0
 https://chatgpt.com/share/69ec23cb-6484-83ea-bc2f-7194640518fd
 
 https://chatgpt.com/share/69ec23d6-3860-83ea-9b39-11ea8097fd69
-
-I created this as a splace screen loging screen for my computer game. i love it but it is square and looks bad on most laptop and monitor wider screen widths. Can we adjust it to accomidate bigger screens better? its ok it the edges get darker and loses detail the wider the screen gets. i just want to accomidate the majority of display sizes.
