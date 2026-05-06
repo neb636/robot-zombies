@@ -2,13 +2,14 @@ import Phaser from 'phaser';
 import { jumpToScene } from '../../../utils/devJump.js';
 import { preloadApartmentAssets } from '../../prologue/apartment/ApartmentRenderer.js';
 import { NEW_BOSTON_ASSET_URLS } from '../../prologue/newBoston/assets.js';
+import { WORLD_MAP_URL, WORLD_TILES_URL } from '../../../assets/index.js';
 import {
-  CHARACTER_ROTATION_URLS,
-  HERO_ANIM_FOLDERS,
-  heroAnimUrl,
-  WORLD_MAP_URL,
-  WORLD_TILES_URL,
-} from '../../../assets/index.js';
+  PLAYER_ANIMATION_DEFS,
+  preloadPlayerAssets,
+  type PlayerAnimAction,
+  type PlayerAnimationDef,
+} from '../../../characters/player/assets.js';
+import { preloadMayaAssets } from '../../../characters/maya/assets.js';
 import { SaveManager } from '../../../save/SaveManager.js';
 import { ProceduralMusic } from '../../../audio/ProceduralMusic.js';
 import {
@@ -52,27 +53,6 @@ const ROTATION_DIRS = [
   'north', 'north-west', 'west', 'south-west',
 ] as const;
 
-const DIRS_8 = ROTATION_DIRS;
-const DIRS_4 = ['south', 'east', 'north', 'west'] as const;
-
-type HeroAnimKey = 'walking' | 'running' | 'jumping' | 'crouching' | 'poking';
-
-interface HeroAnimDef {
-  folder:    string;
-  frames:    number;
-  dirs:      readonly string[];
-  frameRate: number;
-  repeat:    number;
-}
-
-const HERO_ANIMS: Record<HeroAnimKey, HeroAnimDef> = {
-  walking:   { folder: 'Walking-b5ada3a1',                                              frames: 6, dirs: DIRS_8, frameRate: 10, repeat: -1 },
-  running:   { folder: 'Running-4263a14a',                                              frames: 6, dirs: DIRS_8, frameRate: 14, repeat: -1 },
-  jumping:   { folder: 'Jumping-3b85dd59',                                              frames: 9, dirs: DIRS_8, frameRate: 12, repeat:  0 },
-  crouching: { folder: 'Crouching-b9994c7c',                                            frames: 5, dirs: DIRS_4, frameRate:  8, repeat: -1 },
-  poking:    { folder: 'poke_someone._similar_to_punching_but_less_violent-ebf05df7',   frames: 4, dirs: DIRS_4, frameRate: 10, repeat:  0 },
-};
-
 const CHARACTER_FRAME_SIZE = 108;
 
 function clamp(val: number, min: number, max: number): number {
@@ -105,23 +85,9 @@ export class PreloadScene extends Phaser.Scene {
     this.load.tilemapTiledJSON('world-map', WORLD_MAP_URL);
     this.load.image('world-tiles', WORLD_TILES_URL);
 
-    // ── Cross-scene: character rotation sprites (src/assets/characters/) ──
-    for (const c of ['hero', 'maya'] as const) {
-      for (const dir of ROTATION_DIRS) {
-        const url = CHARACTER_ROTATION_URLS[`${c}_${dir}`];
-        if (url) this.load.image(`${c}_${dir}`, url);
-      }
-    }
-
-    // ── Cross-scene: hero animation frames ────────────────────────────────
-    for (const [action, def] of Object.entries(HERO_ANIMS) as [keyof typeof HERO_ANIM_FOLDERS, HeroAnimDef][]) {
-      for (const dir of def.dirs) {
-        for (let i = 0; i < def.frames; i++) {
-          const url = heroAnimUrl(action, dir, i);
-          if (url) this.load.image(`hero_${action}_${dir}_${i}`, url);
-        }
-      }
-    }
+    // ── Party characters with real art (rotation sprites + animations) ───
+    preloadPlayerAssets(this);
+    preloadMayaAssets(this);
 
     // ── Scene-specific: New Boston props ──────────────────────────────────
     for (const [key, url] of Object.entries(NEW_BOSTON_ASSET_URLS)) {
@@ -242,7 +208,7 @@ export class PreloadScene extends Phaser.Scene {
    */
   private _buildHeroAnimationTextures(): void {
     const size = CHARACTER_FRAME_SIZE;
-    for (const [action, def] of Object.entries(HERO_ANIMS)) {
+    for (const [action, def] of Object.entries(PLAYER_ANIMATION_DEFS) as Array<[PlayerAnimAction, PlayerAnimationDef]>) {
       for (const dir of def.dirs) {
         const textureKey = `hero_${action}_${dir}`;
         if (this.textures.exists(textureKey)) continue;
@@ -521,7 +487,7 @@ export class PreloadScene extends Phaser.Scene {
     }
 
     // Hero action animations (walking/running/jumping/crouching/poking × directions).
-    for (const [action, def] of Object.entries(HERO_ANIMS)) {
+    for (const [action, def] of Object.entries(PLAYER_ANIMATION_DEFS) as Array<[PlayerAnimAction, PlayerAnimationDef]>) {
       for (const dir of def.dirs) {
         const textureKey = `hero_${action}_${dir}`;
         if (!this.textures.exists(textureKey)) continue;
@@ -541,7 +507,7 @@ export class PreloadScene extends Phaser.Scene {
       ['hero-walk-left',  'west'],
       ['hero-walk-right', 'east'],
     ];
-    const walkDef = HERO_ANIMS.walking;
+    const walkDef = PLAYER_ANIMATION_DEFS.walking;
     for (const [alias, dir] of walkAliasByDir) {
       const textureKey = `hero_walking_${dir}`;
       if (!this.textures.exists(textureKey)) continue;
