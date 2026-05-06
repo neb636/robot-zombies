@@ -29,36 +29,75 @@ TypeScript is strict with `noUnusedLocals`, `noUnusedParameters`, `exactOptional
 
 ## Project structure
 
+Scenes and characters are **one folder per entity**. Every related file
+(scene class, renderer, layout JSON, dialogue JSON, scene-specific art)
+lives in that folder.
+
 ```
 src/
-  scenes/       — Phaser scenes (one file per scene)
-  entities/     — Player, Enemy, AnimatedSprite
-  battle/       — BattleManager, BattleStateMachine, ATB states, CombatEngine
-  characters/   — Static CharacterDef data (one file per character)
-  party/        — PartyManager (live party state across scenes)
-  save/         — SaveManager (localStorage, versioned with migrations)
-  world/        — WorldMapManager (node graph for overworld travel)
-  dialogue/     — DialogueManager, DialogueBox
-  audio/        — AudioManager, ProceduralMusic, TTSManager
-  ui/           — BattleHUD, MenuItem
-  utils/        — EventBus (bus), constants (EVENTS, TILE_SIZE, flags)
-  data/
-    dialogue/   — Dialogue lines as JSON (prologue.json, boston.json, subway.json, world_map.json)
-    world/      — nodes.json (all 6 regions, 24 nodes, connections, unlock rules)
-  types.ts      — Shared interfaces
-  config.ts     — Phaser game config and scene list
-  main.ts       — Entry point
+  scenes/
+    _core/                — framework scenes (boot, preload, battle, dialogue,
+                            worldMap, trade, hunting, saveLoad, pauseMenu,
+                            _dev/{Dev,SceneBuilder}); each has its own folder
+    prologue/             — apartment/, newBoston/, subway/  + index.ts bundle
+                            (PrologueScene + ApartmentV3 sandbox both live in
+                            apartment/)
+    chapter1/ … chapter5/ — one folder per scene + index.ts bundle
+                            e.g. chapter4/thePass/{ThePassScene.ts,
+                                 dialogue.json, assets/...}
 
-public/assets/  — Game assets (art, audio, maps)
-  sprites/characters/, sprites/enemies/, tilesets/, ui/, audio/music/, audio/sfx/, maps/
+  characters/             — one folder per character
+    <party-name>/index.ts        — player, marcus, maya, elias, deja,
+                                   jerome, drChen
+    npcs/<name>/index.ts         — sam, tilly, cora, rook, tomas, gideon,
+                                   lila, mrGray, elena, ghost, echo
+    npcs/<name>/Npc.ts           — spawn config for physical-sprite NPCs
+                                   (cora, gideon, ghost)
+    index.ts                     — barrel for CHARACTER_REGISTRY
 
-planning/       — Story and design documents (source of truth for game design)
-tasks.md        — Ordered milestone task list
+  assets/                 — cross-scene assets (loaded globally)
+    characters/<name>/    — rotation + animation PNGs (party travels)
+    audio/{music,sfx}/
+    ui/icons/...
+    world/{world.json, world_tiles.png}
+    index.ts              — re-exports per-domain URL maps
+
+  entities/  battle/  party/  save/  world/  dialogue/  audio/  ui/  utils/
+  data/{survival,world}/  — region-scoped data shared across scenes
+  types.ts  config.ts  main.ts
+
+public/assets/_staging/   — PixelLab generation scratch only; promoted assets
+                            land in src/scenes/<scene>/assets/ or
+                            src/assets/characters/<name>/
+
+planning/                 — Story and design documents (source of truth)
+tasks.md                  — Ordered milestone task list
 ```
 
-New scenes must be registered in `src/config.ts`.
+New scenes go in their chapter's folder and are exported via that
+chapter's `index.ts`. `config.ts` consumes only the chapter bundles
+(`CORE_SCENES`, `PROLOGUE_SCENES`, `CHAPTER1_SCENES`, …) — never flat
+scene imports.
 
-**Dialogue rule:** Never hardcode dialogue strings in scene files. All lines belong in `src/data/dialogue/<scene>.json`. Import the JSON and pass arrays directly to `dialogMgr.show(speaker, lines)`. This keeps narrative editable without touching TypeScript.
+**Scene folder convention:** Every scene folder contains
+- `<Name>Scene.ts` — the Phaser scene class
+- `dialogue.json` — speaker lines
+- optional `<Name>Renderer.ts` / `<Name>Layout.ts` / `layout.json`
+- optional `assets/` + `assets.ts` — scene-local PNG/JSON files; `assets.ts`
+  ESM-imports them and exports a `{cacheKey: url}` map that
+  `_core/preload/PreloadScene` (or the renderer's preload helper) registers
+  via `this.load.image(key, url)`.
+
+**Dialogue rule:** Never hardcode dialogue strings in scene files. All
+lines belong in `dialogue.json` next to the scene class
+(e.g. `src/scenes/prologue/subway/dialogue.json`). Import the JSON and pass
+arrays directly to `dialogMgr.show(speaker, lines)`.
+
+**Asset rule:** Scene-specific raw assets (PNG/JSON) live inside the scene
+folder under `assets/` and are imported via Vite ESM (`import url from
+'./assets/foo.png'`) — never via string paths against `public/`. Only
+cross-scene assets go in `src/assets/`. `public/assets/_staging/` is
+PixelLab's generation scratch and is the only thing left under `public/`.
 
 **Mobile/touch rule:** Every interactive feature must work on both keyboard/mouse and touch screens (iPad, phone). The game targets browser on desktop and mobile equally.
 

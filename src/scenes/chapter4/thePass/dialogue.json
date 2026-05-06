@@ -1,0 +1,168 @@
+{
+  "the_pass": {
+    "approach": {
+      "player": [
+        "There it is.",
+        "Nevada-California border. The whole valley choked off."
+      ],
+      "deja_1": [
+        "That thing is... that's a lot of robot.",
+        "We're going through that."
+      ],
+      "chen": [
+        "The Gate Colossus has three phases of defensive engagement.",
+        "Phase one: warning perimeter. Phase two: active suppression. Phase three: full lockdown.",
+        "We hit it between phase one and two \u2014 there's a gap, maybe forty seconds.",
+        "If we move fast, we can push through far enough that phase three can't reach us."
+      ],
+      "maya": [
+        "Forty seconds.",
+        "Okay. Tight, but doable."
+      ],
+      "jerome": [
+        "We've done tighter."
+      ],
+      "deja_2": [
+        "Have we?",
+        "I feel like we should be honest with ourselves here."
+      ]
+    },
+    "room_1": {
+      "clear": [
+        "Room one clear.",
+        "Keep moving."
+      ]
+    },
+    "room_2": {
+      "clear": [
+        "Halfway through the blockade.",
+        "It's responding. Faster than projected."
+      ],
+      "chen": [
+        "It's adapting. The gap is closing.",
+        "We have to move. Now."
+      ]
+    },
+    "room_3": {
+      "before_boss": {
+        "deja": [
+          "Okay. Okay, I see it.",
+          "Big robot. We've done big robots.",
+          "...",
+          "Very big robot."
+        ],
+        "player": [
+          "Chen. You know this thing."
+        ],
+        "chen": [
+          "Targeting array is in the torso. Hit it three times, it recalibrates.",
+          "During recalibration \u2014 six seconds \u2014 it's exposed.",
+          "Don't stop moving."
+        ]
+      },
+      "victory": {
+        "maya": [
+          "It's down.",
+          "Go. Go now before the secondary units respond."
+        ]
+      }
+    },
+    "room_4": {
+      "rockies.deja.final": {
+        "before": {
+          "deja_1": [
+            "Two more rooms. We're almost \u2014 "
+          ],
+          "system_1": [
+            "A secondary sentry drops from the ceiling.",
+            "It wasn't on the schematics.",
+            "It fires before anyone can move."
+          ],
+          "chen": [
+            "Deja \u2014 "
+          ],
+          "deja_2": [
+            "I'm okay.",
+            "...",
+            "I'm.",
+            "..."
+          ],
+          "player_1": [
+            "Deja. Deja, look at me."
+          ],
+          "deja_3": [
+            "I thought I was supposed to die running something.",
+            "Like \u2014 running a con. Running a job.",
+            "Not just.",
+            "Not just standing here."
+          ],
+          "maya": [
+            "Don't talk."
+          ],
+          "deja_4": [
+            "I was going to \u2014 I had this whole thing. New Orleans. After.",
+            "I was going to open something. I don't know. A bar. A place.",
+            "Something that was mine.",
+            "..."
+          ],
+          "jerome": [
+            "...",
+            "Deja."
+          ],
+          "deja_5": [
+            "Tell me we're going to make it.",
+            "Don't \u2014 don't make it into a question. Just.",
+            "Tell me."
+          ],
+          "player_2": [
+            "We're going to make it."
+          ],
+          "deja_6": [
+            "Okay.",
+            "Okay good.",
+            "..."
+          ],
+          "system_2": [
+            "She doesn't say anything else.",
+            "The room is very quiet.",
+            "The blockade continues to sound its alarms in the distance.",
+            "None of you move for a moment.",
+            "Then Maya pulls you forward.",
+            "No one looks back."
+          ]
+        },
+        "deja_lost_text": "DEJA is gone.",
+        "smoke_lost_text": "The party has permanently lost SMOKE (guaranteed escape).",
+        "room_4_clear": {
+          "system": [
+            "You push through the final room on momentum alone.",
+            "No one speaks.",
+            "The California border marker passes beneath your feet.",
+            "You don't celebrate."
+          ]
+        }
+      }
+    },
+    "room_5": {
+      "exit": {
+        "system": [
+          "Through.",
+          "You made it through."
+        ],
+        "maya": [
+          "California.",
+          "Chen. How far to the Valley?"
+        ],
+        "chen": [
+          "Three days. Maybe two if the roads are clear.",
+          "..."
+        ],
+        "jerome": [
+          "She deserved better than that.",
+          "...",
+          "Come on."
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,93 @@
+import Phaser from "phaser";
+import layout from "./layoutV1.json";
+import {
+  renderApartment,
+  type SceneLayout,
+  type TilesetJson,
+} from "./apartmentLayout.js";
+import {
+  APARTMENT_OBJECT_URLS,
+  APARTMENT_TILESET_URLS,
+  APARTMENT_TILESET_META_URLS,
+} from "./assets.js";
+
+export const MAP_W = 704;
+export const MAP_H = 480;
+export const WALL_T = 16;
+export const TOP_WALL_H = 48;
+export const DIVIDER_X = 344;
+export const DOOR_TOP = 248;
+export const DOOR_BOT = 280;
+export const FDOOR_TOP = 248;
+export const FDOOR_BOT = 280;
+
+const TILESETS = ["apartment_floor", "apartment_wall"] as const;
+const FLOOR_TEXTURE_KEY = "apartment_floor_texture";
+
+/**
+ * Preload apartment tilesets, metadata, and prop sprites. Call from the
+ * parent scene's preload(); idempotent across scenes.
+ */
+export function preloadApartmentAssets(scene: Phaser.Scene): void {
+  for (const name of TILESETS) {
+    const tilesetUrl = APARTMENT_TILESET_URLS[name];
+    if (!scene.textures.exists(`tileset_${name}`) && tilesetUrl) {
+      scene.load.image(`tileset_${name}`, tilesetUrl);
+    }
+    const metaUrl = APARTMENT_TILESET_META_URLS[name];
+    if (!scene.cache.json.exists(`tileset_${name}_meta`) && metaUrl) {
+      scene.load.json(`tileset_${name}_meta`, metaUrl);
+    }
+  }
+  if (!scene.textures.exists(FLOOR_TEXTURE_KEY)) {
+    scene.load.image(FLOOR_TEXTURE_KEY, APARTMENT_TILESET_URLS.apartment_floor_texture);
+  }
+  for (const name of Object.keys((layout as SceneLayout).mapObjects)) {
+    if (name === "hero_preview") continue;
+    const key = `prop_${name}`;
+    const url = APARTMENT_OBJECT_URLS[name];
+    if (!scene.textures.exists(key) && url) {
+      scene.load.image(key, url);
+    }
+  }
+}
+
+/**
+ * Render the prologue apartment (floor tiles, walls, furniture props) from
+ * the layout JSON. Assets must have been loaded via preloadApartmentAssets().
+ */
+export function drawPrologueRoom(scene: Phaser.Scene): void {
+  const full = layout as SceneLayout;
+
+  const floorRegions = full.regions.filter(
+    (r) => r.tileset === "apartment_floor",
+  );
+  if (floorRegions.length > 0) {
+    let minX = Infinity,
+      minY = Infinity,
+      maxX = -Infinity,
+      maxY = -Infinity;
+    for (const r of floorRegions) {
+      if (r.x < minX) minX = r.x;
+      if (r.y < minY) minY = r.y;
+      if (r.x + r.w > maxX) maxX = r.x + r.w;
+      if (r.y + r.h > maxY) maxY = r.y + r.h;
+    }
+    scene.add
+      .tileSprite(minX, minY, maxX - minX, maxY - minY, FLOOR_TEXTURE_KEY)
+      .setOrigin(0, 0)
+      .setTileScale(0.14, 0.14);
+  }
+
+  const filteredLayout: SceneLayout = {
+    ...full,
+    regions: full.regions.filter((r) => r.tileset !== "apartment_floor"),
+  };
+
+  renderApartment(scene, filteredLayout, {
+    tilesetTextureKey: (n) => `tileset_${n}`,
+    tilesetMeta: (n) =>
+      scene.cache.json.get(`tileset_${n}_meta`) as TilesetJson | undefined,
+    objectTextureKey: (n) => `prop_${n}`,
+  });
+}

@@ -1,63 +1,21 @@
 import Phaser from 'phaser';
-import { BootScene }       from './scenes/BootScene.js';
-import { PreloadScene }    from './scenes/PreloadScene.js';
-import { PrologueScene }   from './scenes/PrologueScene.js';
-import { ApartmentV3Scene } from './scenes/ApartmentV3Scene.js';
-import { NewBostonScene }  from './scenes/NewBostonScene.js';
-import { SubwayScene }     from './scenes/SubwayScene.js';
-import { WorldMapScene }   from './scenes/WorldMapScene.js';
-import { BattleScene }     from './scenes/BattleScene.js';
-import { DialogueScene }   from './scenes/DialogueScene.js';
-import { DevScene }          from './scenes/DevScene.js';
-import { SceneBuilderScene } from './scenes/SceneBuilderScene.js';
-
-// ─── Stream G ────────────────────────────────────────────────────────────────
-import { SaveLoadScene }   from './scenes/SaveLoadScene.js';
-import { PauseMenuScene }  from './scenes/PauseMenuScene.js';
-
-// ─── Stream A ────────────────────────────────────────────────────────────────
-import { TradeScene }      from './scenes/TradeScene.js';
-import { HuntingScene }    from './scenes/HuntingScene.js';
-
-// ─── Chapter bundles (Streams C1–C5) ─────────────────────────────────────────
+import { CORE_SCENES, DEV_SCENES } from './scenes/_core/index.js';
+import { PROLOGUE_SCENES }         from './scenes/prologue/index.js';
 import { CHAPTER1_SCENES } from './scenes/chapter1/index.js';
 import { CHAPTER2_SCENES } from './scenes/chapter2/index.js';
 import { CHAPTER3_SCENES } from './scenes/chapter3/index.js';
 import { CHAPTER4_SCENES } from './scenes/chapter4/index.js';
 import { CHAPTER5_SCENES } from './scenes/chapter5/index.js';
 
-const coreScenes: Phaser.Types.Scenes.SceneType[] = [
-  BootScene,
-  PreloadScene,
-  PrologueScene,
-  ApartmentV3Scene,
-  NewBostonScene,
-  SubwayScene,
-  WorldMapScene,
-  BattleScene,
-  DialogueScene,
-  SaveLoadScene,
-  PauseMenuScene,
-  TradeScene,
-  HuntingScene,
-];
-
-const chapterScenes: Phaser.Types.Scenes.SceneType[] = [
+const scenes: Phaser.Types.Scenes.SceneType[] = [
+  ...CORE_SCENES,
+  ...PROLOGUE_SCENES,
   ...CHAPTER1_SCENES,
   ...CHAPTER2_SCENES,
   ...CHAPTER3_SCENES,
   ...CHAPTER4_SCENES,
   ...CHAPTER5_SCENES,
-];
-
-const devScenes: Phaser.Types.Scenes.SceneType[] = import.meta.env.DEV
-  ? [DevScene, SceneBuilderScene]
-  : [];
-
-const scenes: Phaser.Types.Scenes.SceneType[] = [
-  ...coreScenes,
-  ...chapterScenes,
-  ...devScenes,
+  ...(import.meta.env.DEV ? DEV_SCENES : []),
 ];
 
 export const gameConfig: Phaser.Types.Core.GameConfig = {

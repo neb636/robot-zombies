@@ -1,6 +1,7 @@
 import { Howl, Howler } from 'howler';
 import Phaser from 'phaser';
 
+import { MUSIC_URLS, SFX_URLS } from '../assets/audio/index.js';
 import {
   BostonTheme, AppalachiaTheme, DeepSouthTheme, GreatPlainsTheme,
   RockiesTheme, SiliconValleyTheme, BattleNormalTheme, BattleBossTheme,
@@ -62,8 +63,10 @@ export class AudioManager {
 
   playMusic(key: string, volume = 0.45): void {
     this.stopMusic(0);
+    const url = MUSIC_URLS[this._stem(key)];
+    if (!url) { this._music = null; return; }
     this._music = new Howl({
-      src:         [`assets/audio/music/${this._stem(key)}.ogg`],
+      src:         [url],
       loop:        true,
       volume,
       autoplay:    true,
@@ -87,8 +90,10 @@ export class AudioManager {
   playSfx(key: string, volume = 0.75): void {
     let howl = this._sfxCache.get(key);
     if (!howl) {
+      const url = SFX_URLS[this._stem(key)];
+      if (!url) return;
       howl = new Howl({
-        src:         [`assets/audio/sfx/${this._stem(key)}.ogg`],
+        src:         [url],
         volume,
         onloaderror: () => { this._sfxCache.delete(key); },
       });

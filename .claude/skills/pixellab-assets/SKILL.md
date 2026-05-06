@@ -4,7 +4,7 @@ description: >
   Generate pixel-art game assets for Quiet Machines using the PixelLab MCP server —
   characters, enemies, bosses, tilesets, map objects. Submits async jobs, waits,
   retrieves, and stages results at `public/assets/_staging/` for the user to review
-  before integrating into `PreloadScene.ts`. Trigger on phrasing like "generate the
+  before integrating into `_core/preload/PreloadScene.ts`. Trigger on phrasing like "generate the
   Maya sprite", "make the Boston ruins tileset", "create the supply crate", "generate
   <character name> character", "generate <enemy> enemy", or any request that names an
   asset in `planning/asset-generation-guide.md`.
@@ -36,7 +36,7 @@ The full inventory, art-direction constants, cost reasoning, and live status tra
 These are separate turns, separated by user review. **Never do both in one turn** unless the user explicitly asks you to skip review.
 
 - **Generate**: submit → wait → retrieve → stage under `public/assets/_staging/…` → report → **STOP**.
-- **Integrate**: only after the user says "integrate X" / "ship these" / equivalent. Move files, wire `PreloadScene.ts`, update status in the guide.
+- **Integrate**: only after the user says "integrate X" / "ship these" / equivalent. Move files into `src/scenes/<scene>/assets/` (or `src/assets/characters/<name>/`), wire the scene's `assets.ts` (or `_core/preload/PreloadScene.ts` for cross-scene art), update status in the guide.
 
 ---
 
@@ -146,7 +146,7 @@ Inside that folder, write:
   - What's included (list of directions, list of animations, frame counts)
   - How to preview (dev-server URL if available, or which file to open)
 
-**Never** write generated output to `public/assets/sprites/`, `public/assets/tilesets/`, or any other "final" location during the Generate phase. Staging is a hard rule.
+**Never** write generated output directly into `src/scenes/<scene>/assets/` or `src/assets/characters/<name>/` during the Generate phase. Those are the final integration destinations; staging under `public/assets/_staging/` is a hard rule until the user reviews.
 
 ### 9. Report and stop
 
@@ -155,13 +155,14 @@ Print a compact summary to the user:
 ```
 Staged: Maya — 8 directions, 4 animations (walking, breathing, fight-stance, taking-punch).
 Path: public/assets/_staging/characters/maya/
-Preview in browser: http://localhost:5173/assets/_staging/characters/maya/
-When ready, say "integrate maya" to wire it into PreloadScene.
+Preview in browser: http://localhost:3000/robot-zombies/assets/_staging/characters/maya/
+When ready, say "integrate maya" — Maya is a party character, so her art goes
+to src/assets/characters/maya/ and is wired via PreloadScene.
 ```
 
 Update `planning/asset-generation-guide.md` status: `generating` → `in-review`.
 
-**Stop here.** Do not touch `PreloadScene.ts`. Do not move files out of staging. Wait for the user's next turn.
+**Stop here.** Do not touch `_core/preload/PreloadScene.ts`. Do not move files out of staging. Wait for the user's next turn.
 
 ---
 
@@ -173,51 +174,61 @@ Triggered by the user saying "integrate <asset>" / "ship it" / "looks good, wire
 
 Confirm `public/assets/_staging/<category>/<asset>/` exists and has the expected files. If not, ask the user whether to regenerate.
 
-### 2. Move files
+### 2. Pick the destination
 
-Move PNGs to their final locations:
+Where the asset lives depends on whether it's used by one scene or many.
 
 | Category | Destination |
 |----------|-------------|
-| characters | `public/assets/sprites/characters/<name>.png` |
-| enemies | `public/assets/sprites/enemies/<name>.png` |
-| bosses | `public/assets/sprites/enemies/<name>.png` (same dir — enemies and bosses share the folder) |
-| tilesets | `public/assets/tilesets/<region>.png` |
-| map-objects | `public/assets/sprites/props/misc/<name>.png` (or a more specific subfolder) |
+| Cross-scene party character (hero, marcus, maya, …) | `src/assets/characters/<name>/` (preserve `rotations/` and `animations/` subfolders) |
+| Cross-scene UI / audio / world | `src/assets/{ui,audio,world}/...` |
+| Scene-local tileset (apartment walls/floor, subway tracks, …) | `src/scenes/<chapter>/<scene>/assets/tilesets/` |
+| Scene-local prop / map object | `src/scenes/<chapter>/<scene>/assets/objects/` (or `props/`) |
+| Enemy / boss procedural-placeholder replacement | match the procedural's owning scene; if used everywhere, `src/assets/characters/<name>/` |
 
-Preserve the staging `README.md` alongside the final asset (or delete — your call, but keeping it is useful for provenance). Delete the staging folder after a successful move.
+If you don't know which scene owns the asset, ask the user before integrating.
 
-### 3. Wire `src/scenes/PreloadScene.ts`
+Use `git mv` so history follows the move. Delete the staging folder after a successful move (or keep its `README.md` next to the integrated file if useful for provenance).
 
-Locate the relevant section. The file structure:
+### 3. Wire the asset's `assets.ts`
 
-- `preload()` at line 12 — add `this.load.spritesheet(...)` or `this.load.image(...)` calls
-- `create()` at line 52 — has `if (!this.textures.exists(...)) this._generateXxxTexture();` guards that fall back to procedural placeholders
-- `_registerAnimations()` at line 231 — animation definitions
+Asset URL strings come from ESM imports — never hardcode `assets/...` strings.
 
-**To wire a new asset:**
+For **scene-local** art:
 
-1. Add the `this.load.spritesheet(...)` / `this.load.image(...)` call in `preload()`.
-   - Character canvas is ~40% larger than `size` (PixelLab convention). For a `size: 48` character, use `frameWidth: 68, frameHeight: 68` — but **verify against the actual output dimensions** by reading the staging README or checking the PNG.
-2. If a procedural placeholder exists (`_generateHeroTexture`, `_generateWardenAlphaTexture`, etc. at lines 81, 311, 395, 483, 591, 679, 780):
-   - Remove the procedural call from `create()` (the `if (!this.textures.exists(...))` guard — just delete that line since the spritesheet load now provides the texture).
-   - Delete the `_generate*Texture()` method entirely if nothing else uses it.
-3. Update `_registerAnimations()`:
-   - Real PixelLab template animation frame counts:
-     - `walking-4-frames` → 4 frames
-     - `running-4-frames` → 4 frames
-     - `breathing-idle` → 8 frames
-     - `fight-stance-idle-8-frames` → 8 frames
-     - `taking-punch` → usually 4 frames (verify from staging)
-     - `scary-walk` → verify from staging
-   - The direction layout PixelLab produces: each direction is a row. For 8-direction characters: rows are S, SE, E, NE, N, NW, W, SW (verify against the staged README — PixelLab's direction order can vary).
+1. Open `src/scenes/<chapter>/<scene>/assets.ts` (create it if the scene doesn't have one yet — see existing `src/scenes/prologue/apartment/assets.ts` for the pattern).
+2. Add an `import url from './assets/<path>.png'` (Vite returns the hashed URL string).
+3. Add the entry to the exported `<SCENE>_ASSET_URLS` map: `{ <cache_key>: url }`.
+4. The scene's renderer or `_core/preload/PreloadScene` already iterates these maps via `this.load.image(key, url)` — usually no further wiring needed.
+
+For **cross-scene** art (party characters, UI, world):
+
+1. Drop the file under `src/assets/<domain>/...` matching the existing structure.
+2. If you added a new character or a new asset domain, extend
+   `src/assets/<domain>/index.ts` to expose its URL (or extend the
+   `import.meta.glob` pattern that already covers `characters/*/rotations/*.png`).
+3. `_core/preload/PreloadScene` already iterates `CHARACTER_ROTATION_URLS` and friends — usually no additional `this.load.image` line needed.
+
+For **procedural-placeholder replacements**:
+
+- Remove the `if (!this.textures.exists(<key>))` guard for the placeholder in `_core/preload/PreloadScene.create()`.
+- Delete the `_generate<Name>Texture()` method.
+- Make sure the spritesheet is registered via the appropriate `assets.ts` map (or directly in `preload()` for one-off boss art).
+- Real PixelLab template animation frame counts:
+  - `walking-4-frames` → 4 frames
+  - `running-4-frames` → 4 frames
+  - `breathing-idle` → 8 frames
+  - `fight-stance-idle-8-frames` → 8 frames
+  - `taking-punch` → usually 4 frames (verify from staging)
+  - `scary-walk` → verify from staging
+- For 8-direction characters, PixelLab rows are typically S, SE, E, NE, N, NW, W, SW (verify against the staged README — order can vary).
 
 ### 4. Update the guide
 
 Edit `planning/asset-generation-guide.md`:
 
 - Change status column: `in-review` → `integrated`
-- If it was a boss with a procedural placeholder, update that row so it no longer says "placeholder" and remove the `PreloadScene.ts:NNN` reference.
+- If it was a boss with a procedural placeholder, update that row so it no longer says "placeholder" and remove the `_core/preload/PreloadScene.ts:NNN` reference.
 
 ### 5. Verify
 
@@ -469,7 +480,7 @@ All bosses:
 - **Don't integrate without explicit approval.** Staging → review → integrate is a hard three-step gate.
 - **Don't skip `ToolSearch`.** PixelLab tools are deferred every session. Calling them without hydrating schemas returns `InputValidationError`.
 - **Don't poll for job status.** Use `ScheduleWakeup` — cheaper, doesn't burn context.
-- **Don't hand-edit `PreloadScene.ts` during Generate phase.** Even if you know the answer, hold the edit until Integrate.
+- **Don't hand-edit `_core/preload/PreloadScene.ts` during Generate phase.** Even if you know the answer, hold the edit until Integrate.
 - **Don't submit single-item jobs.** Batch the whole group (all 7 playable characters, or all 4 enemies) in one submission if the user asks for a set.
 - **Don't use `mode: "pro"` outside Elise Voss.** Hard rule.
 - **Don't write the README.md in the final asset tree** — it belongs in the staging folder, next to the PNGs during review.

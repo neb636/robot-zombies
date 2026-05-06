@@ -1,26 +1,26 @@
 import type { CharacterDef } from '../types.js';
 
-// Party members (existing)
-import { MARCUS_DEF }  from './marcus.js';
-import { PLAYER_DEF }  from './player.js';
-import { MAYA_DEF }    from './maya.js';
-import { ELIAS_DEF }   from './elias.js';
-import { DEJA_DEF }    from './deja.js';
-import { JEROME_DEF }  from './jerome.js';
-import { DR_CHEN_DEF } from './drChen.js';
+// Party members
+import { MARCUS_DEF }  from './marcus/index.js';
+import { PLAYER_DEF }  from './player/index.js';
+import { MAYA_DEF }    from './maya/index.js';
+import { ELIAS_DEF }   from './elias/index.js';
+import { DEJA_DEF }    from './deja/index.js';
+import { JEROME_DEF }  from './jerome/index.js';
+import { DR_CHEN_DEF } from './drChen/index.js';
 
-// Side-character NPCs (Phase B pre-stubs — chapter streams fill bodies)
-import { SAM_DEF }     from './sam.js';
-import { TILLY_DEF }   from './tilly.js';
-import { CORA_DEF }    from './cora.js';
-import { ROOK_DEF }    from './rook.js';
-import { TOMAS_DEF }   from './tomas.js';
-import { GIDEON_DEF }  from './gideon.js';
-import { LILA_DEF }    from './lila.js';
-import { MR_GRAY_DEF } from './mrGray.js';
-import { ELENA_DEF }   from './elena.js';
-import { GHOST_DEF }   from './ghost.js';
-import { ECHO_DEF }    from './echo.js';
+// Side-character NPCs
+import { SAM_DEF }     from './npcs/sam/index.js';
+import { TILLY_DEF }   from './npcs/tilly/index.js';
+import { CORA_DEF }    from './npcs/cora/index.js';
+import { ROOK_DEF }    from './npcs/rook/index.js';
+import { TOMAS_DEF }   from './npcs/tomas/index.js';
+import { GIDEON_DEF }  from './npcs/gideon/index.js';
+import { LILA_DEF }    from './npcs/lila/index.js';
+import { MR_GRAY_DEF } from './npcs/mrGray/index.js';
+import { ELENA_DEF }   from './npcs/elena/index.js';
+import { GHOST_DEF }   from './npcs/ghost/index.js';
+import { ECHO_DEF }    from './npcs/echo/index.js';
 
 export {
   MARCUS_DEF, PLAYER_DEF, MAYA_DEF, ELIAS_DEF, DEJA_DEF, JEROME_DEF, DR_CHEN_DEF,
@@ -37,8 +37,6 @@ export const CHARACTER_REGISTRY: Readonly<Record<string, CharacterDef>> = {
   [DEJA_DEF.id]:    DEJA_DEF,
   [JEROME_DEF.id]:  JEROME_DEF,
   [DR_CHEN_DEF.id]: DR_CHEN_DEF,
-
-  // Side characters
   [SAM_DEF.id]:     SAM_DEF,
   [TILLY_DEF.id]:   TILLY_DEF,
   [CORA_DEF.id]:    CORA_DEF,

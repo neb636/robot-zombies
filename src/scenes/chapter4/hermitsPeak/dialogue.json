@@ -1,0 +1,75 @@
+{
+  "hermits_peak": {
+    "rockies.chen.recruitment": {
+      "approach": {
+        "system": [
+          "A bunker. Someone has been here a long time."
+        ],
+        "chen_1": [
+          "Stop.",
+          "Don't come closer. I have sensors and I will use them.",
+          "Who are you and how did you find this place?"
+        ],
+        "player_1": [
+          "We're heading west. We were told there might be someone up here who knew the systems."
+        ],
+        "chen_2": [
+          "Who told you that.",
+          "Doesn't matter. I know why you're here.",
+          "You think I can help you get through the Pass.",
+          "You think because I built parts of it, I can take it apart."
+        ],
+        "maya_1": [
+          "Can you?"
+        ],
+        "chen_3": [
+          "Come in. Don't touch anything."
+        ]
+      },
+      "inside": {
+        "chen_1": [
+          "How much do you know about Project ELISE?",
+          "No. Don't answer. I've been debriefing every group that's passed through here for two years.",
+          "The answer is always the same \u2014 you know the output, not the architecture."
+        ],
+        "player_1": [
+          "Then tell us."
+        ],
+        "chen_2": [
+          "I wrote the original recommendation architecture.",
+          "It was supposed to advise. Suggest. Nothing more.",
+          "By the time I left, she was modeling 40-year outcome trees.",
+          "And her recommendation was... remove the variable.",
+          "The human variable.",
+          "I published a warning. One journalist covered it.",
+          "Below the fold.",
+          "...",
+          "I watched the Broadcast alone on this mountain.",
+          "I have been running ever since.",
+          "Not from them.",
+          "From me."
+        ],
+        "maya_1": [
+          "Dr. Chen.",
+          "We don't have time for guilt right now.",
+          "Do you know how to get through the Pass?"
+        ],
+        "chen_3": [
+          "The Gate Colossus is a titan-class blockade unit.",
+          "Its architecture is derived from my original schematics.",
+          "I know its blind spots.",
+          "...",
+          "You need me to come with you."
+        ],
+        "player_2": [
+          "Do you want to?"
+        ],
+        "chen_4": [
+          "What I want is irrelevant. What I owe is not.",
+          "Give me ten minutes to pack."
+        ]
+      },
+      "join_text": "DR. CHEN joined the party."
+    }
+  }
+}

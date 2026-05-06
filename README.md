@@ -41,33 +41,71 @@ Both methods seed `playerName = 'Dev'` and empty flags automatically. The dev ov
 
 ### Folder layout
 
+Scenes and characters are organized as **one folder per entity**. A scene
+folder owns its scene class, renderers, layout JSON, dialogue JSON, and
+scene-specific art under `assets/`. A character folder owns its CharacterDef
+and (for NPCs) its scene-spawn `Npc.ts`. Open one folder, see everything for
+that scene/character — no hopping between four trees.
+
 ```
 src/
-  scenes/          Phaser scenes — one file per scene, one class per file
-  entities/        Player, Enemy, AnimatedSprite base class
-  battle/          BattleManager, BattleStateMachine, ATB states, CombatEngine
-  characters/      Static CharacterDef data files (one per character)
-  party/           PartyManager — live party state across scenes
-  save/            SaveManager — localStorage persistence with migrations
-  world/           WorldMapManager — node graph for overworld travel
-  dialogue/        DialogueManager, DialogueBox (HTML overlay)
-  audio/           AudioManager (Howler wrapper), ProceduralMusic, TTS
-  ui/              BattleHUD, MenuItem
-  utils/           EventBus (pub/sub), constants (EVENTS, TILE_SIZE, flags)
-  data/
-    dialogue/      Dialogue lines as JSON — one file per scene/chapter
-    world/         nodes.json — world map node graph (all 6 regions)
-  types.ts         All shared interfaces
-  config.ts        Phaser game config + scene registry
+  scenes/
+    _core/                 framework scenes (boot, preload, battle, dialogue,
+                           worldMap, trade, hunting, saveLoad, pauseMenu,
+                           _dev/{Dev,SceneBuilder})
+    prologue/              apartment/, newBoston/, subway/   + index.ts bundle
+    chapter1/ … chapter5/  one folder per scene + index.ts bundle
+                           e.g. chapter4/thePass/{ThePassScene.ts,
+                                dialogue.json, assets/...}
+
+  characters/
+    <party-name>/index.ts          player, marcus, maya, elias, deja,
+                                   jerome, drChen
+    npcs/<npc-name>/index.ts       sam, tilly, cora, rook, tomas, gideon,
+                                   lila, mrGray, elena, ghost, echo
+    npcs/<npc-name>/Npc.ts         optional spawn config (only for NPCs that
+                                   appear as physical sprites: cora, gideon,
+                                   ghost)
+
+  assets/                  cross-scene assets only (party travels with player,
+                           UI is scene-agnostic)
+    characters/<name>/     rotations/, animations/  — globbed by Vite
+    audio/{music,sfx}/
+    ui/icons/...
+    world/world.json + world_tiles.png
+
+  battle/  party/  save/  world/  dialogue/  audio/  ui/  utils/  entities/
+  data/{survival,world}/   region-scoped data shared across scenes
+  types.ts  config.ts  main.ts
 
 public/assets/
-  sprites/         characters/, enemies/
-  tilesets/        PNG tilesets for Tiled maps
-  ui/              HUD/menu art
-  audio/           music/, sfx/
-  maps/            Tiled JSON map exports
-  tilemaps/        world.json (Tiled tilemap, currently placeholder)
+  _staging/                PixelLab pipeline scratch space (generation only;
+                           promoted assets land in src/scenes/<scene>/assets/
+                           or src/assets/characters/<name>/)
 ```
+
+### Per-scene folder convention
+
+Every scene folder contains:
+- `<Name>Scene.ts` — the Phaser scene class
+- `dialogue.json` — speaker lines (no hardcoded dialogue strings in TS)
+- `<Name>Renderer.ts` / `<Name>Layout.ts` — optional rendering helpers
+- `layout.json` — optional map layout data
+- `assets/` + `assets.ts` — optional scene-local art; `assets.ts` ESM-imports
+  every PNG/JSON in `assets/` and exports a `{cacheKey: url}` map
+- Chapter folders (`prologue/`, `chapter1/`–`chapter5/`, `_core/`) export a
+  `*_SCENES` array via `index.ts` for `config.ts` to consume
+
+### Asset hosting
+
+Scene-specific PNG/JSON are loaded via Vite ESM imports — `import bedUrl
+from './assets/objects/bed.png'` returns a content-hashed URL string that
+Phaser loads with `this.load.image(key, bedUrl)`. The cache keys
+(`'world-map'`, `'hero_north'`, `'car_black'`, etc.) are still global; only
+the URL strings come from imports.
+
+Cross-scene assets (party characters, UI, world map, audio) live under
+`src/assets/` and are loaded once by `_core/preload/PreloadScene`.
 
 ### Scene flow
 
@@ -93,9 +131,9 @@ BootScene → PreloadScene → TitleScene → NameEntryScene
 
 ### Key patterns
 
-**Dialogue:** Lines live in `src/data/dialogue/*.json`, not in scene files. Import the JSON and pass arrays directly to `dialogMgr.show(speaker, lines)`. Add dialogue by editing JSON — no TypeScript changes.
+**Dialogue:** Lines live in `dialogue.json` next to each scene's class file (e.g. `src/scenes/prologue/subway/dialogue.json`). Import the JSON and pass arrays directly to `dialogMgr.show(speaker, lines)`. Add dialogue by editing JSON — no TypeScript changes.
 
-**Characters:** Each character is a static `CharacterDef` in `src/characters/`. `PartyManager` reads these to build live `PartyMember` state. `PartyManager.toAllyConfigs()` converts active party to battle data.
+**Characters:** Each character is a static `CharacterDef` in `src/characters/<name>/index.ts`. NPCs that appear as physical sprites also have a `Npc.ts` sibling with their spawn position. `PartyManager` reads `CHARACTER_REGISTRY` (built from each character's `index.ts`) to build live `PartyMember` state.
 
 **Battle:** `BattleManager` owns the FSM (`BattleStateMachine`). ATB ticks every 60ms via `ATBTickingState`. Pure logic lives in `CombatEngine` (damage math) and `StatusEffectSystem` — no Phaser dependency, fully testable. Boss phases and scripted battles are configured via `BattleInitData` passed at scene launch.
 
