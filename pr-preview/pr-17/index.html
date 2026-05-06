@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#14110f" />
+  <meta name="description" content="A browser-based SNES-style JRPG. Fight for the right to be inefficient." />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-title" content="Quiet Machines" />
+  <title>Quiet Machines</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #000;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+    #game-container {
+      width: 100%;
+      height: 100%;
+    }
+    canvas { display: block; }
+
+    /* ──────────────────────────────────────────────────────────
+       Quiet Machines UI palette — derived from load-screen.png
+       Muted, post-apocalyptic. Neutral charcoal greys with a
+       single amber accent (echoing the BOSTON sign / ELISE eye).
+       ────────────────────────────────────────────────────────── */
+    :root {
+      --qm-bg-overlay:   rgba(6, 7, 8, 0.82);
+      --qm-bg-panel:     rgba(20, 22, 24, 0.96);
+      --qm-bg-deep:      rgba(12, 13, 14, 0.95);
+      --qm-border:       #4a4f54;
+      --qm-border-strong:#5e646a;
+      --qm-border-soft:  #2a2d30;
+      --qm-text:         #c2c7cb;
+      --qm-text-dim:     #7c8186;
+      --qm-accent:       #d99846;
+      --qm-accent-soft:  #a87838;
+      --qm-muted:        #5e6266;
+      --qm-disabled:     #3a3d40;
+      --qm-disabled-bd:  #25282b;
+    }
+
+    /* Dialogue overlay sits above the Phaser canvas */
+    #dialogue-overlay {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 760px;
+      max-width: 96vw;
+      background: var(--qm-bg-panel);
+      border: 3px solid var(--qm-border);
+      border-radius: 4px;
+      padding: 18px 24px;
+      color: var(--qm-text);
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      line-height: 1.6;
+      display: none;
+      z-index: 100;
+      box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.7),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+        0 10px 30px rgba(0, 0, 0, 0.6);
+      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.7);
+    }
+    #dialogue-overlay .speaker {
+      color: var(--qm-accent);
+      font-weight: bold;
+      margin-bottom: 6px;
+      font-size: 13px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8);
+    }
+    #dialogue-overlay .prompt {
+      float: right;
+      color: var(--qm-accent);
+      animation: blink 0.8s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* TTS mute toggle button */
+    #tts-mute-btn {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      background: var(--qm-bg-deep);
+      border: 2px solid var(--qm-border-soft);
+      border-radius: 3px;
+      color: var(--qm-accent);
+      padding: 6px 12px;
+      cursor: pointer;
+      z-index: 200;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: border-color 0.15s, color 0.15s, opacity 0.15s;
+      user-select: none;
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+        0 2px 6px rgba(0, 0, 0, 0.5);
+      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8);
+    }
+    #tts-mute-btn:hover {
+      border-color: var(--qm-border);
+      color: #e8a85a;
+    }
+    #tts-mute-btn.muted {
+      color: var(--qm-muted);
+      border-color: var(--qm-disabled-bd);
+      opacity: 0.6;
+    }
+
+    /* Pause menu overlay */
+    #pause-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: var(--qm-bg-overlay);
+      z-index: 150;
+      backdrop-filter: blur(2px);
+    }
+    #pause-panel {
+      background: var(--qm-bg-panel);
+      border: 3px solid var(--qm-border);
+      border-radius: 4px;
+      padding: 36px 56px;
+      font-family: 'Courier New', monospace;
+      min-width: 300px;
+      text-align: center;
+      box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.7),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+        0 16px 48px rgba(0, 0, 0, 0.7);
+    }
+    #pause-title {
+      color: var(--qm-accent);
+      font-size: 20px;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8);
+    }
+    #pause-title::after {
+      content: '';
+      display: block;
+      width: 56px;
+      height: 1px;
+      background: var(--qm-accent-soft);
+      margin: 12px auto 0;
+      opacity: 0.6;
+    }
+    #pause-menu-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    #pause-menu-list li {
+      color: var(--qm-text);
+      font-size: 16px;
+      padding: 7px 0;
+      cursor: pointer;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: color 0.12s;
+      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.7);
+    }
+    #pause-menu-list li:hover { color: var(--qm-accent); }
+    #pause-hint {
+      color: var(--qm-text-dim);
+      font-size: 11px;
+      margin-top: 24px;
+      letter-spacing: 2px;
+    }
+  </style>
+  <script type="module" crossorigin src="/robot-zombies/pr-preview/pr-17/assets/index-2leubQ4O.js"></script>
+<link rel="manifest" href="/robot-zombies/pr-preview/pr-17/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/robot-zombies/pr-preview/pr-17/registerSW.js"></script></head>
+<body>
+  <div id="game-container"></div>
+  <button id="tts-mute-btn" title="Toggle voice narration [ M ]">🔊 VOICE</button>
+  <div id="pause-overlay">
+    <div id="pause-panel">
+      <div id="pause-title">PAUSED</div>
+      <ul id="pause-menu-list"></ul>
+      <div id="pause-hint">[ ENTER ] Select  ·  [ ESC ] Resume</div>
+    </div>
+  </div>
+  <div id="dialogue-overlay">
+    <div class="speaker" id="dialogue-speaker"></div>
+    <div id="dialogue-text"></div>
+    <span class="prompt">▼</span>
+  </div>
+
+  <script>
+    // Keep the mute button in sync with TTSManager state changes
+    (function () {
+      const btn = document.getElementById('tts-mute-btn');
+
+      // Reflect initial state from localStorage
+      if (localStorage.getItem('rz_tts_muted') === 'true') {
+        btn.textContent = '🔇 VOICE';
+        btn.classList.add('muted');
+      }
+
+      // Button click
+      btn.addEventListener('click', () => {
+        // Dispatch to game engine (DialogueScene handles it via Phaser keyboard,
+        // but we need a direct call here since this is a DOM event)
+        document.dispatchEvent(new CustomEvent('tts:togglemute'));
+      });
+
+      // Respond to tts:mutechange fired by TTSManager.toggleMute()
+      document.addEventListener('tts:mutechange', (e) => {
+        if (e.detail.muted) {
+          btn.textContent = '🔇 VOICE';
+          btn.classList.add('muted');
+        } else {
+          btn.textContent = '🔊 VOICE';
+          btn.classList.remove('muted');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
