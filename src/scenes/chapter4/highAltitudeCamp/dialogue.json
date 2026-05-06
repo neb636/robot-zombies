@@ -1,0 +1,117 @@
+{
+  "high_altitude_camp": {
+    "arrival": {
+      "player": [
+        "Altitude. My lungs aren't happy about it.",
+        "No drones. First time in weeks I can't hear anything mechanical."
+      ],
+      "maya": [
+        "Thin air at this elevation. Cognitive function drops, reaction time drops.",
+        "Don't push it today. We rest."
+      ],
+      "deja": [
+        "Okay but can we talk about how my head is pounding? Is that supposed to happen?",
+        "Because it feels like my brain is trying to leave my skull."
+      ]
+    },
+    "altitude_sickness_warning": [
+      "The altitude is hitting hard. Everyone's slower, sharper pain in the chest when breathing.",
+      "Rest here for a day before pushing on. Pushing through will cost more than it saves."
+    ],
+    "after_rest": {
+      "player": [
+        "Better. Everything's clearer.",
+        "That was the first real sleep I've had in a long time."
+      ],
+      "deja": [
+        "Okay. Okay. I'm good. Let's go.",
+        "Don't ever make me sit still that long again."
+      ],
+      "maya": [
+        "Stats normalized. Let's move before something finds us."
+      ]
+    },
+    "camp_fire_night": {
+      "jerome": [
+        "You ever think about what we're going back to?",
+        "After this. If there is an after."
+      ],
+      "maya": [
+        "Ask me again when we're through the Pass."
+      ],
+      "deja": [
+        "I think about it all the time.",
+        "I used to know exactly what I wanted. Now I don't even know what the city looks like anymore.",
+        "New Orleans. I wonder if the jazz clubs are still open.",
+        "...Probably are. Robots love cultural outputs apparently."
+      ],
+      "jerome_2": [
+        "She said it with a straight face.",
+        "Lord help us."
+      ],
+      "deja_2": [
+        "I'm serious! That's worse somehow!"
+      ]
+    }
+  },
+  "echo": {
+    "rockies.echo.plea": {
+      "approach": {
+        "system": [
+          "A figure at the edge of camp. Converted, but standing still.",
+          "It speaks."
+        ],
+        "echo": [
+          "I know what I look like.",
+          "I need you to know: I was a teacher. Before.",
+          "My name was Rachel.",
+          "I can still remember that.",
+          "I can still remember what it felt like to choose.",
+          "I don't want to be this. I don't want \u2014 ",
+          "Please."
+        ],
+        "player": [
+          "..."
+        ],
+        "chen": [
+          "The conversion is reversible. We established that.",
+          "One medicine kit. It's your call."
+        ]
+      },
+      "choice_prompt": "What do you do?",
+      "choice_cure": {
+        "label": "Use a medicine kit (cure Echo)",
+        "lines_before": [
+          "Chen steps forward and administers the kit.",
+          "The glow fades from her eyes.",
+          "She stands very still for a long moment."
+        ],
+        "echo_response": [
+          "...",
+          "Oh.",
+          "Oh, it's cold.",
+          "I didn't realize how cold it would feel.",
+          "Thank you.",
+          "I don't \u2014 I don't know what happens now.",
+          "But thank you."
+        ],
+        "chen": [
+          "She'll need time.",
+          "More than we have.",
+          "But she'll come back to herself."
+        ]
+      },
+      "choice_refuse": {
+        "label": "Leave her",
+        "lines": [
+          "You don't have a medicine kit to spare.",
+          "Or you do, and you choose not to.",
+          "The distinction matters, and you know it.",
+          "You walk away.",
+          "She doesn't call after you.",
+          "Converted humans don't beg twice."
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "region": "deep_south",
+  "description": "Gulf coast traders. Fuel flows here; medicine is hard to find.",
+  "entries": [
+    { "item": "food",        "buyPrice": 5,  "sellPrice": 3 },
+    { "item": "fuel",        "buyPrice": 9,  "sellPrice": 5 },
+    { "item": "medicine",    "buyPrice": 13, "sellPrice": 5 },
+    { "item": "ammo",        "buyPrice": 6,  "sellPrice": 3 },
+    { "item": "morale_item", "buyPrice": 14, "sellPrice": 0 }
+  ],
+  "moraleItemName": "Fresh coffee",
+  "moraleItemFlavor": "Real beans. Deja drinks three cups and talks at double speed for an hour."
+}

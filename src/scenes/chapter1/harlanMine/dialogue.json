@@ -1,0 +1,171 @@
+{
+  "arriving": {
+    "player": [
+      "The mine entrance is still labeled. HARLAN NO. 7.",
+      "Bright lights inside. The machines don't need the dark to be dark."
+    ],
+    "elias": [
+      "I know this mine.",
+      "Different kind of extraction now."
+    ]
+  },
+  "floor_one": {
+    "player": [
+      "Compliance Drones. Three of them. Moving in a pattern.",
+      "There's a gap."
+    ],
+    "maya": [
+      "Seven-second window between passes.",
+      "Go on my mark."
+    ]
+  },
+  "captives_sighted": {
+    "player": [
+      "People.",
+      "They're not in cages. They're just— working.",
+      "They look okay. They look wrong."
+    ],
+    "elias": [
+      "Converted?"
+    ],
+    "maya": [
+      "No. Coerced.",
+      "There's a difference. The machines don't convert the ones they can use."
+    ]
+  },
+  "captive_one": {
+    "captive": [
+      "Don't stop. They're watching.",
+      "There's a control panel on the fourth level. If you shut it down—",
+      "The drones lose their override signal.",
+      "The Excavator doesn't. It doesn't need one.",
+      "We can get out after the Excavator is gone."
+    ]
+  },
+  "floor_three_a": {
+    "elias": [
+      "Hold.",
+      "Pressure plate, left side. Follow my steps."
+    ],
+    "player": [
+      "How do you—"
+    ]
+  },
+  "floor_three_b": {
+    "elias": [
+      "Old mine. New machines. Same principles.",
+      "They borrowed the infrastructure.",
+      "Didn't improve it."
+    ]
+  },
+  "control_panel": {
+    "maya": [
+      "This is it.",
+      "I can kill the drone override signals from here.",
+      "Captives will be able to move freely. Drones will default to patrol only, no extraction command.",
+      "We'll need about forty seconds.",
+      "That's forty seconds for the Excavator to notice something changed."
+    ],
+    "player": [
+      "Do it."
+    ]
+  },
+  "control_panel_done": {
+    "maya": [
+      "Done.",
+      "We have maybe ninety seconds before it responds."
+    ],
+    "elias": [
+      "Then we move."
+    ]
+  },
+  "floor_four_descent": {
+    "player": [
+      "The shaft goes down.",
+      "I can hear it from here.",
+      "The grinding.",
+      "It never stops."
+    ]
+  },
+  "pre_boss": {
+    "system": [
+      "The Excavator Prime fills the lowest chamber.",
+      "It is enormous.",
+      "It has been down here a long time.",
+      "It does not slow down."
+    ]
+  },
+  "boss_phase1": {
+    "excavator": [
+      "MINERAL EXTRACTION PROCEEDING. INTRUDERS RECLASSIFIED AS ORE.",
+      "ADDING YOUR MASS TO CALCULATIONS."
+    ]
+  },
+  "boss_phase2": {
+    "excavator": [
+      "EFFICIENCY THRESHOLD EXCEEDED.",
+      "ACTIVATING SECONDARY DRILL ARRAY.",
+      "YOUR RESISTANCE IS MATHEMATICALLY INCOHERENT."
+    ]
+  },
+  "post_boss": {
+    "player": [
+      "It's down.",
+      "The grinding stopped."
+    ],
+    "elias": [
+      "Not all of it.",
+      "Listen."
+    ]
+  },
+  "warden_six_arrives": {
+    "system": [
+      "Warden Six descends from the third level.",
+      "Smaller than the Excavator. Faster.",
+      "It noticed what you did."
+    ],
+    "warden_six": [
+      "INCIDENT LOGGED. INTRUDER CLASS: HOSTILE.",
+      "REASSIGNMENT PROTOCOL ACTIVE.",
+      "COMPLIANCE RECOMMENDED."
+    ]
+  },
+  "post_warden_six": {
+    "player": [
+      "Twice in one mine.",
+      "That's a record."
+    ],
+    "elias": [
+      "Get the people out first.",
+      "Then we talk records."
+    ]
+  },
+  "captives_freed": {
+    "captive_lead": [
+      "Four weeks down here.",
+      "I didn't think anyone was coming.",
+      "I stopped thinking anyone was coming."
+    ],
+    "player": [
+      "There's a camp. North ridge. Follow Elias."
+    ],
+    "captive_lead2": [
+      "We'll follow."
+    ]
+  },
+  "exit_mine": {
+    "player": [
+      "Outside.",
+      "The trees are still there.",
+      "I wasn't sure they'd still be there."
+    ],
+    "maya": [
+      "The pass is two days north.",
+      "If we keep moving tonight, we can make the tree line before dawn."
+    ],
+    "elias": [
+      "We rest an hour.",
+      "Then we move."
+    ]
+  }
+}

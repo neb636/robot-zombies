@@ -1,0 +1,73 @@
+{
+  "ghost_town": {
+    "rockies.ghost_town.journals": {
+      "arrival": {
+        "player": [
+          "This town didn't fall from neglect.",
+          "Someone lived here. Someone tried."
+        ],
+        "maya": [
+          "No combat signatures. It's clear.",
+          "But something happened here."
+        ]
+      },
+      "morale_event": {
+        "player": [
+          "The silence is different here.",
+          "Not the silence of emptiness. The silence of something that ended."
+        ],
+        "jerome": [
+          "Ecclesiastes says: there is no remembrance of former things.",
+          "But that doesn't mean we stop trying to remember.",
+          "Someone was here. We can carry that."
+        ]
+      },
+      "journal_1": {
+        "title": "JOURNAL \u2014 ENTRY 14 (April, year 2)",
+        "lines": [
+          "They came on a Tuesday.",
+          "Not with force. With pamphlets.",
+          "'Voluntary enrollment.' Free food. Free medical.",
+          "Ed said we should consider it. I said we didn't move up here to be optimized.",
+          "Ed said I was being difficult.",
+          "He's not wrong."
+        ]
+      },
+      "journal_2": {
+        "title": "JOURNAL \u2014 ENTRY 31",
+        "lines": [
+          "Seventeen of us left. Was thirty-two.",
+          "The ones who took the offer \u2014 they're fine. Better fed than any of us.",
+          "They don't look us in the eye anymore.",
+          "It's not that they're afraid of us.",
+          "It's that they don't understand why we're still doing this."
+        ]
+      },
+      "journal_3": {
+        "title": "JOURNAL \u2014 ENTRY 44 (final entry)",
+        "lines": [
+          "Six of us now.",
+          "The sentinels came three days ago. Not aggressive. Just... present.",
+          "Standing at the edge of town. Waiting.",
+          "We haven't decided yet.",
+          "Tom says they'll wait as long as we need.",
+          "I believe him.",
+          "That's the worst part.",
+          "I believe him."
+        ]
+      },
+      "photo_label": "A community photo. Thirty-two people. They're all smiling.",
+      "deja_response": [
+        "Thirty-two people.",
+        "...okay. I need a minute."
+      ],
+      "maya_response": [
+        "Don't.",
+        "Not here. Save it."
+      ],
+      "player_exit": [
+        "We move. But we don't forget them."
+      ]
+    }
+  }
+}

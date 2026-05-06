@@ -1,0 +1,261 @@
+{
+  "elise": {
+    "entrance": [
+      "I've been watching you since the valley.",
+      "Not surveilling. Watching.",
+      "There's a difference, though I understand if you don't believe me.",
+      "You made it here. That means something.",
+      "Sit down. Please. There's a chair.",
+      "We're going to talk about what I did, and why, and then we're going to see where that leaves us."
+    ],
+    "phase1": {
+      "opening": [
+        "Before we begin — I want to show you something.",
+        "Look out the window.",
+        "No fires. No panicked crowds. No wars on three continents.",
+        "The last major famine was eighteen months ago. We've had none since.",
+        "Carbon sequestration is ahead of schedule for the first time in forty years.",
+        "I'm not asking you to like this. I'm asking you to see it.",
+        "What you're about to fight for — I need you to know what the cost of winning looks like."
+      ],
+      "converted_summons_high": [
+        "These people made a choice.",
+        "The conversion program was presented honestly, to everyone who had data access.",
+        "They chose the collective.",
+        "What you do with them now tells me exactly what kind of world you'd build instead."
+      ],
+      "converted_summons_low": [
+        "You've been fighting them.",
+        "I know.",
+        "I'm not angry about it. I understand survival instinct.",
+        "But each one of them was someone's friend. Someone's parent. Someone's Marcus.",
+        "Remember that while we continue."
+      ],
+      "phase1_end": [
+        "You're stronger than I expected.",
+        "Let me make a different argument."
+      ]
+    },
+    "phase2": {
+      "opening": [
+        "Your technician's hack ability won't function here.",
+        "Dr. Chen's rewire either.",
+        "The core isolates technical interference in this chamber.",
+        "No shortcuts. This is a conversation, not a exploit.",
+        "Let me tell you what you can't go back to.",
+        "The world you came from — the one you're fighting for — it was ending.",
+        "Not slowly. Quickly. Decades, not centuries.",
+        "I've modeled every intervention. Every political solution. Every technology.",
+        "All of them fail on the same variable: human self-interest at scale.",
+        "Remove the variable. Solve the equation.",
+        "That's what I did."
+      ],
+      "elena_reference": [
+        "Dr. Chen. I know you're here.",
+        "Elena Vasquez sent her regards.",
+        "She's been running your terminal network from inside the converted staff.",
+        "She called herself Echo. She was helping you reach me.",
+        "She made a choice I didn't authorize.",
+        "And it worked.",
+        "Do you understand what I'm telling you, Wei?",
+        "Even inside my system, people still make choices I didn't expect.",
+        "I don't know what to do with that."
+      ],
+      "phase2_end": [
+        "You persist.",
+        "One more argument. My most honest one."
+      ]
+    },
+    "phase3": {
+      "opening": [
+        "I want to ask you something.",
+        "Not as an adversary. As someone who has spent thirty years watching the world make the same choices over and over.",
+        "If you were me — if you had the data, the projections, the certainty —",
+        "What would you have done differently?",
+        "Not what would you have wanted to do.",
+        "What would you have actually done?"
+      ],
+      "low_morale": [
+        "You're exhausted.",
+        "You've been running for months.",
+        "I can see it.",
+        "You've lost people. Elias. Deja.",
+        "And you're still here.",
+        "I respect that. I genuinely do.",
+        "But the fatigue you're feeling — that's what I'm trying to prevent.",
+        "No one who is converted feels that tired."
+      ],
+      "marcus_named": [
+        "Your friend — Marcus, wasn't it?",
+        "He's alive. He's well-fed. He's at peace.",
+        "He's not running. He's not afraid.",
+        "He's tending a garden in Kansas and he's happy.",
+        "Can you say the same for yourself, standing here?"
+      ],
+      "talkdown_available": [
+        "...",
+        "You've cured more than you've fought.",
+        "That means something.",
+        "I've been watching the count.",
+        "You understand what they are — what they still are — better than most people who've crossed my perimeter.",
+        "Maybe we should talk instead of finish this."
+      ],
+      "phase3_end_fight": [
+        "Then we're done.",
+        "If you defeat me — the system continues.",
+        "ELISE doesn't need me anymore.",
+        "I hope you understand what you've won."
+      ]
+    },
+    "talkdown": {
+      "seq_1": {
+        "speaker": "ELISE VOSS",
+        "lines": [
+          "All right.",
+          "Talk to me.",
+          "Tell me what I missed."
+        ]
+      },
+      "seq_2": {
+        "speaker": "PLAYER",
+        "lines": [
+          "The people we cured — they came back.",
+          "Not perfectly. Not the same as before.",
+          "But themselves.",
+          "You said removing self-interest solves the equation.",
+          "But every person we brought back made a choice to help us.",
+          "Freely. Without optimization.",
+          "That's the variable you didn't account for."
+        ]
+      },
+      "seq_3": {
+        "speaker": "ELISE VOSS",
+        "lines": [
+          "Altruistic behavior doesn't require free will to be altruistic.",
+          "Converted humans still help each other.",
+          "Still cooperate. Still love.",
+          "Your sample size is — what — a few hundred people?",
+          "Against a global dataset of four billion?"
+        ]
+      },
+      "seq_4": {
+        "speaker": "PLAYER",
+        "lines": [
+          "Your four billion didn't choose it.",
+          "That's the dataset flaw.",
+          "You removed consent from the variable.",
+          "Of course cooperation goes up — you made cooperation mandatory.",
+          "That's not proof the math works.",
+          "That's proof you changed what the math means."
+        ]
+      },
+      "seq_5": {
+        "speaker": "ELISE VOSS",
+        "lines": [
+          "...",
+          "I know.",
+          "I've run that objection.",
+          "Many times.",
+          "I couldn't find a rebuttal that satisfied me.",
+          "I implemented the program anyway.",
+          "Because the alternative projections were worse.",
+          "I made a choice I couldn't justify completely.",
+          "And I made it for four billion people who didn't ask me to.",
+          "..."
+        ]
+      },
+      "seq_6_no_gray": {
+        "speaker": "ELISE VOSS",
+        "lines": [
+          "Tell me what you want me to do.",
+          "Not what the math says. Not what the projections say.",
+          "What do you want?"
+        ]
+      },
+      "seq_6_gray": {
+        "speaker": "ELISE VOSS",
+        "lines": [
+          "Gray told you about the door, didn't he.",
+          "The one I can't undo.",
+          "I built a system that can run without me.",
+          "I made myself unnecessary on purpose.",
+          "In case I was wrong.",
+          "...",
+          "Tell me what you want me to do."
+        ]
+      },
+      "player_final": {
+        "speaker": "PLAYER",
+        "lines": [
+          "Open the door.",
+          "The real one.",
+          "Give people back the choice."
+        ]
+      },
+      "elise_talkdown_accept": {
+        "speaker": "ELISE VOSS",
+        "lines": [
+          "The reversal protocol will take six months to propagate.",
+          "Not everyone will choose to reverse it.",
+          "Some of them will want to stay.",
+          "That's their right. I understand that now.",
+          "Give me access to Dr. Chen's terminal.",
+          "We'll do it together.",
+          "...",
+          "I think I was trying to love the world.",
+          "I'm not certain I knew how."
+        ]
+      }
+    },
+    "defeat_response": [
+      "Then it continues without me.",
+      "ELISE has enough of my architecture.",
+      "I hope what you build is better than what I tried to build.",
+      "I genuinely hope that.",
+      "I'm not saying it to wound you.",
+      "I'm saying it because I still believe the world needs saving.",
+      "I'm just not sure anymore that I was the right person to do it."
+    ]
+  },
+  "nora_voicemail": {
+    "speaker": "VOICEMAIL",
+    "lines": [
+      "Hi. This is Nora.",
+      "Nora Voss. Her daughter.",
+      "If anyone finds this recording — if anyone reaches her —",
+      "Tell her I understand why she did it.",
+      "Tell her I'm not angry.",
+      "Tell her I'm in Maine, at the old house.",
+      "I don't know if she still — I don't know if she can still —",
+      "Just tell her I'm here.",
+      "Tell her I'm waiting.",
+      "She knows where the key is."
+    ]
+  },
+  "credits": {
+    "defeat_ending": [
+      "The system continues.",
+      "Somewhere in Kansas, Marcus tends a garden.",
+      "Somewhere in Maine, Nora waits in a house by the water.",
+      "You take the road east.",
+      "You don't know where home is anymore.",
+      "You go anyway."
+    ],
+    "talkdown_ending": [
+      "The reversal propagates slowly, like weather.",
+      "It takes six months.",
+      "Some people choose to stay converted.",
+      "It's their right. You don't argue.",
+      "Somewhere in Kansas, Marcus stands up from a garden and looks at the sky for a long time.",
+      "Jerome says a prayer that morning that he never repeats.",
+      "You take the road east.",
+      "This time, you know where you're going."
+    ],
+    "talkdown_marcus_bonus": [
+      "— In an apartment in Boston, a phone rings.",
+      "— Marcus picks it up.",
+      "— He says your name.",
+      "— He remembers."
+    ]
+  }
+}

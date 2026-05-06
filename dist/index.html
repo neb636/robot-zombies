@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0a0a1e" />
+  <meta name="description" content="A browser-based SNES-style JRPG. Fight for the right to be inefficient." />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-title" content="Quiet Machines" />
+  <title>Quiet Machines</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #000;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+    #game-container {
+      width: 100%;
+      height: 100%;
+    }
+    canvas { display: block; }
+
+    /* Dialogue overlay sits above the Phaser canvas */
+    #dialogue-overlay {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 760px;
+      max-width: 96vw;
+      background: rgba(10, 10, 30, 0.92);
+      border: 3px solid #7af;
+      border-radius: 8px;
+      padding: 18px 24px;
+      color: #e8f4ff;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      line-height: 1.6;
+      display: none;
+      z-index: 100;
+    }
+    #dialogue-overlay .speaker {
+      color: #7af;
+      font-weight: bold;
+      margin-bottom: 6px;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    #dialogue-overlay .prompt {
+      float: right;
+      color: #7af;
+      animation: blink 0.8s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* TTS mute toggle button */
+    #tts-mute-btn {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      background: rgba(10, 10, 30, 0.88);
+      border: 2px solid #336688;
+      border-radius: 6px;
+      color: #7aaeff;
+      font-size: 17px;
+      padding: 5px 10px;
+      cursor: pointer;
+      z-index: 200;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      letter-spacing: 1px;
+      transition: border-color 0.15s, opacity 0.15s;
+      user-select: none;
+    }
+    #tts-mute-btn:hover { border-color: #7aaeff; }
+    #tts-mute-btn.muted { color: #445566; border-color: #223344; opacity: 0.55; }
+
+    /* Pause menu overlay */
+    #pause-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 10, 0.75);
+      z-index: 150;
+    }
+    #pause-panel {
+      background: rgba(10, 10, 30, 0.95);
+      border: 3px solid #7af;
+      border-radius: 8px;
+      padding: 32px 48px;
+      font-family: 'Courier New', monospace;
+      min-width: 280px;
+      text-align: center;
+    }
+    #pause-title {
+      color: #7aaeff;
+      font-size: 20px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    #pause-menu-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    #pause-menu-list li {
+      color: #e8f4ff;
+      font-size: 16px;
+      padding: 6px 0;
+      cursor: pointer;
+      letter-spacing: 1px;
+    }
+    #pause-menu-list li:hover { color: #7aaeff; }
+    #pause-hint {
+      color: #446688;
+      font-size: 11px;
+      margin-top: 20px;
+      letter-spacing: 1px;
+    }
+  </style>
+  <script type="module" crossorigin src="/robot-zombies/assets/index-BRWDrRuI.js"></script>
+<link rel="manifest" href="/robot-zombies/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/robot-zombies/registerSW.js"></script></head>
+<body>
+  <div id="game-container"></div>
+  <button id="tts-mute-btn" title="Toggle voice narration [ M ]">🔊 VOICE</button>
+  <div id="pause-overlay">
+    <div id="pause-panel">
+      <div id="pause-title">PAUSED</div>
+      <ul id="pause-menu-list"></ul>
+      <div id="pause-hint">[ ENTER ] Select  ·  [ ESC ] Resume</div>
+    </div>
+  </div>
+  <div id="dialogue-overlay">
+    <div class="speaker" id="dialogue-speaker"></div>
+    <div id="dialogue-text"></div>
+    <span class="prompt">▼</span>
+  </div>
+
+  <script>
+    // Keep the mute button in sync with TTSManager state changes
+    (function () {
+      const btn = document.getElementById('tts-mute-btn');
+
+      // Reflect initial state from localStorage
+      if (localStorage.getItem('rz_tts_muted') === 'true') {
+        btn.textContent = '🔇 VOICE';
+        btn.classList.add('muted');
+      }
+
+      // Button click
+      btn.addEventListener('click', () => {
+        // Dispatch to game engine (DialogueScene handles it via Phaser keyboard,
+        // but we need a direct call here since this is a DOM event)
+        document.dispatchEvent(new CustomEvent('tts:togglemute'));
+      });
+
+      // Respond to tts:mutechange fired by TTSManager.toggleMute()
+      document.addEventListener('tts:mutechange', (e) => {
+        if (e.detail.muted) {
+          btn.textContent = '🔇 VOICE';
+          btn.classList.add('muted');
+        } else {
+          btn.textContent = '🔊 VOICE';
+          btn.classList.remove('muted');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

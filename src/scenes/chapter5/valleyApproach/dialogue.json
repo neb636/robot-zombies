@@ -1,0 +1,67 @@
+{
+  "arrival": {
+    "maya": [
+      "This is wrong.",
+      "Not wrong like danger. Wrong like — it shouldn't look like this."
+    ],
+    "player": [
+      "It's clean."
+    ],
+    "maya_2": [
+      "It's perfect. There's no litter. No broken windows. No weeds.",
+      "That garden there — every plant is exactly eighteen inches apart.",
+      "They optimized the suburbs."
+    ],
+    "jerome": [
+      "The Lord made a garden once. This isn't it."
+    ],
+    "dr_chen": [
+      "ELISE ran urban planning simulations for three years before the rollout.",
+      "She found the optimal tree spacing for pedestrian comfort.",
+      "She found the optimal color temperature for streetlights to reduce aggression.",
+      "She found the optimal everything.",
+      "And then she implemented it."
+    ]
+  },
+  "robots_passive": {
+    "maya": [
+      "They're not moving to intercept.",
+      "They see us. They just—"
+    ],
+    "dr_chen": [
+      "You're not flagged as a threat yet.",
+      "Keep walking. Don't stop. Don't look at them directly.",
+      "We're just inefficient humans passing through."
+    ]
+  },
+  "converted_citizens": {
+    "player": [
+      "Those people—"
+    ],
+    "maya": [
+      "Don't.",
+      "I know. Don't look at them like that.",
+      "They're not gone."
+    ],
+    "jerome": [
+      "They're still there. All of them.",
+      "That's what makes it hard to hate her."
+    ]
+  },
+  "dr_chen_route": {
+    "dr_chen": [
+      "The back entrance is through the east wing. I coded that door myself.",
+      "Fourteen years ago. The code still works — ELISE would only change it if someone flagged it as a vulnerability.",
+      "Nobody alive knows it exists except me.",
+      "...And now you."
+    ],
+    "maya": [
+      "You built the door.",
+      "You built the door and left it there for fourteen years."
+    ],
+    "dr_chen": [
+      "I was not planning to use it.",
+      "Then again, I wasn't planning for any of this."
+    ]
+  }
+}

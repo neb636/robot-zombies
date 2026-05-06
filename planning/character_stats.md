@@ -1,4 +1,4 @@
-# Silicon Requiem — Character Stat Sheets
+# Quiet Machines — Character Stat Sheets
 
 > All stats on a 1–100 scale. Integer values only. XP system is milestone-based — characters level at chapter transitions, not per battle.
 

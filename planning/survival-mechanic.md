@@ -1,4 +1,4 @@
-# Silicon Requiem — Survival Layer
+# Quiet Machines — Survival Layer
 
 > Standalone mechanic. Plugs into any region overworld. Oregon Trail anxiety engine dropped into a Chrono Trigger world map.
 

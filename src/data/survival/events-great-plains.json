@@ -1,0 +1,47 @@
+[
+  {
+    "kind": "ambush",
+    "weight": 25,
+    "text": "Aerial Sentinels on the open road. No cover. You hear them before you see the shadow.",
+    "triggersBattle": true,
+    "enemyKey": "aerial_sentinel",
+    "effect": { "ammo": -12 }
+  },
+  {
+    "kind": "survivor_camp",
+    "weight": 15,
+    "text": "Harvest Town is visible from the highway. Smoke, gardens, people moving in orderly lines. Jerome is very quiet for a long time.",
+    "effect": {}
+  },
+  {
+    "kind": "vehicle_breakdown",
+    "weight": 15,
+    "text": "A tire blows on the interstate. No spares left. You're on foot for six hours before finding a replacement.",
+    "effect": { "fuel": -1 },
+    "delayDays": 1
+  },
+  {
+    "kind": "lucky_find",
+    "weight": 10,
+    "text": "An overturned supply convoy — the robots abandoned it mid-route when something called them off. Jerome reads it as grace. Maya reads it as opportunity.",
+    "effect": { "food": 5, "fuel": 2, "ammo": 15 }
+  },
+  {
+    "kind": "rain_spoils",
+    "weight": 10,
+    "text": "A plains storm with no warning. Two hours of hail. The tarp holds but the food pack doesn't.",
+    "effect": { "food": -2 }
+  },
+  {
+    "kind": "jerome_preaches",
+    "weight": 15,
+    "text": "Jerome gathers everyone at dusk. He doesn't quote scripture tonight. He just talks about why he's still here. It helps.",
+    "effect": { "morale": 10 }
+  },
+  {
+    "kind": "campfire_night",
+    "weight": 10,
+    "text": "The plains are so flat you can see the stars unbroken to the horizon. It's the kind of beautiful that makes you ache.",
+    "effect": { "morale": 8 }
+  }
+]

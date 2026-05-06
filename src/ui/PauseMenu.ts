@@ -102,7 +102,7 @@ class PauseMenu {
     this._items.forEach((item, i) => {
       const li = document.createElement('li');
       li.textContent = i === this._selectedIndex ? `> ${item.label}` : `  ${item.label}`;
-      if (i === this._selectedIndex) li.style.color = '#7aaeff';
+      if (i === this._selectedIndex) li.style.color = '#d99846';
       li.addEventListener('click', () => {
         this._selectedIndex = i;
         this._activate();

@@ -1,0 +1,63 @@
+{
+  "arriving": {
+    "deja": [
+      "Bridge. Enforcers on both ends.",
+      "They're looking for something specific. See how they're stopping everyone?",
+      "That's not a routine check. Someone called it in."
+    ],
+    "maya": [
+      "The electronic signatures on those units — T2 Enforcer class.",
+      "They're hardwired to the Governor's registry.",
+      "If our names are still flagged, we're done the moment we step on."
+    ]
+  },
+  "approach_cleared": {
+    "player": [
+      "Tomas cleared us. We should be fine.",
+      "Should be."
+    ],
+    "deja": [
+      "I love the confidence.",
+      "Move fast. Don't answer questions.",
+      "And if an enforcer asks for your output designation — say musician.",
+      "Works every time. They love musicians."
+    ]
+  },
+  "approach_flagged": {
+    "player": [
+      "We're still on the list.",
+      "We fight through."
+    ],
+    "elias": [
+      "Saw worse in Harlan.",
+      "I'll go left."
+    ]
+  },
+  "bridge_combat": {
+    "pre_fight": [
+      "BRIDGE ENFORCER: HALT. NAME. OUTPUT CLASSIFICATION. TRAVEL PURPOSE.",
+      "BRIDGE ENFORCER: YOUR NAMES ARE NOT IN THE AUTHORIZED REGISTRY.",
+      "BRIDGE ENFORCER: INITIATING DETAINMENT PROTOCOL."
+    ],
+    "mid_fight": [
+      "BRIDGE ENFORCER: RESISTANCE IS LOGGED AND WILL BE REVIEWED.",
+      "BRIDGE ENFORCER: ADDITIONAL UNITS DISPATCHED. TIME TO ARRIVAL: 4 MINUTES."
+    ],
+    "post_fight": [
+      "We have four minutes.",
+      "Move."
+    ]
+  },
+  "crossing_complete": {
+    "deja": [
+      "Other side. We made it.",
+      "Bayou's straight south.",
+      "Through the trees. Don't use the road."
+    ],
+    "elias": [
+      "Good water down here.",
+      "Different kind of country.",
+      "Stay close."
+    ]
+  }
+}

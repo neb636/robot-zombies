@@ -1,4 +1,4 @@
-# Silicon Requiem — Battle System
+# Quiet Machines — Battle System
 
 > ATB-style, SNES-friendly. Inspired by Final Fantasy IV–VI. Simple enough to implement in JavaScript, deep enough to carry 20 hours of combat.
 

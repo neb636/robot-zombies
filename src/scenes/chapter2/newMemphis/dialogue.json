@@ -1,0 +1,84 @@
+{
+  "arriving": {
+    "maya": [
+      "I hate this place.",
+      "Not because it's ruined. Because it isn't."
+    ],
+    "player": [
+      "The music is real.",
+      "That's the strangest part."
+    ]
+  },
+  "city_center": {
+    "observation": [
+      "Converted citizens move between stalls. Organized. Unhurried.",
+      "A jazz quartet plays on the corner. The trombone player's eyes don't move when he smiles.",
+      "The food smells good. That's the worst part."
+    ]
+  },
+  "deja_meet": {
+    "deja": [
+      "Hey. Don't make eye contact with the docents.",
+      "They're not security. That's worse — they actually care.",
+      "You came down the 40 from the north. I can tell by the mud.",
+      "Name's Deja. And before you ask — no, I'm not converted. I just live here. Sort of."
+    ],
+    "player": [
+      "Sort of?"
+    ],
+    "deja2": [
+      "The deal is: they let humans stay if we perform. Cultural outputs.",
+      "Jazz. Cooking. Street performance. Things ELISE apparently decided have value.",
+      "I run a shell game on the corner. Robots watch. They learn. It's horrifying.",
+      "But I eat. And I'm fast enough that when I need to not be here, I'm not here.",
+      "You need fast, right? You've got that look."
+    ],
+    "player2": [
+      "We're heading west. It's going to get rough."
+    ],
+    "deja3": [
+      "Rough. Right.",
+      "See, here's the thing. The Governor has a list.",
+      "Everyone who passes through gets noted. Flagged for review.",
+      "You are currently on that list. Both of you.",
+      "I can get you off it. For a price.",
+      "Or you can try to leave without me and find out what a flag means.",
+      "Your call."
+    ]
+  },
+  "deja_join": {
+    "text": [
+      "Deja fell into step like she'd been walking with us for years.",
+      "She didn't say anything else about the deal.",
+      "Neither did we."
+    ]
+  },
+  "governor_approach": {
+    "maya": [
+      "The Governor's building is in the old City Hall.",
+      "He runs the cultural exchange. Maintains the truce.",
+      "He's human. Which means he chose this."
+    ],
+    "deja": [
+      "Don't tell him I'm with you until after.",
+      "He and I have a history."
+    ]
+  },
+  "npcs": {
+    "musician": [
+      "The music is good today.",
+      "It's always good. We play until it's good.",
+      "I don't remember when we started. That's good too, right?"
+    ],
+    "vendor": [
+      "Food is allocated by output metrics.",
+      "Play well, eat well. Simple system.",
+      "I used to argue with my wife about dinner. That seems funny now."
+    ],
+    "watcher": [
+      "...",
+      "...",
+      "You are new. Allocation pending."
+    ]
+  }
+}

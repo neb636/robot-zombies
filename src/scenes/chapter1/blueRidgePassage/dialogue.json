@@ -1,0 +1,105 @@
+{
+  "arriving": {
+    "player": [
+      "The road is gone. Just forest now.",
+      "Foot-wide deer trail. No drone coverage in the canopy.",
+      "This is good. This is also terrifying."
+    ]
+  },
+  "drone_patrol": {
+    "player": [
+      "Movement. Up the ridge.",
+      "Three drones. They haven't spotted us."
+    ],
+    "maya": [
+      "Patrol loop. Eight-minute cycle.",
+      "We wait, or we go wide left through the switchbacks.",
+      "Your call."
+    ]
+  },
+  "elias_first_sight": {
+    "player": [
+      "Something moved in the trees.",
+      "Not a drone. Too quiet. Too deliberate."
+    ]
+  },
+  "elias_meet_a": {
+    "elias": [
+      "You're loud.",
+      "For what it's worth, you're the first loud thing I've heard in a week that wasn't a machine."
+    ],
+    "player": [
+      "We're heading for Ridge Camp. You know it?"
+    ]
+  },
+  "elias_meet_b": {
+    "elias": [
+      "Know it. Built half of it.",
+      "Name's Elias. I'll walk with you.",
+      "Try to keep up."
+    ]
+  },
+  "elias_path_a": {
+    "elias": [
+      "These trails run east from Shenandoah all the way to Cherokee.",
+      "The drones don't come into the thick stuff. Too many obstacles. Bad data.",
+      "The mountains don't cooperate with their optimization."
+    ],
+    "maya": [
+      "Dense canopy defeats their LIDAR grid.",
+      "I hadn't thought of that."
+    ]
+  },
+  "elias_path_b": {
+    "elias": [
+      "I spent forty years hunting these hills.",
+      "Didn't think of it either. Just noticed it."
+    ]
+  },
+  "deer_track": {
+    "elias": [
+      "White-tail. Buck. Moving north.",
+      "First one I've seen this side of the ridge in a month.",
+      "Good sign."
+    ]
+  },
+  "old_cabin": {
+    "player": [
+      "Someone lived here. Not long ago."
+    ],
+    "elias": [
+      "Pettifer family. Three kids.",
+      "They went north. Safer, they figured.",
+      "Could be right."
+    ]
+  },
+  "camp_sight": {
+    "player": [
+      "I can see firelight."
+    ],
+    "elias": [
+      "Ridge Camp. Keep your hands visible.",
+      "They're cautious, not unfriendly. Usually."
+    ]
+  },
+  "excavator_ambush": {
+    "player": [
+      "The ground is moving.",
+      "That's not an earthquake."
+    ],
+    "elias": [
+      "Mining bot.",
+      "Big one."
+    ],
+    "maya": [
+      "They must have extended the extraction zone.",
+      "The camp doesn't know."
+    ]
+  },
+  "boss_warning": {
+    "system": [
+      "The Excavator's rotary drill carves through a boulder like paper.",
+      "It turns toward you."
+    ]
+  }
+}

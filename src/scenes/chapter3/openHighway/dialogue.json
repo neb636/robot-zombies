@@ -1,0 +1,37 @@
+{
+  "arriving": {
+    "player": [
+      "Kansas. It goes on forever.",
+      "No hills. No trees. Nothing to hide behind."
+    ],
+    "maya": [
+      "Aerial Sentinels patrol in grids. Twenty-second sweep intervals.",
+      "Move between sweeps. Stand still when you hear the rotors."
+    ]
+  },
+  "sentinel_spotted": {
+    "maya": [
+      "Down. Don't move.",
+      "Grid sweep. Thirty seconds."
+    ]
+  },
+  "close_call": {
+    "player": [
+      "That was close."
+    ],
+    "maya": [
+      "Too close. They're widening the grid.",
+      "We need to get off the highway."
+    ]
+  },
+  "safe_zone": {
+    "player": [
+      "Old grain depot. We can rest here."
+    ],
+    "maya": [
+      "Signal reads clean. Harvest Town is two miles east.",
+      "The maps show it as a voluntary settlement.",
+      "That means everyone there chose this."
+    ]
+  }
+}

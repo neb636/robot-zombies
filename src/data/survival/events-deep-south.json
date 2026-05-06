@@ -1,0 +1,46 @@
+[
+  {
+    "kind": "survivor_camp",
+    "weight": 20,
+    "text": "A ferry crossing, run by an old man who still charges in pre-Broadcast coin. He doesn't ask questions. Neither do you.",
+    "effect": {}
+  },
+  {
+    "kind": "hunting_opportunity",
+    "weight": 15,
+    "text": "Catfish in the shallows. The bayou is too thick for drones — their sensors choke on the humidity. Elias knows how to read the water.",
+    "effect": {}
+  },
+  {
+    "kind": "ambush",
+    "weight": 20,
+    "text": "Enforcer Units at the bridge toll point. They're not looking for you specifically. They're looking for anyone.",
+    "triggersBattle": true,
+    "enemyKey": "enforcer_unit",
+    "effect": { "ammo": -10 }
+  },
+  {
+    "kind": "rain_spoils",
+    "weight": 15,
+    "text": "The Gulf storm rolls in fast. You spend the night bailing water out of the truck bed. Half the dried rations are ruined.",
+    "effect": { "food": -3 }
+  },
+  {
+    "kind": "lucky_find",
+    "weight": 10,
+    "text": "A bait shop off the highway, locked but not reinforced. Inside: fuel cans, boxed crackers, a first aid kit still in its wrapper.",
+    "effect": { "food": 4, "medicine": 1, "fuel": 1 }
+  },
+  {
+    "kind": "record_player",
+    "weight": 10,
+    "text": "An old juke box in a roadhouse, solar-powered. Someone's left it running. Deja finds a song she recognizes and doesn't say from where.",
+    "effect": { "morale": 5 }
+  },
+  {
+    "kind": "illness",
+    "weight": 10,
+    "text": "The heat and the wet take a toll. Someone's running a fever by morning.",
+    "effect": { "medicine": -1, "morale": -5 }
+  }
+]

@@ -1,0 +1,31 @@
+{
+  "beacon_hill":          { "sceneKey": "NewBostonScene" },
+  "red_line_tunnels":     { "sceneKey": "SubwayScene" },
+  "seaport_district":     { "sceneKey": "SeaportScene" },
+  "mit_campus":           { "sceneKey": "MitCampusScene" },
+
+  "blue_ridge_passage":   { "sceneKey": "BlueRidgeScene" },
+  "ridge_camp":           { "sceneKey": "RidgeCampScene" },
+  "harlan_mine":          { "sceneKey": "HarlanMineScene" },
+  "mountain_pass":        { "sceneKey": "MountainPassScene" },
+
+  "new_memphis":          { "sceneKey": "NewMemphisScene" },
+  "mississippi_crossing": { "sceneKey": "MississippiScene" },
+  "the_bayou":            { "sceneKey": "BayouScene" },
+  "vault_49":             { "sceneKey": "Vault49Scene" },
+
+  "open_highway":         { "sceneKey": "OpenHighwayScene" },
+  "harvest_town":         { "sceneKey": "HarvestTownScene" },
+  "storm_corridor":       { "sceneKey": "StormCorridorScene" },
+  "radio_tower_kansas":   { "sceneKey": "RadioTowerScene" },
+
+  "high_altitude_camp":   { "sceneKey": "HighAltitudeCampScene" },
+  "ghost_town_utah":      { "sceneKey": "GhostTownScene" },
+  "hermits_peak":         { "sceneKey": "HermitsPeakScene" },
+  "the_pass":             { "sceneKey": "ThePassScene" },
+
+  "valley_approach":      { "sceneKey": "ValleyApproachScene" },
+  "si_campus_perimeter":  { "sceneKey": "SICampusScene" },
+  "mainframe_core":       { "sceneKey": "MainframeCoreScene" },
+  "the_boardroom":        { "sceneKey": "BoardroomScene" }
+}

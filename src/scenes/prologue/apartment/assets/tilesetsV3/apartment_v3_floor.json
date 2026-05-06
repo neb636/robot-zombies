@@ -1,0 +1,15 @@
+{
+  "source": "6.png",
+  "crop": {
+    "left": 600,
+    "top": 690,
+    "width": 64,
+    "height": 64
+  },
+  "note": "warm wood-grain plank, clean stretch between bed-area and couch",
+  "tile_size": {
+    "width": 16,
+    "height": 16
+  },
+  "tile_image": "apartment_v3_floor.png"
+}

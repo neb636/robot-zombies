@@ -211,3 +211,122 @@ export interface Interactable {
   used?: boolean;
   interact: () => void;
 }
+
+// ─── Survival Layer ───────────────────────────────────────────────────────────
+
+export type Region =
+  | 'boston'
+  | 'appalachia'
+  | 'deep_south'
+  | 'great_plains'
+  | 'rockies'
+  | 'silicon_valley';
+
+export interface SurvivalState {
+  food: number;
+  fuel: number;
+  medicine: number;
+  ammo: number;
+  scrap: number;
+  morale: number;           // 0–100
+  vehicleCondition: number; // 0–100
+  partySize: number;
+  region: Region;
+  daysElapsed: number;
+}
+
+export type TravelEventKind =
+  | 'hunting_opportunity'
+  | 'abandoned_store'
+  | 'survivor_camp'
+  | 'lucky_find'
+  | 'vehicle_breakdown'
+  | 'illness'
+  | 'ambush'
+  | 'rain_spoils'
+  | 'campfire_night'
+  | 'jerome_preaches'
+  | 'record_player'
+  | 'none';
+
+export interface TravelEvent {
+  kind: TravelEventKind;
+  text: string;
+  effect?: Partial<Pick<SurvivalState, 'food' | 'fuel' | 'medicine' | 'ammo' | 'scrap' | 'morale'>>;
+  triggersBattle?: boolean;
+  enemyKey?: string;
+}
+
+// ─── Dialogue Choices (Stream G) ─────────────────────────────────────────────
+
+export interface DialogueChoice {
+  label: string;
+  nextId: string;
+  setFlags?: readonly string[];
+  requireFlags?: readonly string[];
+  requireItems?: ReadonlyArray<{ item: keyof SurvivalState; count: number }>;
+  consumeItems?: ReadonlyArray<{ item: keyof SurvivalState; count: number }>;
+}
+
+export interface DialogueLine {
+  speaker: string;
+  text: string;
+  choices?: readonly DialogueChoice[];
+}
+
+// ─── Save Slots (Stream G) ───────────────────────────────────────────────────
+
+export interface SaveSlotInfo {
+  slot: number;
+  occupied: boolean;
+  playerName?: string;
+  chapter?: number;
+  savedAt?: number;
+  playTimeMs?: number;
+  sceneKey?: string;
+}
+
+// ─── Survival Trade ───────────────────────────────────────────────────────────
+
+export interface TradeEntry {
+  item: 'food' | 'fuel' | 'medicine' | 'ammo' | 'morale_item';
+  buyPrice: number;
+  sellPrice: number;
+}
+
+export interface TradePrices {
+  region: Region;
+  entries: TradeEntry[];
+}
+
+export type HuntingResult = 'perfect' | 'good' | 'miss';
+
+// ─── World Map / Node Entry ──────────────────────────────────────────────────
+
+export interface NodeEntryData {
+  sceneKey: string;
+  /** Optional payload forwarded to the launched scene's init(). */
+  data?: Record<string, unknown>;
+}
+
+// ─── Battle extensions (Stream D) ────────────────────────────────────────────
+
+export interface PassiveEffect {
+  characterId: string;
+  description: string;
+  onBattleStart?: (ctx: unknown) => void;
+  onTick?: (ctx: unknown) => boolean;
+  onBeforeAction?: (ctx: unknown) => void;
+  onBattleEnd?: (ctx: unknown, victory: boolean) => void;
+}
+
+export interface ReinforcementSpec {
+  enemyKey: string;
+  row?: 'front' | 'back';
+}
+
+export interface ComboBonusEffect {
+  comboId: string;
+  description: string;
+  resolve: (ctx: unknown) => void;
+}

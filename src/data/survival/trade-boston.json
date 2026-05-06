@@ -1,0 +1,13 @@
+{
+  "region": "boston",
+  "description": "Underground survivor cells. Prices are rough — nobody has much.",
+  "entries": [
+    { "item": "food",        "buyPrice": 5,  "sellPrice": 3 },
+    { "item": "fuel",        "buyPrice": 12, "sellPrice": 6 },
+    { "item": "medicine",    "buyPrice": 8,  "sellPrice": 4 },
+    { "item": "ammo",        "buyPrice": 6,  "sellPrice": 3 },
+    { "item": "morale_item", "buyPrice": 15, "sellPrice": 0 }
+  ],
+  "moraleItemName": "Paperback novel",
+  "moraleItemFlavor": "A water-stained thriller. Somebody already solved the mystery in pencil on the last page."
+}

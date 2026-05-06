@@ -1,0 +1,45 @@
+[
+  {
+    "kind": "hunting_opportunity",
+    "weight": 20,
+    "text": "Elk on the alpine meadow. The drones can't reach altitude this high. Elias doesn't even have to say anything.",
+    "effect": {}
+  },
+  {
+    "kind": "lucky_find",
+    "weight": 15,
+    "text": "A ranger station, solar-powered and untouched. Whoever was posted here left everything behind when the Broadcast happened.",
+    "effect": { "food": 5, "medicine": 2, "fuel": 1 }
+  },
+  {
+    "kind": "illness",
+    "weight": 20,
+    "text": "Altitude sickness hits overnight. Headaches, nausea, confusion. You lose a day waiting it out.",
+    "effect": { "medicine": -1, "morale": -8 }
+  },
+  {
+    "kind": "campfire_night",
+    "weight": 20,
+    "text": "The first night in the mountains, you sleep through the whole thing without waking. Something about the altitude and the cold makes the body switch off.",
+    "effect": { "morale": 10 }
+  },
+  {
+    "kind": "vehicle_breakdown",
+    "weight": 10,
+    "text": "The pass is iced. You spend half the day digging out and improvising chains from whatever you have.",
+    "effect": { "fuel": -1 },
+    "delayDays": 1
+  },
+  {
+    "kind": "record_player",
+    "weight": 10,
+    "text": "Dr. Chen finds a cassette player in a ghost town general store. He holds it for a long time before handing it over. The tape inside still works.",
+    "effect": { "morale": 5 }
+  },
+  {
+    "kind": "rain_spoils",
+    "weight": 5,
+    "text": "Snow instead of rain. You didn't plan for this. Some supplies freeze solid.",
+    "effect": { "food": -2 }
+  }
+]

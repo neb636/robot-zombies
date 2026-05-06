@@ -1,0 +1,11 @@
+export { generateMarcusSprite }    from './marcus.js';
+export { generateMayaSprite }      from './maya.js';
+export { generateEliasSprite }     from './elias.js';
+export { generateDejaSprite }      from './deja.js';
+export { generateJeromeSprite }    from './jerome.js';
+export { generateDrChenSprite }    from './dr_chen.js';
+export { generateSurvivorSprite }  from './survivor.js';
+export { generateMerchantSprite }  from './merchant.js';
+export { generateConvertedSprite } from './converted.js';
+export { generateChildSprite }     from './child.js';
+export { generateFarmhandSprite }  from './farmhand.js';

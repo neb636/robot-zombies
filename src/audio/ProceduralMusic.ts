@@ -1,5 +1,5 @@
 /**
- * ProceduralMusic — Web Audio API synthesizer for Silicon Requiem.
+ * ProceduralMusic — Web Audio API synthesizer for Quiet Machines.
  *
  * Generates a harp arpeggio loop inspired by the Final Fantasy IV Prelude:
  * two interleaved ascending/descending streams in A minor, creating a flowing
@@ -26,7 +26,7 @@ export class ProceduralMusic {
    * and traces the same contour from a different position in the arpeggio.
    *
    * Key: A natural minor (A C E G) — same flowing quality as FF4's C major but
-   * with the melancholy edge that fits Silicon Requiem.
+   * with the melancholy edge that fits Quiet Machines.
    *
    * Full shape: A3→C4→E4→G4→A4→C5→E5→G5 up, G5→E5→C5→A4→G4→E4→C4→A3 down.
    */

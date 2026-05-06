@@ -1,0 +1,67 @@
+{
+  "title": "Apartment v3 (sandbox)",
+  "mapWidth": 640,
+  "mapHeight": 512,
+  "wallThickness": 16,
+  "topWallHeight": 56,
+
+  "tilesets": {
+    "floor": "assets/tilesets/v3/apartment_v3_floor.png",
+    "wall":  "assets/tilesets/v3/apartment_v3_wall.png"
+  },
+
+  "mapObjects": {
+    "bed_queen":         "assets/sprites/props/apartment_v3/bed_queen.png",
+    "nightstand_alarm":  "assets/sprites/props/apartment_v3/nightstand_alarm.png",
+    "dresser_low":       "assets/sprites/props/apartment_v3/dresser_low.png",
+    "desk_computer":     "assets/sprites/props/apartment_v3/desk_computer.png",
+    "couch_3seat":       "assets/sprites/props/apartment_v3/couch_3seat.png",
+    "coffee_table_rug":  "assets/sprites/props/apartment_v3/coffee_table_rug.png",
+    "flatscreen_tv":     "assets/sprites/props/apartment_v3/flatscreen_tv.png",
+    "front_door_closed": "assets/sprites/props/apartment_v3/front_door_closed.png",
+    "window_day":        "assets/sprites/props/apartment_v3/window_day.png",
+    "wall_clock":        "assets/sprites/props/apartment_v3/wall_clock.png",
+    "coat_rack_hanging": "assets/sprites/props/apartment_v3/coat_rack_hanging.png",
+    "potted_plant_small":"assets/sprites/props/apartment_v3/potted_plant_small.png",
+    "potted_plant_large":"assets/sprites/props/apartment_v3/potted_plant_large.png",
+    "cat_sleeping":      "assets/sprites/props/apartment_v3/cat_sleeping.png",
+    "wall_poster":       "assets/sprites/props/apartment_v3/wall_poster.png"
+  },
+
+  "objects": [
+    { "asset": "wall_poster",        "x": 112, "y": 32,  "origin": [0.5, 0.5] },
+    { "asset": "window_day",         "x": 174, "y": 32,  "origin": [0.5, 0.5] },
+    { "asset": "wall_clock",         "x": 347, "y": 28,  "origin": [0.5, 0.5] },
+    { "asset": "window_day",         "x": 415, "y": 32,  "origin": [0.5, 0.5] },
+    { "asset": "front_door_closed",  "x": 538, "y": 36,  "origin": [0.5, 0.5] },
+    { "asset": "coat_rack_hanging",  "x": 594, "y": 36,  "origin": [0.5, 0.5] },
+
+    { "asset": "bed_queen",          "x": 82,  "y": 160, "origin": [0.5, 0.5] },
+    { "asset": "nightstand_alarm",   "x": 169, "y": 114, "origin": [0.5, 0.5] },
+    { "asset": "dresser_low",        "x": 255, "y": 114, "origin": [0.5, 0.5] },
+
+    { "asset": "desk_computer",      "x": 82,  "y": 338, "origin": [0.5, 0.5] },
+
+    { "asset": "couch_3seat",        "x": 498, "y": 310, "origin": [0.5, 0.5] },
+    { "asset": "coffee_table_rug",   "x": 493, "y": 388, "origin": [0.5, 0.5] },
+    { "asset": "flatscreen_tv",      "x": 584, "y": 296, "origin": [0.5, 0.5] },
+    { "asset": "cat_sleeping",       "x": 498, "y": 290, "origin": [0.5, 0.5] },
+
+    { "asset": "potted_plant_large", "x": 347, "y": 338, "origin": [0.5, 0.5] },
+    { "asset": "potted_plant_small", "x": 415, "y": 440, "origin": [0.5, 0.5] },
+    { "asset": "potted_plant_small", "x": 580, "y": 460, "origin": [0.5, 0.5] }
+  ],
+
+  "walls": [
+    { "x": 60,  "y": 145, "w": 60,  "h": 70  },
+    { "x": 145, "y": 100, "w": 50,  "h": 50  },
+    { "x": 230, "y": 100, "w": 50,  "h": 50  },
+    { "x": 60,  "y": 320, "w": 60,  "h": 60  },
+    { "x": 470, "y": 290, "w": 60,  "h": 80  },
+    { "x": 460, "y": 372, "w": 80,  "h": 50  },
+    { "x": 568, "y": 282, "w": 36,  "h": 60  }
+  ],
+
+  "playerStart": { "x": 320, "y": 350 },
+  "camera": { "zoom": 2 }
+}

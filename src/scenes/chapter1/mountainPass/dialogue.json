@@ -1,0 +1,134 @@
+{
+  "arriving": {
+    "player": [
+      "Above the tree line.",
+      "For the first time in a week I can see in every direction.",
+      "That is not entirely a good thing."
+    ],
+    "elias": [
+      "Wind'll pick up before dark.",
+      "We make the saddle before that, we'll be all right."
+    ]
+  },
+  "exposed_ridge": {
+    "maya": [
+      "We're exposed up here.",
+      "Drone coverage is lighter in the high terrain, but 'lighter' isn't 'none.'"
+    ],
+    "elias": [
+      "Stay off the skyline.",
+      "Move low."
+    ]
+  },
+  "weather_sign": {
+    "elias": [
+      "Smell that.",
+      "Rain before nightfall. Maybe more."
+    ],
+    "player": [
+      "Is that bad?"
+    ],
+    "elias2": [
+      "For the drones? Good.",
+      "For us? Depends on how bad you are at being wet and cold."
+    ]
+  },
+  "vehicle_wreck": {
+    "player": [
+      "A truck. Burned out.",
+      "Recent. Within a month, maybe less."
+    ],
+    "elias": [
+      "Check the bed. Sometimes there's fuel in the undercarriage reserve."
+    ],
+    "maya": [
+      "Here. Two gallons. Not full but not nothing."
+    ]
+  },
+  "vehicle_working": {
+    "player": [
+      "Wait.",
+      "This one's different.",
+      "The engine's intact."
+    ],
+    "maya": [
+      "I can hotwire it.",
+      "Give me ten minutes."
+    ],
+    "elias": [
+      "We have eight.",
+      "I'll stand watch."
+    ]
+  },
+  "vehicle_running": {
+    "maya": [
+      "There.",
+      "She's rough, but she runs.",
+      "This changes things."
+    ],
+    "player": [
+      "How far will she take us?"
+    ],
+    "maya2": [
+      "Far enough."
+    ]
+  },
+  "storm_approaching": {
+    "player": [
+      "The sky is the color of a bruise.",
+      "We need to move."
+    ],
+    "elias": [
+      "Aye."
+    ]
+  },
+  "random_patrol_encounter": {
+    "system": [
+      "A drone patrol materializes from the low cloud cover.",
+      "They're sweeping the road."
+    ],
+    "maya": [
+      "Atmospheric interference degraded their sensors.",
+      "They might not see us.",
+      "Might."
+    ]
+  },
+  "survival_warning": {
+    "player": [
+      "We're low on supplies.",
+      "We've been low on supplies for a while.",
+      "At some point 'low' becomes something else."
+    ],
+    "elias": [
+      "Tomorrow I'll hunt if the rain clears.",
+      "There are rabbits in the north bowl. I saw sign this morning.",
+      "We'll be all right."
+    ]
+  },
+  "chapter_end_vista": {
+    "player": [
+      "From here I can see south.",
+      "All the way back to the ridge.",
+      "All the way to where we started."
+    ],
+    "elias": [
+      "Don't look back too long.",
+      "It'll make you think you can go back."
+    ],
+    "maya": [
+      "The plains are east of here.",
+      "Three days travel, maybe four.",
+      "New territory."
+    ],
+    "player2": [
+      "New territory."
+    ]
+  },
+  "chapter_transition": {
+    "system": [
+      "Chapter 1 complete.",
+      "The mountains recede behind you.",
+      "The open road ahead is a different kind of danger."
+    ]
+  }
+}
