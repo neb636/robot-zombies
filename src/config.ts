@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { BootScene }       from './scenes/BootScene.js';
 import { PreloadScene }    from './scenes/PreloadScene.js';
 import { PrologueScene }   from './scenes/PrologueScene.js';
+import { ApartmentV3Scene } from './scenes/ApartmentV3Scene.js';
 import { NewBostonScene }  from './scenes/NewBostonScene.js';
 import { SubwayScene }     from './scenes/SubwayScene.js';
 import { WorldMapScene }   from './scenes/WorldMapScene.js';
@@ -29,6 +30,7 @@ const coreScenes: Phaser.Types.Scenes.SceneType[] = [
   BootScene,
   PreloadScene,
   PrologueScene,
+  ApartmentV3Scene,
   NewBostonScene,
   SubwayScene,
   WorldMapScene,

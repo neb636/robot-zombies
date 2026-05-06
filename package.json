@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "viewer": "node scripts/generate-viewer.js",
-    "viewer:watch": "node scripts/generate-viewer.js --watch"
+    "viewer:watch": "node scripts/generate-viewer.js --watch",
+    "chop:apartment": "node scripts/chop-apartment.mjs"
   },
   "dependencies": {
     "howler": "^2.2.4",
@@ -17,6 +18,7 @@
   },
   "devDependencies": {
     "@types/howler": "^2.2.12",
+    "sharp": "^0.34.5",
     "typescript": "^5.9.3",
     "vite": "^5.4.0",
     "vite-plugin-pwa": "^1.2.0"

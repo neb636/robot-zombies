@@ -4,6 +4,7 @@ import { jumpToScene } from '../utils/devJump.js';
 const SCENES = [
   'PreloadScene',
   'PrologueScene',
+  'ApartmentV3Scene',
   'NewBostonScene',
   'SubwayScene',
   'WorldMapScene',
