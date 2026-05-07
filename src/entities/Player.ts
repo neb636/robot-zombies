@@ -36,15 +36,18 @@ export class Player extends AnimatedSprite {
 
     this.sprite.setCollideWorldBounds(true);
     this.sprite.setScale(1.55);
+    // Render above scene-level walls (which sit at depth 1–2) so the
+    // character stays visible when standing near the top wall.
+    this.sprite.setDepth(10);
 
-    // Top-down "feet footprint" body: only the bottom of the character is
-    // collidable so the player can push head/torso into walls (the wall's
-    // higher depth renders over the character). Visible character body is
-    // 26×50 within the 108×108 frame at frame_y 30–80; the body covers the
-    // bottom slice so feet stop at walls.
+    // Top-down "feet footprint" body — a thin slice at the character's feet
+    // (frame_y ≈ 76–80 of the 108×108 frame). Visible character body sits at
+    // frame_y 30–80; placing the collision body at the feet lets the player
+    // walk so feet are at the wall edge while the head/torso visually
+    // overlaps the wall (which renders below the player).
     const body = this.sprite.body as Phaser.Physics.Arcade.Body;
-    body.setSize(26, 8);
-    body.setOffset(42, 72);
+    body.setSize(26, 4);
+    body.setOffset(42, 76);
 
     if (this.scene.textures.exists('hero')) {
       this.playAnim('hero-idle-south');
