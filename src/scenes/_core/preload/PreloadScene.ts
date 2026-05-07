@@ -168,7 +168,7 @@ export class PreloadScene extends Phaser.Scene {
         this.scene.start('SceneBuilderScene', { layout: build });
         return;
       }
-      const devTarget = params.get('dev');
+      const devTarget = params.get('dev') ?? params.get('scene');
       if (devTarget) {
         const enemy = params.get('enemy');
         jumpToScene(this.game, devTarget, enemy ? { enemy } : undefined);

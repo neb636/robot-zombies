@@ -37,6 +37,13 @@ export class Player extends AnimatedSprite {
     this.sprite.setCollideWorldBounds(true);
     this.sprite.setScale(1.55);
 
+    // The 108×108 sprite frame is mostly transparent padding. Tighten the
+    // physics body to the visible character (26×50 native px) so the player
+    // can walk up against walls instead of stopping short.
+    const body = this.sprite.body as Phaser.Physics.Arcade.Body;
+    body.setSize(26, 50);
+    body.setOffset(42, 30);
+
     if (this.scene.textures.exists('hero')) {
       this.playAnim('hero-idle-south');
     } else {
